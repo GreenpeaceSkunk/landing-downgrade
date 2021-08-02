@@ -15,7 +15,7 @@ import { UserFeedbackFormContext } from '../SplittedForms/UserFeedbackForm/conte
 const ReduceDonationFormThankYou = lazy(() => import('./ThankYou'));
 
 const pathnames = [
-  '/form/user/information',
+  '/form-user/information',
 ];
 
 const Component: React.FunctionComponent<{}> = () => {
@@ -100,7 +100,7 @@ const Component: React.FunctionComponent<{}> = () => {
   useEffect(() => {
     if(currentIndex === 0) {
       history.push({
-        pathname: `${path}/form/user/information`,
+        pathname: `${path}/form-user/information`,
       })
     }
   }, [
@@ -123,7 +123,7 @@ const Component: React.FunctionComponent<{}> = () => {
               <Form.Text>Para nosotros es muy importante que sigamos trabajando juntos en las causas más importantes</Form.Text>
             </Form.Header>
 
-            <Route exact path={`${path}/form/user/information`}>
+            <Route exact path={`${path}/form-user/information`}>
               <Form.CarouselWrapper>
                 <UserDonationForm ref={userDonationFormRef} />
                 <UserDataForm ref={userDataFormRef} />

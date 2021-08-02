@@ -14,8 +14,8 @@ import { save } from './service';
 const ReduceDonationFormThankYou = lazy(() => import('./ThankYou'));
 
 const pathnames = [
-  '/form/user/information',
-  '/form/user/feedback',
+  '/form-user/information',
+  '/form-user/feedback',
 ];
 
 const Component: React.FunctionComponent<{}> = () => {
@@ -88,13 +88,13 @@ const Component: React.FunctionComponent<{}> = () => {
               <Form.Text>Lamentamos que hayas tomado esta decisión, pero entendemos que tenés motivos para hacerlo.</Form.Text>
             </Form.Header>
             
-            <Route exact path={`${path}/form/user/information`}>
+            <Route exact path={`${path}/form-user/information`}>
               <Form.CarouselWrapper>
                 <UserForm ref={userFormRef} />
               </Form.CarouselWrapper>
             </Route>
             
-            <Route exact path={`${path}/form/user/feedback`}>
+            <Route exact path={`${path}/form-user/feedback`}>
               <Form.CarouselWrapper>
                 <UserFeedbackForm ref={userFeedbackFormRef} />
               </Form.CarouselWrapper>
