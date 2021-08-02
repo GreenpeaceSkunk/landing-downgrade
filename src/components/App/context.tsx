@@ -5,7 +5,6 @@ import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from '../../theme/globalStyle';
 import Theme from '../../theme/Theme';
 import ErrorBoundary from '../ErrorBoundary';
-import { reducer, initialState } from './reducer';
 
 interface IContext {
   queryParams: URLSearchParams;
@@ -20,7 +19,6 @@ Context.displayName = 'AppContext';
 const { Provider, Consumer } = Context;
 
 const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = ({ children }) => {
-  const [{ data }, dispatch ] = useReducer(reducer, initialState);
   const queryParams = useQuery();
 
   return useMemo(() => (

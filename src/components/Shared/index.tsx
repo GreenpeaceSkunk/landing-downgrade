@@ -1,10 +1,10 @@
 import Images from '../../images';
-import Elements from '@bit/meema.ui-components.elements';
+import Elements, { CustomCSSType } from '@bit/meema.ui-components.elements';
 import ThreeCircles from '@bit/meema.ui-components.loaders.three-circles';
-import { css } from 'styled-components';
+import styled, { css } from 'styled-components';
 import { pixelToRem } from 'meema.utils';
 
-export const Logo = () => (
+export const Logo = (customCss: CustomCSSType) => (
   <Elements.A
     href='https://greenpeace.org.ar'
   >
@@ -12,15 +12,12 @@ export const Logo = () => (
       alt='Greenpeace'
       src={Images.Icons.GreenpeaceLogoWhite}
       customCss={css`
-        width: 10rem;
+        width: ${pixelToRem(140)};
         height: auto;
       `}
-      width='10rem'
-      height='auto'
     />
   </Elements.A>
 );
-
 
 export const Loader = () => (
   <Elements.Wrapper

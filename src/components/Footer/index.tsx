@@ -2,7 +2,6 @@ import React, { memo, useMemo } from 'react';
 import styled, { css } from 'styled-components';
 import { Footer, A, Nav, Span, } from '@bit/meema.ui-components.elements';
 import { pixelToRem } from 'meema.utils';
-import { Logo } from '../Shared';
 
 const Link = styled(A)`
   color: white;
@@ -27,12 +26,13 @@ const Link = styled(A)`
   }
 `;
 
-const MainFooter: React.FunctionComponent<{}> = memo(() => useMemo(() => (
+const Component: React.FunctionComponent<{}> = memo(() => useMemo(() => (
   <Footer
     customCss={css`
       display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
       padding: ${pixelToRem(30)};
       width: 100%;
       min-height: ${({theme}) => pixelToRem(theme.footer.mobile.height)};
@@ -51,13 +51,6 @@ const MainFooter: React.FunctionComponent<{}> = memo(() => useMemo(() => (
       }
     `}
   >
-    <Logo />
-    <Span
-      customCss={css`
-        color: white;
-        margin-bottom: ${pixelToRem(5)};
-      `}
-    >® Greenpeace Argentina 2021</Span>
     <Nav>
       <Link
         href={`${process.env.REACT_APP_TERMS_AND_CONDITIONS_URL}`}
@@ -66,8 +59,14 @@ const MainFooter: React.FunctionComponent<{}> = memo(() => useMemo(() => (
         href={`${process.env.REACT_APP_PRIVACY_POLICY_URL}`}
       >Política de privacidad</Link>
     </Nav>
+    <Span
+      customCss={css`
+        color: white;
+        margin-bottom: ${pixelToRem(5)};
+      `}
+    >® Greenpeace Argentina 2021</Span>
   </Footer>
 ), []));
 
-MainFooter.displayName = 'MainFooter';
-export default MainFooter;
+Component.displayName = 'MainFooter';
+export default Component;

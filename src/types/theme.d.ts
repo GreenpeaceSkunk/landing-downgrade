@@ -6,36 +6,42 @@ export interface ITheme {
       light?: string;
       normal?: string;
       dark?: string;
+      extraDark?: string;
     };
     secondary: {
       extraLight?: string;
       light?: string;
       normal?: string;
       dark?: string;
+      extraDark?: string;
     };
     tertiary: {
       extraLight?: string;
       light?: string;
       normal?: string;
       dark?: string;
+      extraDark?: string;
     };
     success: {
       extraLight?: string;
       light?: string;
       normal?: string;
       dark?: string;
+      extraDark?: string;
     };
     warning: {
       extraLight?: string;
       light?: string;
       normal?: string;
       dark?: string;
+      extraDark?: string;
     };
     error: {
       extraLight?: string;
       light?: string;
       normal?: string;
       dark?: string;
+      extraDark?: string;
     };
   };
   heading: {
@@ -45,12 +51,14 @@ export interface ITheme {
         light?: string;
         normal?: string;
         dark?: string;
+        extraDark?: string;
       };
       secondary: {
         extraLight?: string;
         light?: string;
         normal?: string;
         dark?: string;
+        extraDark?: string;
       };
     }
   };
@@ -61,12 +69,14 @@ export interface ITheme {
         light?: string;
         normal?: string;
         dark?: string;
+        extraDark?: string;
       };
       secondary: {
         extraLight?: string;
         light?: string;
         normal?: string;
         dark?: string;
+        extraDark?: string;
       };
     }
   };

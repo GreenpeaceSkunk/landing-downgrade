@@ -1,5 +1,5 @@
 import React, { FunctionComponent, memo, useMemo } from 'react';
-import { Wrapper, Header, H1, HGroup, Span } from '@bit/meema.ui-components.elements';
+import { Wrapper, Header, H1, HGroup, Span, P } from '@bit/meema.ui-components.elements';
 import { pixelToRem } from 'meema.utils';
 import { css } from 'styled-components';
 import { Logo } from '../Shared';
@@ -12,20 +12,19 @@ const MainHeader: FunctionComponent<{}> = memo(() => {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        padding-top: ${pixelToRem(30)};
-        padding-bottom: ${pixelToRem(30)};
+        padding: ${pixelToRem(30)};
         width: 100%;
         min-height: ${({theme}) => pixelToRem(theme.header.mobile.height)};
-        background-image: linear-gradient(90deg, rgba(0, 0, 0, 1) 1%, rgba(44, 44, 44, 0) 96%), url(${Images.Backgrounds.HeaderBackground});
+        background-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 1%, rgba(44, 44, 44, 0) 96%), url(${Images.Backgrounds.HeaderBackground});
         background-repeat: no-repeat;
         background-position: center center;
-        background-size: auto 100%;
+        background-size: cover;
         transition: all 250ms ease;
   
         @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-          background-size: cover;
           min-height: ${({theme}) => pixelToRem(theme.header.tablet.height)};
           background-color: ${({theme}) => theme.header.tablet.backgroundColor};
+          background-position: center 80%;
         }
         
         @media (min-width: ${({theme}) => pixelToRem(theme.responsive.desktop.minWidth)}) {
@@ -34,13 +33,12 @@ const MainHeader: FunctionComponent<{}> = memo(() => {
         }
       `}
     >
+      <Logo />
       <Wrapper
         customCss={css`
           display: flex;
+          flex-grow: 1;
           flex-direction: column;
-          padding-right: ${pixelToRem(30)};
-          padding-left: ${pixelToRem(30)};
-          margin-top: ${pixelToRem(20)};
           width: 100%;
           transition: all 250ms ease;
   
@@ -53,34 +51,53 @@ const MainHeader: FunctionComponent<{}> = memo(() => {
           }
   
           @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-            /* max-width: ${pixelToRem(1100)}; */
+            max-width: ${pixelToRem(1140)};
             align-self: center;
+            justify-content: space-between;
+
           }
         `}
       >
-        <Logo />
-        <HGroup>
+        <HGroup
+          customCss={css`
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: center;
+            text-align: center;
+            
+            @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+              text-align: left;
+            }
+          `}
+        >
           <H1
             customCss={css`
-              color: ${({theme}) => theme.color.tertiary.normal};
-              font-size: ${pixelToRem(28)};
-              line-height: 110%;
-  
-              @media (min-width: ${({theme}) => pixelToRem(theme.responsive.desktop.minWidth)}) {
-                font-size: ${pixelToRem(36)};
+              margin-bottom: ${pixelToRem(16)};
+              color: white;
+              font-size: ${pixelToRem(26)};
+              font-family: ${({theme}) => theme.font.family.primary.bold};
+              line-height: ${pixelToRem(28)};
+              
+              @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+                margin-bottom: ${pixelToRem(24)};
+                font-size: ${pixelToRem(48)};
               }
             `}
-          >Título</H1>
-          <Span
+          >Subsistimos con aportes como el tuyo</H1>
+          <P
             customCss={css`
               color: white;
-              font-size: ${pixelToRem(18)};
-            
-              @media (min-width: ${({theme}) => pixelToRem(theme.responsive.desktop.minWidth)}) {
-                font-size: ${pixelToRem(20)};
+              font-size: ${pixelToRem(16)};
+              line-height: ${pixelToRem(18)};
+              font-family: ${({theme}) => theme.font.family.primary.bold};
+              
+              @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+                font-size: ${pixelToRem(26)};
+                line-height: ${pixelToRem(28)};
               }
             `}
-          >Bajada.</Span>
+          >En greenpeace no recibimos dinero de empresas privadas, ni de la política, por eso tu aporte es tan importante.</P>
         </HGroup>
       </Wrapper>
     </Header>

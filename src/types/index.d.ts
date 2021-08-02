@@ -1,4 +1,17 @@
 import { EventType as GoogleTagManagerEventType } from 'google-tag-manager';
+import {
+  ContextStateType as AppContextStateType,
+  ContextActionType as AppContextActionType,
+} from './app';
+import { 
+  IUser,
+  IUserData,
+  IUserDonation,
+  IUserFeedback,
+  ContextStateType as UserContextStateType,
+  ContextActionType as UserContextActionType,
+} from './user';
+
 declare global {
   interface Window {
     dataLayer: [{
@@ -25,6 +38,10 @@ declare global {
   }
 }
 
+export interface DispatchFn<action> {
+  (action: any): void;  
+};
+
 export interface GenericReducerFn<S, A> { 
   (state: S, action: A): S;
 }
@@ -40,19 +57,19 @@ export type AxiosResquestError = {
 };
 
 export type SharedState = {
-  data: any;
   submitting?: boolean,
   submitted?: boolean,
   error: string | null,
 };
 
+export type PayloadObjectType = { [x: string]: string | number };
+
 export type SharedActions = 
-  | { type: 'SUBMIT' }
+  | { type: 'SUBMIT', payload: any }
   | { type: 'SUBMITTED' }
   | { type: 'CANCEL' }
   | { type: 'FAILURE', error: any }
   
-// For example 'email' | 'fullName'
 export type FormFields = '';
 
 export type FormFieldsType = {
@@ -64,4 +81,12 @@ export type OnClickEvent = MouseEvent<HTMLButtonElement>;
 
 export type {
   GoogleTagManagerEventType,
+  AppContextStateType,
+  AppContextActionType,
+  IUser,
+  IUserData,
+  IUserDonation,
+  IUserFeedback,
+  UserContextStateType,
+  UserContextActionType,
 };
