@@ -28,7 +28,8 @@ export const validateAmount = (monto = '', otherAmount = ''): boolean => {
 }
 
 export const validateFirstName = (value: string): ValidationType => {
-  if(checkMinLength(value, 2)) {
+  // if(checkMinLength(value, 2)) {
+    if(/^[A-Za-z]+$/i.test(value)) {
     return {
       isValid: false,
       errorMessage: ERROR_CODES['001'],
@@ -47,7 +48,8 @@ export const validateFirstName = (value: string): ValidationType => {
 }
 
 export const validateLastName = (value: string): ValidationType => {
-  if(checkMinLength(value, 2)) {
+  // if(checkMinLength(value, 2)) {
+  if(/^[A-Za-z]+$/i.test(value)) {
     return {
       isValid: false,
       errorMessage: ERROR_CODES['003'],

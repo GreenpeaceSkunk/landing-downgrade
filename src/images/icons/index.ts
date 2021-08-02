@@ -1,6 +1,7 @@
 import GreenpeaceLogoWhite from './greenpeace-white.svg';
 import GreenpeaceLogoGreen from './greenpeace-green.svg';
 import FacebookLogo from './facebook.svg';
+import InstagramLogo from './instagram.svg';
 import TwitterLogo from './twitter.svg';
 import WhatsappLogo from './whatsapp.svg';
 import EmailLogo from './email.svg';
@@ -22,6 +23,7 @@ const _ = {
   FacebookLogo,
   TwitterLogo,
   WhatsappLogo,
+  InstagramLogo,
   EmailLogo,
   PeopleIcon,
   SelectArrowIcon,

@@ -1,7 +1,8 @@
 import React, { memo, useMemo } from 'react';
 import styled, { css } from 'styled-components';
-import { Footer, A, Nav, Span, } from '@bit/meema.ui-components.elements';
+import { Footer, A, Nav, Span, Wrapper, } from '@bit/meema.ui-components.elements';
 import { pixelToRem } from 'meema.utils';
+import SocialMediaNav from '../SocialMediaNav';
 
 const Link = styled(A)`
   color: white;
@@ -31,7 +32,7 @@ const Component: React.FunctionComponent<{}> = memo(() => useMemo(() => (
     customCss={css`
       display: flex;
       flex-direction: row;
-      align-items: center;
+      align-items: flex-end;
       justify-content: space-between;
       padding: ${pixelToRem(30)};
       width: 100%;
@@ -59,12 +60,15 @@ const Component: React.FunctionComponent<{}> = memo(() => useMemo(() => (
         href={`${process.env.REACT_APP_PRIVACY_POLICY_URL}`}
       >Política de privacidad</Link>
     </Nav>
-    <Span
-      customCss={css`
-        color: white;
-        margin-bottom: ${pixelToRem(5)};
-      `}
-    >® Greenpeace Argentina 2021</Span>
+    <Wrapper>
+      {/* <Span
+        customCss={css`
+          color: white;
+          margin-bottom: ${pixelToRem(5)};
+        `}
+      >® Greenpeace Argentina 2021</Span> */}
+      <SocialMediaNav />
+    </Wrapper>
   </Footer>
 ), []));
 
