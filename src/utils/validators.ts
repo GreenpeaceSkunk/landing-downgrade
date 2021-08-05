@@ -6,19 +6,37 @@ const ERROR_CODES = {
   '003': 'Asegurate que el apellido sea correcto.',
   '004': 'El apellido solo puede contener letras.',
   '005': 'Ingresá el DNI sin puntos ni espacios.',
+  '010': 'El DNI solo puede contener números.',
   '006': 'Asegurate de que el e-mail sea correcto.',
   '007': 'Asegurate de que el código de área sea correcto.',
+  '011': 'El código de área solo puede contener números.',
   '008': 'Asegurate de que el celular sea correcto.',
+  '009': 'El celular solo puede contener números.',
 }
 
 type ValidationType = { isValid: boolean; errorMessage?: string };
 
+const checkIfHaveOnlyNumbers = (value = '') => /^[0-9]*$/.test(value);
 const checkIfHaveNumber = (value: string):boolean => /\d/.test(value);
 const checkMinLength = (value: string, minLength: number): boolean => (value.length < minLength);
 
+export const validateNotEmptyField = (value: string): ValidationType => {
+  if(checkMinLength(value, 2)) {
+    return {
+      isValid: false,
+      errorMessage: 'Asegurate de que el campo no esté vacío',
+    };
+  }
+
+  return {
+    isValid: true,
+    errorMessage: '',
+  };
+};
+
 export const validateField = (value: string): ValidationType => {
   return {
-    isValid: (value !== '') && true,
+    isValid: (value !== '' && !/^[A-Za-z]+$/i.test(value)) && true,
     errorMessage: '',
   };
 };
@@ -27,9 +45,8 @@ export const validateAmount = (monto = '', otherAmount = ''): boolean => {
   return !(monto === '' || (monto === 'otherAmount' && otherAmount === '')) ;
 }
 
-export const validateFirstName = (value: string): ValidationType => {
-  // if(checkMinLength(value, 2)) {
-    if(/^[A-Za-z]+$/i.test(value)) {
+export const validateFirstName = (value = '', minLength = 2): ValidationType => {
+  if(checkMinLength(value, 2)) {
     return {
       isValid: false,
       errorMessage: ERROR_CODES['001'],
@@ -47,9 +64,8 @@ export const validateFirstName = (value: string): ValidationType => {
   };
 }
 
-export const validateLastName = (value: string): ValidationType => {
-  // if(checkMinLength(value, 2)) {
-  if(/^[A-Za-z]+$/i.test(value)) {
+export const validateLastName = (value = '', minLength = 2): ValidationType => {
+  if(checkMinLength(value, minLength)) {
     return {
       isValid: false,
       errorMessage: ERROR_CODES['003'],
@@ -67,24 +83,60 @@ export const validateLastName = (value: string): ValidationType => {
   };
 }
 
-export const validateAreaCode = (value: string): ValidationType => {
+export const validateAreaCode = (value = '', minLength = 2): ValidationType => {
+  if(checkMinLength(value, minLength)) {
+    return {
+      isValid: false,
+      errorMessage: ERROR_CODES['007'],
+    };
+  } else if (!checkIfHaveOnlyNumbers(value)) {
+    return {
+      isValid: false,
+      errorMessage: ERROR_CODES['011'],
+    }
+  }
+
   return {
-    isValid: (value.length === 2) && true,
-    errorMessage: ERROR_CODES['007'],
+    isValid: true,
+    errorMessage: '',
   };
 }
 
-export const validatePhoneNumber = (value: string): ValidationType => {
+export const validatePhoneNumber = (value = '', minLength = 8): ValidationType => {
+  if(checkMinLength(value, minLength)) {
+    return {
+      isValid: false,
+      errorMessage: ERROR_CODES['008'],
+    };
+  } else if (!checkIfHaveOnlyNumbers(value)) {
+    return {
+      isValid: false,
+      errorMessage: ERROR_CODES['009'],
+    }
+  }
+
   return {
-    isValid: (value.length === 8) && true,
-    errorMessage: ERROR_CODES['008'],
+    isValid: true,
+    errorMessage: '',
   };
 }
 
-export const validateCitizenId = (value: string): ValidationType => {
+export const validateCitizenId = (value: string, minLength = 8): ValidationType => {
+  if(checkMinLength(value, minLength)) {
+    return {
+      isValid: false,
+      errorMessage: ERROR_CODES['005'],
+    };
+  } else if (!checkIfHaveOnlyNumbers(value)) {
+    return {
+      isValid: false,
+      errorMessage: ERROR_CODES['010'],
+    }
+  }
+
   return {
-    isValid: (value.length === 8) && true,
-    errorMessage: ERROR_CODES['005'], 
+    isValid: true,
+    errorMessage: '',
   };
 }
 

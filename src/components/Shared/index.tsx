@@ -4,7 +4,7 @@ import ThreeCircles from '@bit/meema.ui-components.loaders.three-circles';
 import styled, { css } from 'styled-components';
 import { pixelToRem } from 'meema.utils';
 
-export const Logo = (customCss: CustomCSSType) => (
+export const Logo: React.FunctionComponent<{ customCss?: CustomCSSType }> = ({customCss}) => (
   <Elements.A
     href='https://greenpeace.org.ar'
   >
@@ -14,12 +14,14 @@ export const Logo = (customCss: CustomCSSType) => (
       customCss={css`
         width: ${pixelToRem(140)};
         height: auto;
+
+        ${(customCss) && customCss};
       `}
     />
   </Elements.A>
 );
 
-export const Loader = () => (
+export const Loader:React.FunctionComponent<{ mode: 'light' | 'default' }> = ({ mode }) => (
   <Elements.Wrapper
     customCss={css`
       display: flex;
@@ -27,12 +29,11 @@ export const Loader = () => (
       justify-content: center;
       height: 100%;
       width: 100%;
-      padding: ${pixelToRem(16)} 0;
     `}
   >
     <ThreeCircles 
       circleCss={css`
-        background-color: ${props => props.theme.color.primary.normal};
+        background-color: ${(mode === 'light') ? 'white' : (({ theme }) => theme.color.primary.normal)};
       `}
     />
   </Elements.Wrapper>

@@ -11,7 +11,7 @@ const Component: React.FunctionComponent<{}> = memo(() => {
   return useMemo(() => (
     <Switch>
       <Route path={path}>
-        <Suspense fallback={<Loader />}>
+        <Suspense fallback={<Loader mode='default' />}>
           <Index />
         </Suspense>
       </Route>

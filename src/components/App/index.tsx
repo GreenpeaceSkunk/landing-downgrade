@@ -39,7 +39,7 @@ const Component: React.FunctionComponent<{}> = memo(() => {
       `}
     >
       <ErrorBoundary fallback='App Error.'>
-        <Suspense fallback={<Loader />}>
+        <Suspense fallback={<Loader mode='default' />}>
           <AppRouter />
         </Suspense>
       </ErrorBoundary>

@@ -57,15 +57,15 @@ export type AxiosResquestError = {
 };
 
 export type SharedState = {
-  submitting?: boolean,
-  submitted?: boolean,
+  submitting: boolean,
+  submitted: boolean,
   error: string | null,
 };
 
 export type PayloadObjectType = { [x: string]: string | number };
 
 export type SharedActions = 
-  | { type: 'SUBMIT', payload: any }
+  | { type: 'SUBMIT' }
   | { type: 'SUBMITTED' }
   | { type: 'CANCEL' }
   | { type: 'FAILURE', error: any }

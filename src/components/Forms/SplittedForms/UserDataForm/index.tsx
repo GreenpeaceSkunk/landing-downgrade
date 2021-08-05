@@ -141,7 +141,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
               name='mobilePhoneNumber'
               type='text'
               value={data.mobilePhoneNumber}
-              maxLength={9}
+              maxLength={8}
               onChange={onChangeHandler}
             />
           </Form.Group>

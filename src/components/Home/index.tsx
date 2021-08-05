@@ -11,35 +11,30 @@ import Images from '../../images';
 import Card from '../Card';
 import VideoPlayer from '../VideoPlayer';
 
-const FormRouter = lazy(() => import('../Forms/router'));
-
 interface IText { showBullet?: boolean; };
 
-const textStyles = css<IText>`
-  display: flex;
-  flex-direction: column;
-  font-family: ${({theme}) => theme.font.family.primary.regular};
-  font-size: ${pixelToRem(16)};
-  font-weight: 400;
-  line-height: ${pixelToRem(18)};
-
-  ${({ showBullet }) => (typeof showBullet === 'boolean' && showBullet) && css`
-    flex-direction: row;
-    width: 100%;
-
-    &:before {
-      width: ${pixelToRem(25)};
-      flex: 0 0 ${pixelToRem(25)};
-      content: ">";
-    }
-  `};
-`;
+const FormRouter = lazy(() => import('../Forms/router'));
 
 const Component: React.FunctionComponent<{}> = memo(() => {
   return useMemo(() => (
-    <View>
+    <View
+      id='home'
+      customCss={css`
+        padding-bottom: 0;
+      `}
+    >
       <Layout.Panel>
-        <Layout.PanelWrapper>
+        <Layout.PanelWrapper
+          customCss={css`
+            padding-top: ${pixelToRem(35)};
+            padding-bottom: ${pixelToRem(35)};
+
+            @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+              padding-top: ${pixelToRem(55)};
+              padding-bottom: ${pixelToRem(55)};
+            }
+          `}
+        >
           <Layout.Title
             color='primary'
           >Lamentamos que tengas que cancelar tu donación</Layout.Title>
@@ -51,7 +46,15 @@ const Component: React.FunctionComponent<{}> = memo(() => {
           background-color: ${({ theme }) => theme.color.secondary.light};
         `}
       >
-        <Layout.PanelWrapper>
+        <Layout.PanelWrapper
+          customCss={css`
+            padding-top: ${pixelToRem(30)};
+
+            @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+              padding-top: ${pixelToRem(55)};
+            }
+          `}
+        >
           <Layout.Title>Continuaremos luchando por las causas que más nos necesitan</Layout.Title>
           <Layout.Cards
             customCss={css`
@@ -78,14 +81,30 @@ const Component: React.FunctionComponent<{}> = memo(() => {
             fixByScroll={true}
             videoUrl='https://www.youtube.com/watch?v=t4-sDoVfjxw'
           />
-          <Wrapper>
-            <Layout.Title color='primary'>Antes de seguir, tomate un minuto para pensarlo</Layout.Title>
-            <Layout.Text>Recordá que en Greenpeace</Layout.Text>
-          </Wrapper>
         </Layout.PanelWrapper>
       </Layout.Panel>
-      <Layout.Panel>
-        <Layout.Title color='light'>Tomate un minuto para pensarlo<br/>y recordá que en Greenpeace</Layout.Title>
+      <Layout.Panel
+        customCss={css`
+          /* padding-top: ${pixelToRem(30)}; */
+          padding-bottom: ${pixelToRem(30)};
+          background-color: ${({ theme }) => theme.color.secondary.light};
+          
+          @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+            /* padding-top: ${pixelToRem(55)}; */
+            padding-bottom: ${pixelToRem(55)};
+          }
+          `}
+      >
+        <Wrapper
+          customCss={css`
+            display: flex;
+            flex-direction: column;
+            margin-bottom: ${pixelToRem(50)} !important;
+          `}
+        >
+          <Layout.Title color='primary'>Antes de seguir, tomate un minuto para pensarlo</Layout.Title>
+          <Layout.Text>Recordá que en Greenpeace</Layout.Text>
+        </Wrapper>
         <Layout.Cards>
           <Card
             title='No recibimos aportes de empresas privadas.'
@@ -101,18 +120,18 @@ const Component: React.FunctionComponent<{}> = memo(() => {
         <Layout.Title color='primary'>La decisión siempre está en tus manos</Layout.Title>
         <Layout.Text>Siempre podrás reducir el monto de tu donación o cancelarla directamente, sin vueltas. Si aún no estás seguro, podés hacerlo en otro momento.</Layout.Text>
       </Layout.Panel>
-      <Layout.Panel 
+      <Layout.Panel
         customCss={css`
-          /* background-color: ${({ theme }) => theme.color.secondary.light}; */
+          padding-left: 0;
+          padding-right: 0;
+          padding-bottom: 0;
         `}
       >
-        <Layout.PanelWrapper>
-          <ErrorBoundary fallback='Form Error'>
-            <Suspense fallback={<Loader/>}>
-              <FormRouter />
-            </Suspense>
-          </ErrorBoundary>
-        </Layout.PanelWrapper>
+        <ErrorBoundary fallback='Form Error'>
+          <Suspense fallback={<Loader mode='default' />}>
+            <FormRouter />
+          </Suspense>
+        </ErrorBoundary>
       </Layout.Panel>
     </View>
   ), []);

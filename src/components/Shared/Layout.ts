@@ -20,15 +20,7 @@ const Panel = styled(Elements.Wrapper)`
   }
   
   @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-    padding: ${pixelToRem(58)} ${pixelToRem(77)};
-    /* 
-    > div {
-      &:first-child {
-        background-color: pink;
-        max-width: ${pixelToRem(1100)};
-      }
-    }
-    */
+    /* padding: ${pixelToRem(58)} ${pixelToRem(77)}; */
   }
   
   ${({customCss}) => customCss && customCss};

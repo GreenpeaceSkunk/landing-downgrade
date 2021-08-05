@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { H1, Img, P, Wrapper } from '@bit/meema.ui-components.elements';
+import { Wrapper } from '@bit/meema.ui-components.elements';
 import { pixelToRem } from 'meema.utils';
 import ReactPlayer from 'react-player/lazy';
 import { css } from 'styled-components';
@@ -37,9 +37,7 @@ const Component: React.FunctionComponent<IProps> = ({
     return () => {
       window.removeEventListener('scroll', onScrollHandler);
     }
-  }, [
-    fixByScroll,
-  ]);
+  }, []);
 
   return useMemo(() => (
     <Wrapper
@@ -52,6 +50,7 @@ const Component: React.FunctionComponent<IProps> = ({
         @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
           width: ${pixelToRem(864)};
           height: ${pixelToRem(487)};
+          z-index: 999;
         }
       `}
     >
@@ -72,6 +71,9 @@ const Component: React.FunctionComponent<IProps> = ({
             animation-iteration-count: 1;
             animation-direction: alternate;
             animation-fill-mode: forwards;
+
+            @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+            }
             
             @keyframes fixVideo {
               0% {
@@ -128,6 +130,10 @@ const Component: React.FunctionComponent<IProps> = ({
           controls={true}
           muted={true}
           playbackRate={1}
+          onPause={() => {
+            setIsFixed(false);
+            window.removeEventListener('scroll', onScrollHandler);
+          }}
           fallback={
             <Wrapper customCss={css`
               display: flex;
@@ -138,7 +144,7 @@ const Component: React.FunctionComponent<IProps> = ({
               width: 100%;
               font-size: ${pixelToRem(40)};
             `}>
-              <Loader />
+              <Loader mode='default' />
             </Wrapper>
           }
         />

@@ -3,6 +3,7 @@ import { pixelToRem } from 'meema.utils';
 import { css } from 'styled-components';
 import Elements, { Img, H1, P } from '@bit/meema.ui-components.elements';
 import Images from '../../../../images';
+import Form from '../../../Shared/Form';
 
 const Component: React.FunctionComponent<{}> = () => {
   return useMemo(() => (
@@ -11,13 +12,19 @@ const Component: React.FunctionComponent<{}> = () => {
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: ${pixelToRem(40)} 0;
+        padding: ${pixelToRem(40)} ${pixelToRem(40)};
 
         > * {
           margin-bottom: ${pixelToRem(10)};
         }
+
+        @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+          padding-left: 0;
+          padding-right: 0;
+        }
       `}
     >
+      <Form.NavigationNav allowGoBack={false} />
       <Img
         src={Images.Icons.DoneIcon}
         alt="ok"
@@ -34,8 +41,7 @@ const Component: React.FunctionComponent<{}> = () => {
       >Listo, reduciremos tu donación</H1>
       <P>Te confirmaremos a tu e-mail cuando la hayamos procesado.</P>
     </Elements.Wrapper>
-  ), [
-  ]);
+  ), []);
 };
 
 Component.displayName = 'ReduceDonationFormThankYou';

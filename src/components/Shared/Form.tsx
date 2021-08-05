@@ -1,10 +1,11 @@
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import Elements from "@bit/meema.ui-components.elements";
 import { pixelToRem, CustomCSSType } from "meema.utils";
 import styled, { css } from "styled-components";
 import Icons from '../../images/icons';
-import { useHistory } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import { OnChangeEvent } from 'greenpeace';
+import { FormContext } from '../Forms/context';
 
 /*
 * TODO:
@@ -32,13 +33,12 @@ const innerMargin = (marginRight: number, marginLeft: number) => css`
 
 const Main = styled(Elements.Form)`
   flex-direction: column;
-  position: fixed;
   padding: ${pixelToRem(20)} ${pixelToRem(24)} ${pixelToRem(70)};
   /* background-color: ${({theme}) => theme.color.secondary.light}; */
-  left: 0;
-  top: 0;
+  /* position: fixed; */
+  /* left: 0; */
+  /* top: 0; */
   width: 100%;
-  /* min-height: 100vh; */
   overflow: auto;
 
   @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
@@ -48,11 +48,16 @@ const Main = styled(Elements.Form)`
 
 const Content = styled(Elements.Wrapper)``;
 
-const NavigationNav: React.FunctionComponent<{}> = memo(() => {
+const NavigationNav: React.FunctionComponent<{ allowGoBack?: boolean }> = memo(({
+  allowGoBack = true,
+}) => {
   const history = useHistory();
+  const { currentIndex, setCurrentIndex } = useContext(FormContext);
 
   const onBack = useCallback(() => {
-    history.goBack();
+    if(allowGoBack) {
+      setCurrentIndex(currentIndex > 0 ? currentIndex - 1 : 0);
+    }
   }, [
     history,
   ]);
@@ -61,31 +66,38 @@ const NavigationNav: React.FunctionComponent<{}> = memo(() => {
     history.push('/');
   }, [
     history,
+    currentIndex,
   ]);
 
   return useMemo(() => (
     <Elements.Nav
       customCss={css`
         display: flex;
-        justify-content: space-between;
+        justify-content: ${(currentIndex > 0 && allowGoBack) ? 'space-between' : 'flex-end'};
         width: 100%;
+        margin-bottom: ${pixelToRem(45)};
 
         img {
           cursor: pointer;
         }
       `}
     >
-      <Elements.Img src={Icons.BackIcon} role='button' onClick={onBack} />
+      {(currentIndex > 0 && allowGoBack) && <Elements.Img src={Icons.BackIcon} role='button' onClick={onBack} />}
       <Elements.Img src={Icons.XIcon} role='button' onClick={onClose} />
     </Elements.Nav>
   ), [
+    currentIndex,
+    allowGoBack,
     onClose,
+    setCurrentIndex,
   ]);
 });
 
-const Row = styled(Elements.Wrapper)<{ title?: string; }>`
+// Changed to Fieldset
+const Row = styled.fieldset<{ title?: string; }>`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  border: none;
   width: 100%;
 
   ${({ title }) => (title) && css`
@@ -96,6 +108,10 @@ const Row = styled(Elements.Wrapper)<{ title?: string; }>`
       content: "${title}";
     }
   `}
+
+  @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+    flex-direction: row;
+  }
 `;
 
 const Column = styled(Elements.Wrapper)`
@@ -134,6 +150,7 @@ const Group: React.FunctionComponent<{
   useEffect(() => {
     if(validateFn) {
       const validator = validateFn(value);
+      console.log(validator);
       setIsValid(validator.isValid);
       setErrorMessage(validator.errorMessage);
       
@@ -157,7 +174,6 @@ const Group: React.FunctionComponent<{
         
         &:after {
           width: 100%;
-          /* display: ${(!isValid && value !== '' && showErrorMessage && errorMessage) ? 'flex' : 'none'}; */
           margin-top: ${pixelToRem(10)};
           font-size: ${pixelToRem(15)};
           color: ${({theme}) => theme.color.error.normal};
@@ -176,8 +192,8 @@ const Group: React.FunctionComponent<{
             border-color: ${({theme}) => theme.color.error.normal};
           `}
         }
-        ${innerMargin(20, 20)};
 
+        ${innerMargin(20, 20)};
         ${(customCss) && customCss};
       `}
     >
@@ -207,15 +223,6 @@ const Header = styled(Elements.Header)`
   margin: ${pixelToRem(27)} 0; 
 `;
 
-const HeaderTitle = styled(Elements.H1)`
-  font-size: ${pixelToRem(18)};
-  font-style: normal;
-  font-weight: 600;
-  line-height: ${pixelToRem(34)};
-  text-align: left;
-  color: ${({theme}) => theme.color.primary.normal};
-`;
-
 const Text = styled(Elements.P)`
   font-size: ${pixelToRem(16)};
   font-style: normal;
@@ -243,8 +250,16 @@ const Title = styled(Elements.H2)`
 
 const Nav = styled(Elements.Nav)`
   display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 100%;
+  margin-top: ${pixelToRem(40)};
+
+  > * {
+    &:not(:last-child) {
+      margin-bottom: ${pixelToRem(20)};
+    }
+  } 
 `;
 
 const Message = styled(Elements.P)`
@@ -258,17 +273,23 @@ const ErrorMessage = styled(Elements.Wrapper)`
   border-radius: ${pixelToRem(5)};
   background-color: ${({theme}) => theme.color.error.normal};
   color: white;
+  margin-top: ${pixelToRem(18)};
 
   &:before {
+    flex: 0 0 auto;
     width: ${pixelToRem(20)};
     height: ${pixelToRem(20)};
-    margin-right: ${pixelToRem(12)};
+    /* margin-right: ${pixelToRem(12)}; */
     background-size: ${pixelToRem(20)} ${pixelToRem(20)};
     background-position: center center;
     background-repeat: no-repeat;
     transform-origin: center;
     background-image: url(${Icons.WarningIcon});
     content: "";
+
+    @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+      margin-right: ${pixelToRem(12)};
+    }
   }
 `;
 
@@ -302,7 +323,6 @@ const TextArea = styled(Elements.TextArea)`
 `;
 
 const Button = styled(Elements.Button)`
-  /* width: 100%; */
   padding: ${pixelToRem(10)};
   color: white;
   background-color: ${({theme}) => theme.color.primary.normal};
@@ -310,6 +330,7 @@ const Button = styled(Elements.Button)`
   font-size: ${pixelToRem(16)};
   font-family: ${({theme}) => theme.font.family.primary.normal};
   padding: ${pixelToRem(13)} ${pixelToRem(60)};
+  width: fit-content;
 
   &:hover {
     background-color: ${({theme}) => theme.color.primary.dark};
@@ -333,6 +354,12 @@ const Button = styled(Elements.Button)`
       box-shadow: none !important;
     }
   `}
+`;
+
+const ButtonLink = styled(NavLink)`
+  color: ${({theme}) => theme.color.primary.normal};
+  text-decoration: underline;
+  width: fit-content;
 `;
 
 const RadioButton: React.FunctionComponent<{
@@ -388,11 +415,24 @@ const RadioButton: React.FunctionComponent<{
           background-color: white;
           border: solid ${pixelToRem(1)} ${({theme}) => theme.color.secondary.normal};
           margin-right: ${pixelToRem(10)};
-          transition: all 150ms ease;
 
           ${(checkedValue === value) && css`
             border-color: ${({theme}) => theme.color.primary.normal};
+            background-color: ${({theme}) => theme.color.primary.normal};
             border-width: ${pixelToRem(4)};
+
+            &:after {
+              flex: 0 0 auto;
+              width: ${pixelToRem(12)};
+              height: ${pixelToRem(12)};
+              background-size: ${pixelToRem(12)} ${pixelToRem(12)};
+              background-position: center center;
+              background-repeat: no-repeat;
+              transform-origin: center;
+              background-image: url(${Icons.TickIcon});
+              position: absolute;
+              content: "";
+            }
           `}
         `}
       />
@@ -425,6 +465,7 @@ const _ = {
   CarouselWrapper,
   TextArea,
   Button,
+  ButtonLink,
   RadioButton,
 };
 

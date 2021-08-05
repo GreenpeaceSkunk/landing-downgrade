@@ -39,7 +39,6 @@ export const createToken = async (form: HTMLFormElement):Promise<boolean> => {
 
 export const getInstallments = async (params: any): Promise<any> => {
   return new Promise((resolve, reject) => {
-    console.log("getInstallments", params);
     window.Mercadopago.getInstallments(params, (status: number, installments: any[]) => {
       if(installments.length) {
         const paymentMethods = installments.map((paymentMethod: any) => (

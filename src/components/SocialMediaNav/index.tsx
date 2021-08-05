@@ -11,12 +11,17 @@ const Component: React.FunctionComponent<{}> = () => {
       <Span
         customCss={css`
           display: flex;
+          justify-content: center;
           color: white;
           margin-bottom: ${pixelToRem(36)};
+          text-align: center;
         `}
       >¡Seamos muchos más los que ayudamos al planeta!</Span>
       <Nav
         customCss={css`
+          display: flex;
+          justify-content: center;
+          width: 100%;
           > * {
             margin-right: ${pixelToRem(32)};
             
@@ -26,14 +31,14 @@ const Component: React.FunctionComponent<{}> = () => {
           }
         `}
       >
-        <A href='https://facebook.com/greenpeace'>
-          <Img src={Images.Icons.FacebookLogo} alt='' />
+        <A href={`${process.env.REACT_APP_SOCIAL_MEDIA_URL_FACEBOOK}`} target='_blank'>
+          <Img src={Images.Icons.FacebookLogo} alt='Facebook' loading='lazy' />
         </A>
-        <A href='https://facebook.com/greenpeace'>
-          <Img src={Images.Icons.InstagramLogo} alt='' />
+        <A href={`${process.env.REACT_APP_SOCIAL_MEDIA_URL_INSTAGRAM}`} target='_blank'>
+          <Img src={Images.Icons.InstagramLogo} alt='Instagram' loading='lazy' />
         </A>
-        <A href='https://facebook.com/greenpeace'>
-          <Img src={Images.Icons.TwitterLogo} alt='' />
+        <A href={`${process.env.REACT_APP_SOCIAL_MEDIA_URL_TWITTER}`} target='_blank'>
+          <Img src={Images.Icons.TwitterLogo} alt='Twitter' loading='lazy' />
         </A>
       </Nav>
     </Wrapper>

@@ -1,15 +1,20 @@
 import React, { createContext, useCallback, useEffect, useMemo, useReducer, useState } from 'react';
-import { reducer, initialState, ContextActionType as FormContextActionType, FieldErrorType } from './reducer';
+import { reducer, initialState, ContextActionType as FormContextActionType, ErrorsType } from './reducer';
 import { UserDonationFormProvider } from './SplittedForms/UserDonationForm/context';
 import { UserDataFormProvider } from './SplittedForms/UserDataForm/context';
 import { UserFeedbackFormProvider } from './SplittedForms/UserFeedbackForm/context';
-import { useHistory, useLocation, useRouteMatch } from 'react-router-dom';
+import { RouteComponentProps, useHistory, useLocation, useRouteMatch, withRouter } from 'react-router-dom';
 
 interface IContext {
-  errors: FieldErrorType;
-  showFieldErrors: boolean;
+  errors: ErrorsType;
   pathnames: string[];
+  currentIndex: number;
+  showFieldErrors: boolean;
+  allowNext: boolean;
+  submitted: boolean;
+  submitting: boolean;
   setPathnames: React.Dispatch<React.SetStateAction<string[]>>;
+  setCurrentIndex: React.Dispatch<React.SetStateAction<number>>;
   onUpdateFieldHandler: ( fieldName: string, isValid: boolean ) => void;
   dispatch: (action: FormContextActionType) => void;
 }
@@ -22,13 +27,17 @@ const Context = createContext({} as IContext);
 Context.displayName = 'FormContext';
 const { Provider, Consumer } = Context;
 
-const ContextProvider: React.FunctionComponent<IProps> = ({ children }) => {
-  const [{ errors }, dispatch ] = useReducer(reducer, initialState);
+const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = ({ children }) => {
+  const [{
+    errors,
+    submitted,
+    submitting,
+  }, dispatch ] = useReducer(reducer, initialState);
   const [ showFieldErrors, setShowFieldErrors ] = useState<boolean>(true);
   const [ currentIndex, setCurrentIndex ] = useState<number>(0);
   const [ pathnames, setPathnames ] = useState<string[]>([]);
-  const history = useHistory();
   const { path } = useRouteMatch();
+  const [ allowNext, setAllowNext ] = useState<boolean>(true);
 
   const onUpdateFieldHandler = useCallback(( fieldName: string, isValid: boolean ) => {
     dispatch({
@@ -36,38 +45,36 @@ const ContextProvider: React.FunctionComponent<IProps> = ({ children }) => {
       payload: {
         fieldName,
         isValid,
+        indexForm: currentIndex,
       }
     });
   }, [
     errors,
+    currentIndex,
     dispatch,
   ]);
 
-  // useEffect(() => {
-  //   history.push({
-  //     pathname: `${path}${pathnames[currentIndex]}`,
-  //   });
-  // }, [
-  //   currentIndex,
-  // ]);
-
-  // useEffect(() => {
-  //   if(!pathnames.length) {
-  //     setCurrentIndex(0);
-  //   }
-  // }, [
-  //   pathnames,
-  // ])
-
-  // useEffect(() => {
-  //   setPathnames([]);
-  // }, [])
+  useEffect(() => {
+    if(errors && errors[currentIndex]) {
+      const tmp = {...errors[currentIndex]};
+      setAllowNext(Object.values(tmp).length ? false : true);
+      setShowFieldErrors((Object.values(tmp).length >= 2) ? false : true)
+    }
+  }, [
+    currentIndex,
+    errors,
+  ]);
 
   return useMemo(() => (
     <Provider value={{
       errors,
-      showFieldErrors,
       pathnames,
+      currentIndex,
+      showFieldErrors,
+      allowNext,
+      submitted,
+      submitting,
+      setCurrentIndex,
       setPathnames,
       onUpdateFieldHandler,
       dispatch,
@@ -83,16 +90,23 @@ const ContextProvider: React.FunctionComponent<IProps> = ({ children }) => {
   ), [
     children,
     errors,
-    showFieldErrors,
     path,
+    currentIndex,
+    showFieldErrors,
+    allowNext,
+    submitted,
+    submitting,
     setPathnames,
+    setCurrentIndex,
     onUpdateFieldHandler,
     dispatch,
   ]);
 };
 
+const WrappedProvider = withRouter(ContextProvider);
+
 export {
-  ContextProvider as FormProvider,
+  WrappedProvider as FormProvider,
   Consumer as FormConsumer,
   Context as FormContext,
 };

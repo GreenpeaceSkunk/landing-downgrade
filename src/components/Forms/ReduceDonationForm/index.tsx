@@ -11,6 +11,7 @@ import { save } from './service';
 import { UserDataFormContext } from '../SplittedForms/UserDataForm/context';
 import { UserDonationFormContext } from '../SplittedForms/UserDonationForm/context';
 import { UserFeedbackFormContext } from '../SplittedForms/UserFeedbackForm/context';
+import { isMobile } from 'meema.utils';
 
 const ReduceDonationFormThankYou = lazy(() => import('./ThankYou'));
 
@@ -21,23 +22,30 @@ const pathnames = [
 const Component: React.FunctionComponent<{}> = () => {
   const history = useHistory();
   const carouselRef = useRef<ICarouselRef>(null);
-  const [ currentIndex, setCurrentIndex ] = useState<number>(0);
+  const userDataFormRef = useRef<IUserDataFormRef>(null);
+  const userDonationFormRef = useRef<IUserDonationFormRef>(null);
   const { path } = useRouteMatch();
-  const { errors, dispatch } = useContext(FormContext);
+  const {
+    errors,
+    currentIndex,
+    allowNext,
+    showFieldErrors,
+    submitted,
+    submitting,
+    setCurrentIndex,
+    dispatch,
+  } = useContext(FormContext);
   const { data } = useContext(UserDataFormContext);
   const { donation } = useContext(UserDonationFormContext);
   const { feedback } = useContext(UserFeedbackFormContext);
- 
-  const userDataFormRef = useRef<IUserDataFormRef>(null);
-  const userDonationFormRef = useRef<IUserDonationFormRef>(null);
 
   const onSubmit = useCallback((evt: FormEvent) => {
     evt.preventDefault();
-
     if(currentIndex + 1 < pathnames.length) {
       setCurrentIndex(currentIndex + 1);
     } else {
       (async () => {
+        dispatch({ type: 'SUBMIT' });
         const result = await save({
           userAgent: window.navigator.userAgent,
           percentDecrease: donation.percentDecrease,
@@ -48,7 +56,7 @@ const Component: React.FunctionComponent<{}> = () => {
           email: data.email,
           mPhoneNumber: data.mobilePhoneNumber,
         });
-        
+        dispatch({ type: 'SUBMITTED' });
         if(result.error) {
           console.log('Error inesperado', result.message);
         } else {
@@ -62,40 +70,6 @@ const Component: React.FunctionComponent<{}> = () => {
     donation,
     currentIndex,
   ]);
-
-  const onSubmit2 = useCallback((evt: FormEvent) => {
-    evt.preventDefault();
-    if(carouselRef.current) {
-      if(currentIndex < carouselRef.current.getTotal() - 1) {
-        setCurrentIndex(currentIndex + 1);
-      } else {
-        (async () => {
-          const result = await save({
-            userAgent: window.navigator.userAgent,
-            percentDecrease: donation.percentDecrease,
-            firstName: data.firstName,
-            lastName: data.lastName,
-            citizenId: data.citizenId,
-            areaCode: data.areaCode,
-            email: data.email,
-            mPhoneNumber: data.mobilePhoneNumber,
-          });
-          
-          if(result.error) {
-            console.log('Error inesperado', result.message);
-          } else {
-            history.push(`${path}/thank-you`);
-          }
-        })();
-      }
-    }
-  }, [
-    path,
-    data,
-    donation,
-    currentIndex,
-    carouselRef,
-  ]);
   
   useEffect(() => {
     if(currentIndex === 0) {
@@ -107,11 +81,22 @@ const Component: React.FunctionComponent<{}> = () => {
     currentIndex,
   ]);
 
+  useEffect(() => {
+    setCurrentIndex(0);
+    if(isMobile()) {
+      document.body.style.overflow = "hidden";
+  
+      return () => {
+        document.body.style.overflow = "auto";
+      }
+    }
+  }, []);
+
   return useMemo(() => (
     <Elements.Wrapper>
       <Switch>
         <Route exact path={`${path}/thank-you`}>
-          <Suspense fallback={<Loader />}>
+          <Suspense fallback={<Loader mode='default' />}>
             <ReduceDonationFormThankYou />
           </Suspense>
         </Route>
@@ -129,31 +114,22 @@ const Component: React.FunctionComponent<{}> = () => {
                 <UserDataForm ref={userDataFormRef} />
               </Form.CarouselWrapper>
             </Route>
-
-            {/* <Carousel
-              ref={carouselRef}
-              allowSlide={false}
-              showControls={!false}
-              showIndicators={!false}
-              index={currentIndex}
-            >
-              <Form.CarouselWrapper>
-                <UserDonationForm ref={userDonationFormRef} />
-                <UserDataForm ref={userDataFormRef} />
-              </Form.CarouselWrapper>
-            </Carousel> */}
-                
+            
+            <Form.Message>* Datos obligatorios</Form.Message>
+            {(!showFieldErrors) ? (
+              <Form.ErrorMessage>Tenés campos incompletos o con errores. Revisalos para continuar.</Form.ErrorMessage>
+            ) : null }
             <Form.Nav>
               <Form.Button
                 type='submit'
                 format='contained'
-                disabled={(errors && Object.keys(errors).length) ? true : false}
-              >Continuar</Form.Button>
+                disabled={!allowNext || submitting}
+              >
+                {(submitting) ? (
+                  <Loader mode='light' />
+                ) : (((currentIndex < (pathnames.length - 1)) ? 'Continuar' : 'Confimar'))}
+              </Form.Button>
             </Form.Nav>
-            <Form.Message>* Datos obligatorios</Form.Message>
-            {(errors && (Object.keys(errors).length >= 2)) ? (
-              <Form.ErrorMessage>Tenés campos incompletos o con errores. Revisalos para continuar.</Form.ErrorMessage>
-            ) : null }
           </Form.Main>
         </Route>
       </Switch>
@@ -169,6 +145,11 @@ const Component: React.FunctionComponent<{}> = () => {
     userDataFormRef,
     userDonationFormRef,
     history,
+    allowNext,
+    showFieldErrors,
+    submitted,
+    submitting,
+    setCurrentIndex,
     dispatch,
   ]);
 };

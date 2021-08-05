@@ -3,17 +3,19 @@ import styled, { css } from 'styled-components';
 import { Footer, A, Nav, Span, Wrapper, } from '@bit/meema.ui-components.elements';
 import { pixelToRem } from 'meema.utils';
 import SocialMediaNav from '../SocialMediaNav';
+import { Logo } from '../Shared';
 
 const Link = styled(A)`
   color: white;
   text-decoration: underline;
-  margin-bottom: ${pixelToRem(5)};
+  /* margin-bottom: ${pixelToRem(5)}; */
   font-family: ${({theme}) => theme.font.family.primary.regular};
+  font-size: ${pixelToRem(14)};
   
   @media (min-width: ${props => pixelToRem(props.theme.responsive.tablet.minWidth)}) {
     margin-bottom: 0;
     
-    &:after {
+    /* &:after {
       content: '|';
       margin-right: ${pixelToRem(10)};
       margin-left: ${pixelToRem(10)};
@@ -23,7 +25,7 @@ const Link = styled(A)`
       &:after {
         display: none;
       }
-    }
+    } */
   }
 `;
 
@@ -31,8 +33,8 @@ const Component: React.FunctionComponent<{}> = memo(() => useMemo(() => (
   <Footer
     customCss={css`
       display: flex;
-      flex-direction: row;
-      align-items: flex-end;
+      flex-direction: column;
+      align-items: center;
       justify-content: space-between;
       padding: ${pixelToRem(30)};
       width: 100%;
@@ -42,32 +44,44 @@ const Component: React.FunctionComponent<{}> = memo(() => useMemo(() => (
       transition: all 250ms ease;
 
       @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+        flex-direction: row-reverse;
+        align-items: flex-start;
         min-height: ${({theme}) => pixelToRem(theme.footer.tablet.height)};
         background-color: ${({theme}) => theme.footer.tablet.backgroundColor};
       }
-
+      
       @media (min-width: ${({theme}) => pixelToRem(theme.responsive.desktop.minWidth)}) {
         min-height: ${({theme}) => pixelToRem(theme.footer.desktop.height)};
         background-color: ${({theme}) => theme.footer.desktop.backgroundColor};
       }
-    `}
+      `}
   >
-    <Nav>
-      <Link
-        href={`${process.env.REACT_APP_TERMS_AND_CONDITIONS_URL}`}
-      >Términos y condiciones</Link>
-      <Link
-        href={`${process.env.REACT_APP_PRIVACY_POLICY_URL}`}
-      >Política de privacidad</Link>
-    </Nav>
+    <SocialMediaNav />
     <Wrapper>
-      {/* <Span
+      <Logo customCss={css`
+        display: none;
+        
+        @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+          display: block;
+        }
+
+      `}/>
+      <Nav
         customCss={css`
-          color: white;
-          margin-bottom: ${pixelToRem(5)};
+          display: flex;
+          justify-content: center;
+          width: 100%;
+          margin-top: ${pixelToRem(48)};
+
+          @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+            justify-content: flex-start;
+          }
         `}
-      >® Greenpeace Argentina 2021</Span> */}
-      <SocialMediaNav />
+      >
+        <Link href={`${process.env.REACT_APP_TERMS_AND_CONDITIONS_URL}`}>Términos y condiciones</Link>
+        <Span customCss={css`color: white; margin: 0 ${pixelToRem(10)};`}>|</Span>
+        <Link href={`${process.env.REACT_APP_PRIVACY_POLICY_URL}`}>Política de privacidad</Link>
+      </Nav>
     </Wrapper>
   </Footer>
 ), []));

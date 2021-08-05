@@ -5,13 +5,12 @@ import React, {
   useImperativeHandle,
   useMemo,
 } from 'react';
-import { Input, RadioButton } from '@bit/meema.gpar-ui-components.form';
-import { OnClickEvent, OnChangeEvent } from 'greenpeace';
+import { OnChangeEvent } from 'greenpeace';
 import { useRouteMatch } from 'react-router-dom';
 import Form from '../../../Shared/Form'; // Move to bit
 import { FormContext } from '../../context';
 import { UserFeedbackFormContext } from './context';
-import { validateField, validateFirstName } from '../../../../utils/validators';
+import { validateNotEmptyField } from '../../../../utils/validators';
 
 interface IProps {}
 export interface IRef {}
@@ -26,7 +25,6 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
 
   const onChangeHandler = useCallback((evt: OnChangeEvent) => {
     evt.preventDefault();
-    console.log('onChangeHandler')
     dispatch({
       type: 'UPDATE_USER_FEEDBACK',
       payload: {
@@ -37,29 +35,11 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
     feedback,
     dispatch,
   ]);
-
-  // const onClick = useCallback((evt: OnClickEvent) => {
-  //   evt.preventDefault();
-  //   dispatch({
-  //     type: 'UPDATE_USER_FEEDBACK',
-  //     payload: {
-  //       [`${evt.currentTarget.name}`]: parseInt(evt.currentTarget.dataset.value),
-  //     },
-  //   });
-  // }, [
-  //   feedback,
-  //   dispatch,
-  // ]);
   
   useImperativeHandle(innerRef, () => {
     return {}
   });
 
-  useEffect(() => {
-
-  }, [
-
-  ]);
   return useMemo(() => (
     <Form.Content>
       <Form.Title>Datos personales</Form.Title>
@@ -69,6 +49,8 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
             value={feedback.selectedOption}
             fieldName='selectedOption'
             labelText='¿Qué motivo te llevó a tomar esta decisión? *'
+            showErrorMessage={showFieldErrors}
+            validateFn={validateNotEmptyField}
             onUpdateHandler={onUpdateFieldHandler}
             >
               {[
@@ -86,7 +68,6 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
                   onChangeHandler={onChangeHandler}
                 />
               ))}
-                
           </Form.Group>
         </Form.Column>
         <Form.Column>
@@ -94,7 +75,8 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
             fieldName='comment'
             labelText='Contanos más sobre el motivo que elegiste*'
             value={feedback.comment}
-            validateFn={validateFirstName}
+            showErrorMessage={showFieldErrors}
+            validateFn={validateNotEmptyField}
             onUpdateHandler={onUpdateFieldHandler}
           >
             <Form.TextArea

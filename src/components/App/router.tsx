@@ -15,7 +15,7 @@ const Component: React.FunctionComponent<{}> = memo(() => {
   return useMemo(() => (
     <>
       <ErrorBoundary fallback='Header error'>
-        <Suspense fallback={<Loader />}>
+        <Suspense fallback={<Loader mode='default' />}>
           <MainHeader />
         </Suspense>
       </ErrorBoundary>
@@ -28,19 +28,16 @@ const Component: React.FunctionComponent<{}> = memo(() => {
         `}
       >
         <Switch>
-          <Route exact path='/thank-you'>
-            Thank you page
-          </Route>
           <Route path='/'>
             <ErrorBoundary fallback='Home error'>
-              <Suspense fallback={<Loader />}>
+              <Suspense fallback={<Loader mode='default' />}>
                 <HomeView />
               </Suspense>
             </ErrorBoundary>
           </Route>
         </Switch>
         <ErrorBoundary fallback='Footer error'>
-          <Suspense fallback={<Loader />}>
+          <Suspense fallback={<Loader mode='default' />}>
             <MainFooter />
           </Suspense>
         </ErrorBoundary>

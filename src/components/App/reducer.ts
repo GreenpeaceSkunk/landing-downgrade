@@ -20,10 +20,10 @@ export const initialState: ContextStateType = {
     data: {
       firstName: 'Doe',
       lastName: 'Deer',
-      citizenId: '10234567',
+      citizenId: '1023456',
       email: 'doe.deer@email.com',
       areaCode: '11',
-      mobilePhoneNumber: '40000111',
+      mobilePhoneNumber: '4000011',
     },
     donation: {
       percentDecrease: 10,
