@@ -17,13 +17,21 @@ export const initialState: ContextStateType = {
   //   mobilePhoneNumber: '',
   // } as IUserData,
   user: {
+    // data: {
+    //   firstName: 'Doe',
+    //   lastName: 'Deer',
+    //   citizenId: '1023456',
+    //   email: 'doe.deer@email.com',
+    //   areaCode: '11',
+    //   mobilePhoneNumber: '4000011',
+    // },
     data: {
-      firstName: 'Doe',
-      lastName: 'Deer',
-      citizenId: '1023456',
-      email: 'doe.deer@email.com',
-      areaCode: '11',
-      mobilePhoneNumber: '4000011',
+      firstName: '',
+      lastName: '',
+      citizenId: '',
+      email: '',
+      areaCode: '',
+      mobilePhoneNumber: '',
     },
     donation: {
       percentDecrease: 10,

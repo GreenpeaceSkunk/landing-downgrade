@@ -150,7 +150,6 @@ const Group: React.FunctionComponent<{
   useEffect(() => {
     if(validateFn) {
       const validator = validateFn(value);
-      console.log(validator);
       setIsValid(validator.isValid);
       setErrorMessage(validator.errorMessage);
       
