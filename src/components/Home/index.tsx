@@ -1,21 +1,19 @@
 import React, { lazy, useMemo, memo, Suspense } from 'react';
-import { H1, H2, Img, P, Span, View, Wrapper } from '@bit/meema.ui-components.elements';
+import { View, Wrapper } from '@bit/meema.ui-components.elements';
 import { HomeProvider } from './context';
-import styled, { css } from 'styled-components';
-import { pixelToRem } from 'meema.utils';
+import { css } from 'styled-components';
+import { isMobile, pixelToRem } from 'meema.utils';
 import { Loader } from '../Shared';
 import Layout from '../Shared/Layout';
 import ErrorBoundary from '../ErrorBoundary';
-
-import Images from '../../images';
 import Card from '../Card';
 import VideoPlayer from '../VideoPlayer';
-
-interface IText { showBullet?: boolean; };
 
 const FormRouter = lazy(() => import('../Forms/router'));
 
 const Component: React.FunctionComponent<{}> = memo(() => {
+  const mobile = isMobile();
+
   return useMemo(() => (
     <View
       id='home'
@@ -74,7 +72,7 @@ const Component: React.FunctionComponent<{}> = memo(() => {
             <Card
               description='Los incendios en humedales que logramos visibilizar gracias a tu ayuda y tantas otras por las que seguiremos luchando cada día.'
               icon='trees'
-              title='Protección<br/>de humedales'
+              title='Protección de humedales'
             />
           </Layout.Cards>
           <VideoPlayer
@@ -111,13 +109,16 @@ const Component: React.FunctionComponent<{}> = memo(() => {
             icon='factory'
           />
           <Card
-            title='6 de cada 7 especies de tortugas marinas están en peligro de extinción.'
+            title='No recibimos aportes de partidos políticos ni estamos vinculados con ellos.'
             icon='government'
           />
         </Layout.Cards>
       </Layout.Panel>
       <Layout.Panel>
-        <Layout.Title color='primary'>La decisión siempre está en tus manos</Layout.Title>
+        <Layout.Title
+          color='primary'
+          customCss={css``}
+        >La decisión siempre está {mobile ? <br/> : null} en tus manos</Layout.Title>
         <Layout.Text>Siempre podrás reducir el monto de tu donación o cancelarla directamente, sin vueltas. Si aún no estás seguro, podés hacerlo en otro momento.</Layout.Text>
       </Layout.Panel>
       <Layout.Panel
@@ -134,7 +135,9 @@ const Component: React.FunctionComponent<{}> = memo(() => {
         </ErrorBoundary>
       </Layout.Panel>
     </View>
-  ), []);
+  ), [
+    mobile,
+  ]);
 });
 
 Component.displayName = 'HomeView';

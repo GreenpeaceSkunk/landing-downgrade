@@ -1,11 +1,13 @@
 import React, { FunctionComponent, memo, useMemo } from 'react';
-import { Wrapper, Header, H1, HGroup, Span, P } from '@bit/meema.ui-components.elements';
-import { pixelToRem } from 'meema.utils';
+import { Wrapper, Header, H1, HGroup, P } from '@bit/meema.ui-components.elements';
+import { isMobile, pixelToRem } from 'meema.utils';
 import { css } from 'styled-components';
 import { Logo } from '../Shared';
 import Images from '../../images';
 
 const MainHeader: FunctionComponent<{}> = memo(() => {
+  const mobile = isMobile();
+
   return useMemo(() => (
     <Header
       customCss={css`
@@ -90,18 +92,19 @@ const MainHeader: FunctionComponent<{}> = memo(() => {
               color: white;
               font-size: ${pixelToRem(16)};
               line-height: ${pixelToRem(18)};
-              font-family: ${({theme}) => theme.font.family.primary.bold};
               
               @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
                 font-size: ${pixelToRem(26)};
                 line-height: ${pixelToRem(28)};
               }
             `}
-          >En greenpeace no recibimos dinero de empresas privadas, ni de la política, por eso tu aporte es tan importante.</P>
+          >En greenpeace no recibimos dinero de empresas privadas,{(!mobile) ? <br/> : null} ni de la política, por eso tu aporte es tan importante.</P>
         </HGroup>
       </Wrapper>
     </Header>
-  ), [])
+  ), [
+    mobile,
+  ])
 });
 
 export default MainHeader;
