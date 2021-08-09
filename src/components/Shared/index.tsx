@@ -1,7 +1,7 @@
 import Images from '../../images';
 import Elements, { CustomCSSType } from '@bit/meema.ui-components.elements';
 import ThreeCircles from '@bit/meema.ui-components.loaders.three-circles';
-import styled, { css } from 'styled-components';
+import { css } from 'styled-components';
 import { pixelToRem } from 'meema.utils';
 
 export const Logo: React.FunctionComponent<{ customCss?: CustomCSSType }> = ({customCss}) => (

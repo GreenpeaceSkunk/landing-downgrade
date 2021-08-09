@@ -4,7 +4,6 @@ import Images from '../../images';
 import { css } from 'styled-components';
 import { pixelToRem } from 'meema.utils';
 
-
 const Component: React.FunctionComponent<{}> = () => {
   return useMemo(() => (
     <Wrapper>
