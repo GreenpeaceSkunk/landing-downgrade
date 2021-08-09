@@ -1,7 +1,6 @@
 import React, { createContext, useMemo, useReducer } from 'react';
 import { IUserFeedback, UserContextActionType as ContextActionType } from 'greenpeace';
 import { reducer, initialState } from '../../../App/reducer';
-
 interface IContext {
   feedback: IUserFeedback;
   dispatch: (action: ContextActionType) => void;

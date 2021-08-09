@@ -114,6 +114,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
             fieldName='areaCode'
             value={data.areaCode}
             labelText='Cod. Área *'
+            labelBottomText='Sin el 0'
             showErrorMessage={showFieldErrors}
             customCss={css`
               flex-basis: ${pixelToRem(140)};
@@ -133,6 +134,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
             fieldName='mobilePhoneNumber'
             value={data.mobilePhoneNumber}
             labelText='Celular *'
+            labelBottomText='Sin el 15'
             showErrorMessage={showFieldErrors}
             validateFn={validatePhoneNumber}
             onUpdateHandler={onUpdateFieldHandler}

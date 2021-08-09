@@ -7,6 +7,7 @@ import { NavLink, useHistory } from 'react-router-dom';
 import { OnChangeEvent } from 'greenpeace';
 import { FormContext } from '../Forms/context';
 
+// export type OnUpdateFieldHandlerFn = ( fieldName: string, value: string, isValid: boolean ) => void;
 /*
 * TODO:
 *  - Debounce input 
@@ -59,14 +60,15 @@ const NavigationNav: React.FunctionComponent<{ allowGoBack?: boolean }> = memo((
       setCurrentIndex(currentIndex > 0 ? currentIndex - 1 : 0);
     }
   }, [
-    history,
+    allowGoBack,
+    currentIndex,
+    setCurrentIndex,
   ]);
   
   const onClose = useCallback(() => {
     history.push('/');
   }, [
     history,
-    currentIndex,
   ]);
 
   return useMemo(() => (
@@ -86,10 +88,11 @@ const NavigationNav: React.FunctionComponent<{ allowGoBack?: boolean }> = memo((
       <Elements.Img src={Icons.XIcon} role='button' onClick={onClose} />
     </Elements.Nav>
   ), [
-    currentIndex,
     allowGoBack,
-    onClose,
+    currentIndex,
     setCurrentIndex,
+    onBack,
+    onClose,
   ]);
 });
 
@@ -129,17 +132,19 @@ const Group: React.FunctionComponent<{
   children?: React.ReactNode | HTMLAllCollection;
   fieldName: string;
   labelText?: string;
+  labelBottomText?: string;
   value?: string|number;
   showErrorMessage?: boolean;
   customCss?: CustomCSSType;
   validateFn?: (value: any) => any;
-  onUpdateHandler?: (fieldName: string, isValid: boolean) => void;
+  onUpdateHandler?: (fieldName: string, isValid: boolean, value?: string|number) => void;
 }> = ({
   children,
   fieldName,
   labelText,
+  labelBottomText,
   showErrorMessage = false,
-  value,
+  value = '',
   customCss,
   validateFn,
   onUpdateHandler,
@@ -150,11 +155,12 @@ const Group: React.FunctionComponent<{
   useEffect(() => {
     if(validateFn) {
       const validator = validateFn(value);
-      setIsValid(validator.isValid);
+      const isValid = validator.isValid;
+      setIsValid(isValid);
       setErrorMessage(validator.errorMessage);
       
       if(onUpdateHandler && fieldName) {
-        onUpdateHandler(fieldName, validator.isValid);
+        onUpdateHandler(fieldName, isValid, value);
       }
     }
   }, [
@@ -205,11 +211,21 @@ const Group: React.FunctionComponent<{
         >{labelText}</Elements.Label>
       )}
       {children}
+      {(labelBottomText) ? (
+        <Elements.Label
+          customCss={css`
+            font-size: ${pixelToRem(14)};
+            margin-top: ${pixelToRem(4)};
+            text-align: left;
+          `}
+        >{labelBottomText}</Elements.Label>
+      ) : null}
     </Elements.Wrapper>
   ), [
     children,
     fieldName,
     labelText,
+    labelBottomText,
     showErrorMessage,
     value,
     customCss,

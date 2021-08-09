@@ -5,11 +5,13 @@ export type ErrorsType = { [index: string]: FieldErrorType } | null;
 
 export type ContextStateType = {
   errors: ErrorsType;
+  isEdited: boolean;
 } & SharedState;
 
 export type ContextActionType = 
 | { type: 'UPDATE_FIELD_ERRORS', payload: { fieldName: string; isValid: boolean; indexForm: number; } }
 | { type: 'RESET_FIELD_ERRORS' }
+| { type: 'UPDATE_FORM_STATUS' }
 | { type: 'RESET' }
 | { type: 'SET_ERROR', error: string | null }
 | SharedActions;
@@ -19,12 +21,14 @@ export const initialState: ContextStateType = {
   errors: null,
   submitted: false,
   submitting: false,
+  isEdited: false,
 }
 
 export const reducer: GenericReducerFn<ContextStateType, ContextActionType> = (state: ContextStateType, action: ContextActionType) => {
   switch (action.type) {
     case 'UPDATE_FIELD_ERRORS':
       let tmpErrors = (state.errors) ? {...state.errors} : {};
+
       if(action.payload.isValid) {
         if(tmpErrors[`${action.payload.indexForm}`]) {
           const tmpFormIndex = {...tmpErrors[`${action.payload.indexForm}`]};
@@ -46,7 +50,14 @@ export const reducer: GenericReducerFn<ContextStateType, ContextActionType> = (s
       return {
         ...state,
         errors: null,
+        isEdited: false,
       }
+    }
+    case 'UPDATE_FORM_STATUS': {
+      return {
+        ...state,
+        isEdited: true,
+      };
     }
     case 'RESET': {
       return {
@@ -61,6 +72,7 @@ export const reducer: GenericReducerFn<ContextStateType, ContextActionType> = (s
         ...state,
         submitting: true,
         submitted: false,
+        isEdited: false,
       };
     }
     case 'SUBMITTED': {
@@ -68,6 +80,7 @@ export const reducer: GenericReducerFn<ContextStateType, ContextActionType> = (s
         ...state,
         submitting: false,
         submitted: true,
+        isEdited: false,
       };
     }
     default: {

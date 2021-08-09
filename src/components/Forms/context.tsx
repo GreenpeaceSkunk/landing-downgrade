@@ -3,19 +3,21 @@ import { reducer, initialState, ContextActionType as FormContextActionType, Erro
 import { UserDonationFormProvider } from './SplittedForms/UserDonationForm/context';
 import { UserDataFormProvider } from './SplittedForms/UserDataForm/context';
 import { UserFeedbackFormProvider } from './SplittedForms/UserFeedbackForm/context';
-import { RouteComponentProps, useHistory, useLocation, useRouteMatch, withRouter } from 'react-router-dom';
+import { RouteComponentProps, useRouteMatch, withRouter } from 'react-router-dom';
 
 interface IContext {
   errors: ErrorsType;
   pathnames: string[];
   currentIndex: number;
   showFieldErrors: boolean;
+  showGeneralError: boolean;
+  isEdited: boolean;
   allowNext: boolean;
   submitted: boolean;
   submitting: boolean;
   setPathnames: React.Dispatch<React.SetStateAction<string[]>>;
   setCurrentIndex: React.Dispatch<React.SetStateAction<number>>;
-  onUpdateFieldHandler: ( fieldName: string, isValid: boolean ) => void;
+  onUpdateFieldHandler: (fieldName: string, isValid: boolean, value?: string|number) => void;
   dispatch: (action: FormContextActionType) => void;
 }
 
@@ -30,16 +32,21 @@ const { Provider, Consumer } = Context;
 const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = ({ children }) => {
   const [{
     errors,
+    isEdited,
     submitted,
     submitting,
   }, dispatch ] = useReducer(reducer, initialState);
   const [ showFieldErrors, setShowFieldErrors ] = useState<boolean>(true);
+  const [ showGeneralError, setShowGeneralError ] = useState<boolean>(true);
   const [ currentIndex, setCurrentIndex ] = useState<number>(0);
   const [ pathnames, setPathnames ] = useState<string[]>([]);
   const { path } = useRouteMatch();
   const [ allowNext, setAllowNext ] = useState<boolean>(true);
 
-  const onUpdateFieldHandler = useCallback(( fieldName: string, isValid: boolean ) => {
+  const onUpdateFieldHandler = useCallback(( fieldName: string, isValid: boolean, value?: string|number ) => {
+    if(value && value !== '' && !isEdited) {
+      dispatch({ type: 'UPDATE_FORM_STATUS' });
+    }
     dispatch({
       type: 'UPDATE_FIELD_ERRORS',
       payload: {
@@ -58,11 +65,13 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
     if(errors && errors[currentIndex]) {
       const tmp = {...errors[currentIndex]};
       setAllowNext(Object.values(tmp).length ? false : true);
-      setShowFieldErrors((Object.values(tmp).length >= 2) ? false : true)
+      setShowFieldErrors((Object.values(tmp).length >= 2) ? false : true);
+      setShowGeneralError((isEdited && Object.values(tmp).length >= 2) ? true : false);
     }
   }, [
     currentIndex,
     errors,
+    isEdited,
   ]);
 
   return useMemo(() => (
@@ -71,7 +80,9 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
       pathnames,
       currentIndex,
       showFieldErrors,
+      showGeneralError,
       allowNext,
+      isEdited,
       submitted,
       submitting,
       setCurrentIndex,
@@ -93,7 +104,9 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
     path,
     currentIndex,
     showFieldErrors,
+    showGeneralError,
     allowNext,
+    isEdited,
     submitted,
     submitting,
     setPathnames,

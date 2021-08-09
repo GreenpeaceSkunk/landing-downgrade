@@ -1,9 +1,9 @@
-import React, { FormEvent, lazy, memo, Suspense, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import Elements, { Button } from '@bit/meema.ui-components.elements';
-import Carousel, { IRef as ICarouselRef } from '@bit/meema.ui-components.carousel';
+import React, { FormEvent, lazy, memo, Suspense, useCallback, useContext, useEffect, useMemo, useRef } from 'react';
+import Elements from '@bit/meema.ui-components.elements';
+// import Carousel, { IRef as ICarouselRef } from '@bit/meema.ui-components.carousel';
 import { Loader } from '../../Shared';
 import Form from '../../Shared/Form'; // Move to bit
-import { NavLink, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import { FormContext } from '../context';
 import UserForm, { IRef as IUserFormRef } from '../SplittedForms/UserDataForm';
 import UserFeedbackForm, { IRef as IUserFeedbackRef } from '../SplittedForms/UserFeedbackForm';
@@ -11,7 +11,6 @@ import { UserDataFormContext } from '../SplittedForms/UserDataForm/context';
 import { UserFeedbackFormContext } from '../SplittedForms/UserFeedbackForm/context';
 import { save } from './service';
 import { isMobile } from 'meema.utils';
-import { forEachLeadingCommentRange } from 'typescript';
 
 const ReduceDonationFormThankYou = lazy(() => import('./ThankYou'));
 
@@ -22,10 +21,19 @@ const pathnames = [
 
 const Component: React.FunctionComponent<{}> = () => {
   const history = useHistory();
-  const { errors, currentIndex, allowNext, showFieldErrors, submitting, setCurrentIndex, dispatch } = useContext(FormContext);
+  const {
+    errors,
+    currentIndex,
+    allowNext,
+    showFieldErrors,
+    showGeneralError,
+    submitting,
+    setCurrentIndex,
+    dispatch,
+  } = useContext(FormContext);
   const { data } = useContext(UserDataFormContext);
   const { feedback } = useContext(UserFeedbackFormContext);
-  const carouselRef = useRef<ICarouselRef>(null);
+  // const carouselRef = useRef<ICarouselRef>(null);
   const userFormRef = useRef<IUserFormRef>(null);
   const userFeedbackFormRef = useRef<IUserFeedbackRef>(null);
   const { path } = useRouteMatch();
@@ -58,10 +66,14 @@ const Component: React.FunctionComponent<{}> = () => {
       })();
     }
   }, [
-    path,
+    currentIndex,
     data,
     feedback,
-    currentIndex,
+    history,
+    path,
+    pathnames,
+    dispatch,
+    setCurrentIndex,
   ]);
 
   useEffect(() => {
@@ -70,6 +82,7 @@ const Component: React.FunctionComponent<{}> = () => {
     });
   }, [
     currentIndex,
+    history,
   ]);
 
   useEffect(() => {
@@ -112,7 +125,7 @@ const Component: React.FunctionComponent<{}> = () => {
             </Route>
                 
             <Form.Message>* Datos obligatorios</Form.Message>
-            {(!showFieldErrors) ? (
+            {(showGeneralError) ? (
               <Form.ErrorMessage>Tenés campos incompletos o con errores. Revisalos para continuar.</Form.ErrorMessage>
             ) : null }
             <Form.Nav>
@@ -136,7 +149,7 @@ const Component: React.FunctionComponent<{}> = () => {
     </Elements.Wrapper>
   ), [
     path,
-    carouselRef,
+    // carouselRef,
     currentIndex,
     errors,
     userFormRef,
@@ -144,6 +157,7 @@ const Component: React.FunctionComponent<{}> = () => {
     history,
     allowNext,
     showFieldErrors,
+    showGeneralError,
     submitting,
     setCurrentIndex,
     dispatch,

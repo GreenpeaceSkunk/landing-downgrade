@@ -25,7 +25,9 @@ const Component: React.FunctionComponent<{}> = () => {
         }
       `}
     >
-      <Form.NavigationNav allowGoBack={false} />
+      <Form.NavigationNav
+        allowGoBack={false}
+      />
       <Img
         src={Images.Icons.DoneIcon}
         alt="ok"
@@ -47,6 +49,7 @@ const Component: React.FunctionComponent<{}> = () => {
           background-color: white;
           border-radius: ${pixelToRem(10)};
           padding: ${pixelToRem(35)} ${pixelToRem(24)};
+          margin-top: ${pixelToRem(24)};
 
           > * {
             &:not(:last-child.child) {

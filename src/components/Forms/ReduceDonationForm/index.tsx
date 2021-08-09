@@ -1,6 +1,6 @@
-import React, { FormEvent, lazy, memo, Suspense, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import Elements, { Button } from '@bit/meema.ui-components.elements';
-import Carousel, { IRef as ICarouselRef } from '@bit/meema.ui-components.carousel';
+import React, { FormEvent, lazy, memo, Suspense, useCallback, useContext, useEffect, useMemo, useRef } from 'react';
+import Elements from '@bit/meema.ui-components.elements';
+// import Carousel, { IRef as ICarouselRef } from '@bit/meema.ui-components.carousel';
 import { Loader } from '../../Shared';
 import Form from '../../Shared/Form'; // Move to bit
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
@@ -21,7 +21,7 @@ const pathnames = [
 
 const Component: React.FunctionComponent<{}> = () => {
   const history = useHistory();
-  const carouselRef = useRef<ICarouselRef>(null);
+  // const carouselRef = useRef<ICarouselRef>(null);
   const userDataFormRef = useRef<IUserDataFormRef>(null);
   const userDonationFormRef = useRef<IUserDonationFormRef>(null);
   const { path } = useRouteMatch();
@@ -29,7 +29,9 @@ const Component: React.FunctionComponent<{}> = () => {
     errors,
     currentIndex,
     allowNext,
+    isEdited,
     showFieldErrors,
+    showGeneralError,
     submitted,
     submitting,
     setCurrentIndex,
@@ -139,14 +141,16 @@ const Component: React.FunctionComponent<{}> = () => {
     donation,
     feedback,
     path,
-    carouselRef,
+    // carouselRef,
     currentIndex,
     errors,
     userDataFormRef,
     userDonationFormRef,
     history,
     allowNext,
+    isEdited,
     showFieldErrors,
+    showGeneralError,
     submitted,
     submitting,
     setCurrentIndex,
