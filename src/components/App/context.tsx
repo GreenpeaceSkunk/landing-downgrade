@@ -1,4 +1,4 @@
-import React, { createContext, useMemo, useReducer } from "react";
+import React, { createContext, useMemo } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import useQuery from "../../hooks/useQuery";
 import { ThemeProvider } from 'styled-components';
