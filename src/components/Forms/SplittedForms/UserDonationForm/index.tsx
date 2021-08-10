@@ -45,7 +45,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
   
   return useMemo(() => (
     <Form.Content>
-      <Form.Title>Confirmanos tus datos</Form.Title>
+      <Form.Title>¿Cuánto vas a reducir?</Form.Title>
       <Form.Row>
         <Form.Group
           fieldName='percentDecrease'
