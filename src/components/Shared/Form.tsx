@@ -151,12 +151,11 @@ const Group: React.FunctionComponent<{
   useEffect(() => {
     if(validateFn) {
       const validator = validateFn(value);
-      const isValid = validator.isValid;
-      setIsValid(isValid);
+      setIsValid(validator.isValid);
       setErrorMessage(validator.errorMessage);
       
       if(onUpdateHandler && fieldName) {
-        onUpdateHandler(fieldName, isValid, value);
+        onUpdateHandler(fieldName, validator.isValid, value);
       }
     }
   }, [
@@ -225,6 +224,7 @@ const Group: React.FunctionComponent<{
     showErrorMessage,
     value,
     customCss,
+    isValid,
     validateFn,
     onUpdateHandler,
   ]);

@@ -14,7 +14,7 @@ const ERROR_CODES = {
   '009': 'El celular solo puede contener números.',
 }
 
-type ValidationType = { isValid: boolean; errorMessage?: string };
+export type ValidationType = { isValid: boolean; errorMessage?: string };
 
 const checkIfHaveOnlyNumbers = (value = '') => /^[0-9]*$/.test(value);
 const checkIfHaveNumber = (value: string):boolean => /\d/.test(value);
@@ -140,11 +140,11 @@ export const validateCitizenId = (value: string, minLength = 8): ValidationType 
   };
 }
 
-export const validateCreditCard = (value: string): boolean => {
-  if(validateField(value)) {
-    return value.length === 16;
-  }
-  return false;
+export const validateCreditCard = (value: string): ValidationType => {
+  return {
+    isValid: validateField(value) ? (/^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/.test(value)) : false,
+    errorMessage: 'El número de tarjeta es inválido', 
+  };
 }
 
 export const validateEmail = (value: string): ValidationType => {
