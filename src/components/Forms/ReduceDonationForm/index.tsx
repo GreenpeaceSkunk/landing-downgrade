@@ -22,6 +22,7 @@ const pathnames = [
 const Component: React.FunctionComponent<{}> = () => {
   const history = useHistory();
   // const carouselRef = useRef<ICarouselRef>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const userDataFormRef = useRef<IUserDataFormRef>(null);
   const userDonationFormRef = useRef<IUserDonationFormRef>(null);
   const { path } = useRouteMatch();
@@ -84,6 +85,14 @@ const Component: React.FunctionComponent<{}> = () => {
   ]);
 
   useEffect(() => {
+    if(formRef.current && !isMobile()) {
+      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [
+    formRef.current,
+  ]);
+
+  useEffect(() => {
     setCurrentIndex(0);
     if(isMobile()) {
       document.body.style.overflow = "hidden";
@@ -103,7 +112,10 @@ const Component: React.FunctionComponent<{}> = () => {
           </Suspense>
         </Route>
         <Route path={path}>
-          <Form.Main onSubmit={onSubmit}>
+          <Form.Main
+             ref={formRef}
+            onSubmit={onSubmit}
+          >
             <Form.NavigationNav />
             <Form.Header>
               <Form.MainTitle>Reducir mi donación</Form.MainTitle>
@@ -153,6 +165,7 @@ const Component: React.FunctionComponent<{}> = () => {
     showGeneralError,
     submitted,
     submitting,
+    formRef,
     setCurrentIndex,
     dispatch,
   ]);

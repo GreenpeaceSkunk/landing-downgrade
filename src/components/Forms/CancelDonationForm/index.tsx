@@ -34,6 +34,7 @@ const Component: React.FunctionComponent<{}> = () => {
   const { data } = useContext(UserDataFormContext);
   const { feedback } = useContext(UserFeedbackFormContext);
   // const carouselRef = useRef<ICarouselRef>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const userFormRef = useRef<IUserFormRef>(null);
   const userFeedbackFormRef = useRef<IUserFeedbackRef>(null);
   const { path } = useRouteMatch();
@@ -86,6 +87,14 @@ const Component: React.FunctionComponent<{}> = () => {
   ]);
 
   useEffect(() => {
+    if(formRef.current && !isMobile()) {
+      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [
+    formRef.current,
+  ]);
+
+  useEffect(() => {
     setCurrentIndex(0);
     if(isMobile()) {
       document.body.style.overflow = "hidden";
@@ -105,7 +114,7 @@ const Component: React.FunctionComponent<{}> = () => {
           </Suspense>
         </Route>
         <Route path={path}>
-          <Form.Main onSubmit={onSubmit}>
+          <Form.Main ref={formRef} onSubmit={onSubmit}>
             <Form.NavigationNav />
             <Form.Header>
               <Form.MainTitle>Cancelar mi donación</Form.MainTitle>
@@ -159,6 +168,7 @@ const Component: React.FunctionComponent<{}> = () => {
     showFieldErrors,
     showGeneralError,
     submitting,
+    formRef,
     setCurrentIndex,
     dispatch,
   ]);
