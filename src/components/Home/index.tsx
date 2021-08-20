@@ -100,8 +100,8 @@ const Component: React.FunctionComponent<{}> = memo(() => {
             margin-bottom: ${pixelToRem(50)} !important;
           `}
         >
-          <Layout.Title color='primary'>Antes de seguir, tomate un minuto para pensarlo</Layout.Title>
-          <Layout.Text>Recordá que en Greenpeace</Layout.Text>
+          <Layout.Title color='primary'>Antes de seguir, tomate un minuto para pensarlo.</Layout.Title>
+          <Layout.Text>Recordá que en Greenpeace:</Layout.Text>
         </Wrapper>
         <Layout.Cards>
           <Card
