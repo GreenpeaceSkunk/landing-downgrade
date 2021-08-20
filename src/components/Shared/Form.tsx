@@ -21,11 +21,6 @@ import { FormContext } from '../Forms/context';
  */
 const innerMargin = (marginRight: number, marginLeft: number) => css`
   margin-right: ${pixelToRem(marginRight)};
-  /* margin-left: ${pixelToRem(marginLeft)}; */
-
-  /* &:first-child {
-    margin-left: 0;
-  } */
   
   &:last-child {
     margin-right: 0;
@@ -96,7 +91,8 @@ const NavigationNav: React.FunctionComponent<{ allowGoBack?: boolean }> = memo((
   ]);
 });
 
-// Changed to Fieldset
+// Changed to FunctionComponent
+// Text should be a legend tag
 const Row = styled.fieldset<{ title?: string; }>`
   display: flex;
   flex-direction: column;
@@ -294,7 +290,6 @@ const ErrorMessage = styled(Elements.Wrapper)`
     flex: 0 0 auto;
     width: ${pixelToRem(20)};
     height: ${pixelToRem(20)};
-    /* margin-right: ${pixelToRem(12)}; */
     background-size: ${pixelToRem(20)} ${pixelToRem(20)};
     background-position: center center;
     background-repeat: no-repeat;

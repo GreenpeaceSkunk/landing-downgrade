@@ -20,9 +20,9 @@ const Component: React.FunctionComponent<IProps> = ({
   const onScrollHandler = useCallback(() => {
     if(wrapperRef.current) {
       if(window.pageYOffset > (wrapperRef.current.offsetTop + (wrapperRef.current.clientHeight - 20))) {
-        setIsFixed(true);
+        // setIsFixed(true);
       } else {
-        setIsFixed(false);
+        // setIsFixed(false);
       }
     }
   }, [
