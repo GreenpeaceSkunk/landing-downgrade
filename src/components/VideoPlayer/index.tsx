@@ -126,9 +126,9 @@ const Component: React.FunctionComponent<IProps> = ({
           height='100%'
           url={videoUrl}
           loop={false}
-          playing={true}
+          playing={false}
           controls={true}
-          muted={true}
+          muted={false}
           playbackRate={1}
           onPause={() => {
             setIsFixed(false);
