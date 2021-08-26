@@ -1,19 +1,30 @@
-import React, { memo, useMemo } from 'react';
-import { pixelToRem } from 'meema.utils';
+import React, { memo, useEffect, useMemo, useRef } from 'react';
+import { isMobile, pixelToRem } from 'meema.utils';
 import { css } from 'styled-components';
 import Elements, { Img, H1, P, Wrapper, Span } from '@bit/meema.ui-components.elements';
 import Images from '../../../../images';
 import Form from '../../../Shared/Form';
 
 const Component: React.FunctionComponent<{}> = () => {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if(wrapperRef.current && !isMobile()) {
+      wrapperRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [
+    wrapperRef.current,
+  ]);
+
   return useMemo(() => (
     <Elements.Wrapper
+      ref={wrapperRef}
       customCss={css`
         display: flex;
         flex-direction: column;
         align-items: center;
         align-self: center;
-        padding: ${pixelToRem(40)} ${pixelToRem(40)};
+        padding: ${pixelToRem(40)} ${pixelToRem(40)} ${pixelToRem(70)};
 
         > * {
           margin-bottom: ${pixelToRem(10)};
@@ -76,7 +87,9 @@ const Component: React.FunctionComponent<{}> = () => {
         >El equipo de Greenpeace</Span>
       </Wrapper>
     </Elements.Wrapper>
-  ), []);
+  ), [
+    wrapperRef,
+  ]);
 };
 
 Component.displayName = 'ReduceDonationFormThankYou';

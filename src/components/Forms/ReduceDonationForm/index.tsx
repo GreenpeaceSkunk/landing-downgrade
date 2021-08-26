@@ -11,7 +11,8 @@ import { save } from './service';
 import { UserDataFormContext } from '../SplittedForms/UserDataForm/context';
 import { UserDonationFormContext } from '../SplittedForms/UserDonationForm/context';
 import { UserFeedbackFormContext } from '../SplittedForms/UserFeedbackForm/context';
-import { isMobile } from 'meema.utils';
+import { isMobile, pixelToRem } from 'meema.utils';
+import { css } from 'styled-components';
 
 const ReduceDonationFormThankYou = lazy(() => import('./ThankYou'));
 
@@ -104,7 +105,11 @@ const Component: React.FunctionComponent<{}> = () => {
   }, []);
 
   return useMemo(() => (
-    <Elements.Wrapper>
+    <Elements.Wrapper
+      customCss={css`
+        padding-bottom: ${pixelToRem(45)};
+      `}
+    >
       <Switch>
         <Route exact path={`${path}/thank-you`}>
           <Suspense fallback={<Loader mode='default' />}>

@@ -1,13 +1,24 @@
-import React, { memo, useMemo } from 'react';
-import { pixelToRem } from 'meema.utils';
+import React, { memo, useEffect, useMemo, useRef } from 'react';
+import { isMobile, pixelToRem } from 'meema.utils';
 import { css } from 'styled-components';
 import Elements, { Img, H1, P } from '@bit/meema.ui-components.elements';
 import Images from '../../../../images';
 import Form from '../../../Shared/Form';
 
 const Component: React.FunctionComponent<{}> = () => {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if(wrapperRef.current && !isMobile()) {
+      wrapperRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [
+    wrapperRef.current,
+  ]);
+  
   return useMemo(() => (
     <Elements.Wrapper
+      ref={wrapperRef}
       customCss={css`
         display: flex;
         flex-direction: column;
@@ -41,7 +52,9 @@ const Component: React.FunctionComponent<{}> = () => {
       >Listo, reduciremos tu donación</H1>
       <P>Te confirmaremos a tu e-mail cuando la hayamos procesado.</P>
     </Elements.Wrapper>
-  ), []);
+  ), [
+    wrapperRef,
+  ]);
 };
 
 Component.displayName = 'ReduceDonationFormThankYou';
