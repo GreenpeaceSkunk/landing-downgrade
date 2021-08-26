@@ -134,9 +134,9 @@ const Component: React.FunctionComponent<{}> = () => {
               </Form.CarouselWrapper>
             </Route>
                 
-            {(showGeneralError) ? (
+            {(showGeneralError) && (
               <Form.ErrorMessage>Tenés campos incompletos o con errores. Revisalos para continuar.</Form.ErrorMessage>
-            ) : null }
+            )}
             <Form.Nav>
               <Form.Button
                 type='submit'

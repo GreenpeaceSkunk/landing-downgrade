@@ -64,9 +64,10 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
   useEffect(() => {
     if(errors && errors[currentIndex]) {
       const tmp = {...errors[currentIndex]};
-      setAllowNext(Object.values(tmp).length ? false : true);
-      setShowFieldErrors((Object.values(tmp).length >= 2) ? false : true);
-      setShowGeneralError((isEdited && Object.values(tmp).length >= 2) ? true : false);
+      const totalErrors = Object.values(tmp).length;
+      setAllowNext((totalErrors > 0) ? false : true);
+      setShowFieldErrors((totalErrors < 2) ? true : false);
+      setShowGeneralError((isEdited && totalErrors >= 2) ? true : false);
     }
   }, [
     currentIndex,

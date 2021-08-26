@@ -135,9 +135,9 @@ const Component: React.FunctionComponent<{}> = () => {
             </Route>
             
             <Form.Message>* Datos obligatorios</Form.Message>
-            {(!showFieldErrors) ? (
+            {(showGeneralError) && (
               <Form.ErrorMessage>Tenés campos incompletos o con errores. Revisalos para continuar.</Form.ErrorMessage>
-            ) : null }
+            )}
             <Form.Nav>
               <Form.Button
                 type='submit'
