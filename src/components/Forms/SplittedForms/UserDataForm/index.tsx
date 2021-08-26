@@ -68,7 +68,13 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
             onUpdateHandler={onUpdateFieldHandler}
             showErrorMessage={showFieldErrors}
           >
-            <Input name='firstName' type='text' value={data.firstName} onChange={onChangeHandler} />
+            <Input
+              name='firstName'
+              type='text'
+              placeholder='Daniel'
+              value={data.firstName}
+              onChange={onChangeHandler}
+              />
           </Form.Group>
         </Form.Column>
         <Form.Column>
@@ -79,10 +85,11 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
             showErrorMessage={showFieldErrors}
             validateFn={validateLastName}
             onUpdateHandler={onUpdateFieldHandler}
-          >
+            >
             <Input
               name='lastName'
               type='text'
+              placeholder='Alvarez'
               value={data.lastName}
               onChange={onChangeHandler}
             />
@@ -103,6 +110,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
             <Input
               name='citizenId'
               type='text'
+              placeholder='23755211'
               value={data.citizenId}
               onChange={onChangeHandler}
               maxLength={8}
@@ -125,6 +133,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
             <Input
               name='areaCode'
               type='text'
+              placeholder='11'
               value={data.areaCode}
               maxLength={2}
               onChange={onChangeHandler}
@@ -142,6 +151,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
             <Input
               name='mobilePhoneNumber'
               type='text'
+              placeholder='61234567'
               value={data.mobilePhoneNumber}
               maxLength={8}
               onChange={onChangeHandler}
@@ -163,7 +173,13 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
             validateFn={validateEmail}
             onUpdateHandler={onUpdateFieldHandler}
           >
-            <Input name='email' type='email' value={data.email} onChange={onChangeHandler} />
+            <Input
+              name='email'
+              type='email'
+              placeholder='daniel.alvarez@gmail.com'
+              value={data.email}
+              onChange={onChangeHandler}
+            />
           </Form.Group>
         </Form.Column>
       </Form.Row>

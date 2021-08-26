@@ -47,7 +47,8 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
           <Form.Group
             value={feedback.selectedOption}
             fieldName='selectedOption'
-            labelText='¿Qué motivo te llevó a tomar esta decisión? *'
+            labelText='¿Qué motivo te llevó a tomar esta decisión?'
+            labelBottomText='* Obligatorio'
             showErrorMessage={showFieldErrors}
             validateFn={validateNotEmptyField}
             onUpdateHandler={onUpdateFieldHandler}
@@ -72,7 +73,8 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
         <Form.Column>
           <Form.Group
             fieldName='comment'
-            labelText='Contanos más sobre el motivo que elegiste*'
+            labelText='Contanos más sobre el motivo que elegiste'
+            labelBottomText='* Obligatorio'
             value={feedback.comment}
             showErrorMessage={showFieldErrors}
             validateFn={validateNotEmptyField}
@@ -80,7 +82,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
           >
             <Form.TextArea
               name='comment'
-              placeholder='0/150'
+              placeholder='Ingresar detalles'
               value={feedback.comment}
               onChange={onChangeHandler}
               maxLength={150}

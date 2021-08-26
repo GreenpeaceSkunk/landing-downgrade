@@ -124,6 +124,7 @@ const Component: React.FunctionComponent<{}> = () => {
             <Route exact path={`${path}/form-user/information`}>
               <Form.CarouselWrapper>
                 <UserForm ref={userFormRef} />
+                <Form.Message>* Datos obligatorios</Form.Message>
               </Form.CarouselWrapper>
             </Route>
             
@@ -133,7 +134,6 @@ const Component: React.FunctionComponent<{}> = () => {
               </Form.CarouselWrapper>
             </Route>
                 
-            <Form.Message>* Datos obligatorios</Form.Message>
             {(showGeneralError) ? (
               <Form.ErrorMessage>Tenés campos incompletos o con errores. Revisalos para continuar.</Form.ErrorMessage>
             ) : null }
