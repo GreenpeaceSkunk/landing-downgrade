@@ -57,6 +57,7 @@ const Component: React.FunctionComponent<{}> = memo(() => {
           <Layout.Cards
             customCss={css`
               margin: ${pixelToRem(50)} 0 ${pixelToRem(80)};
+              justify-content: space-between !important;
             `}
           >
             <Card
@@ -115,11 +116,21 @@ const Component: React.FunctionComponent<{}> = memo(() => {
         </Layout.Cards>
       </Layout.Panel>
       <Layout.Panel>
+        <Wrapper
+          customCss={css`
+            @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+              max-width: ${pixelToRem(1140)};
+              align-self: center;
+              justify-content: space-between;
+            }
+          `}
+        >
         <Layout.Title
           color='primary'
           customCss={css``}
         >La decisión siempre está {mobile ? <br/> : null} en tus manos</Layout.Title>
         <Layout.Text>Siempre podrás reducir el monto de tu donación o cancelarla directamente, sin vueltas. Si aún no estás seguro, podés hacerlo en otro momento.</Layout.Text>
+        </Wrapper>
       </Layout.Panel>
       <Layout.Panel
         customCss={css`

@@ -21,7 +21,7 @@ const Component: React.FunctionComponent<{}> = memo(() => useMemo(() => (
     customCss={css`
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: stretch;
       justify-content: space-between;
       padding: ${pixelToRem(30)};
       width: 100%;
@@ -32,7 +32,6 @@ const Component: React.FunctionComponent<{}> = memo(() => useMemo(() => (
 
       @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
         flex-direction: row-reverse;
-        align-items: flex-start;
         min-height: ${({theme}) => pixelToRem(theme.footer.tablet.height)};
         background-color: ${({theme}) => theme.footer.tablet.backgroundColor};
       }
@@ -47,7 +46,6 @@ const Component: React.FunctionComponent<{}> = memo(() => useMemo(() => (
       customCss={css`
         display: flex;
         flex-direction: column;
-        justify-content: center;
         align-items: center;
       `}
     >
@@ -61,7 +59,13 @@ const Component: React.FunctionComponent<{}> = memo(() => useMemo(() => (
       </Wrapper>
 
     </Wrapper>
-    <Wrapper>
+    <Wrapper
+      customCss={css`
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        `}
+    >
       <Logo customCss={css`
         display: none;
         
@@ -79,6 +83,7 @@ const Component: React.FunctionComponent<{}> = memo(() => useMemo(() => (
 
           @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
             justify-content: flex-start;
+            margin-top: 0;
           }
         `}
       >
