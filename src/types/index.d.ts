@@ -35,6 +35,11 @@ declare global {
       key: string;
       tokenId: string;
     };
+
+    _hjSettings: {
+      hjid: number;
+      hjsv: number;
+    }
   }
 }
 
