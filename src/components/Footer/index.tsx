@@ -8,24 +8,11 @@ import { Logo } from '../Shared';
 const Link = styled(A)`
   color: white;
   text-decoration: underline;
-  /* margin-bottom: ${pixelToRem(5)}; */
   font-family: ${({theme}) => theme.font.family.primary.regular};
   font-size: ${pixelToRem(14)};
   
   @media (min-width: ${props => pixelToRem(props.theme.responsive.tablet.minWidth)}) {
     margin-bottom: 0;
-    
-    /* &:after {
-      content: '|';
-      margin-right: ${pixelToRem(10)};
-      margin-left: ${pixelToRem(10)};
-    }
-    
-    &:last-child {
-      &:after {
-        display: none;
-      }
-    } */
   }
 `;
 
