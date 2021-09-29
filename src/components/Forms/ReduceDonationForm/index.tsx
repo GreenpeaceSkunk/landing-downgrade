@@ -1,6 +1,6 @@
 import React, { FormEvent, lazy, memo, Suspense, useCallback, useContext, useEffect, useMemo, useRef } from 'react';
 import Elements from '@bit/meema.ui-components.elements';
-// import Carousel, { IRef as ICarouselRef } from '@bit/meema.ui-components.carousel';
+import { isMobile, pixelToRem } from 'meema.utils';
 import { Loader } from '../../Shared';
 import Form from '../../Shared/Form'; // Move to bit
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
@@ -11,8 +11,8 @@ import { save } from './service';
 import { UserDataFormContext } from '../SplittedForms/UserDataForm/context';
 import { UserDonationFormContext } from '../SplittedForms/UserDonationForm/context';
 import { UserFeedbackFormContext } from '../SplittedForms/UserFeedbackForm/context';
-import { isMobile, pixelToRem } from 'meema.utils';
 import { css } from 'styled-components';
+import Snackbar, { IRef as ISnackbarRef } from '../../Snackbar';
 
 const ReduceDonationFormThankYou = lazy(() => import('./ThankYou'));
 
@@ -22,13 +22,13 @@ const pathnames = [
 
 const Component: React.FunctionComponent<{}> = () => {
   const history = useHistory();
-  // const carouselRef = useRef<ICarouselRef>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const userDataFormRef = useRef<IUserDataFormRef>(null);
   const userDonationFormRef = useRef<IUserDonationFormRef>(null);
   const { path } = useRouteMatch();
   const {
     errors,
+    totalErrors,
     currentIndex,
     allowNext,
     isEdited,
@@ -37,42 +37,56 @@ const Component: React.FunctionComponent<{}> = () => {
     submitted,
     submitting,
     setCurrentIndex,
+    setShowFieldErrors,
     dispatch,
   } = useContext(FormContext);
   const { data } = useContext(UserDataFormContext);
   const { donation } = useContext(UserDonationFormContext);
   const { feedback } = useContext(UserFeedbackFormContext);
+  const snackbarRef = useRef<ISnackbarRef>(null);
 
   const onSubmit = useCallback((evt: FormEvent) => {
     evt.preventDefault();
-    if(currentIndex + 1 < pathnames.length) {
-      setCurrentIndex(currentIndex + 1);
+
+    if(totalErrors > 0) {
+      setShowFieldErrors(true);
+      if(snackbarRef && snackbarRef.current) {
+        snackbarRef.current.showSnackbar();
+      }
     } else {
-      (async () => {
-        dispatch({ type: 'SUBMIT' });
-        const result = await save({
-          userAgent: window.navigator.userAgent,
-          percentDecrease: donation.percentDecrease,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          citizenId: data.citizenId,
-          areaCode: data.areaCode,
-          email: data.email,
-          mPhoneNumber: data.mobilePhoneNumber,
-        });
-        dispatch({ type: 'SUBMITTED' });
-        if(result.error) {
-          console.log('Error inesperado', result.message);
-        } else {
-          history.push(`${path}/thank-you`);
-        }
-      })();
+      if(currentIndex + 1 < pathnames.length) {
+        setCurrentIndex(currentIndex + 1);
+      } else {
+        (async () => {
+          dispatch({ type: 'SUBMIT' });
+          const result = await save({
+            userAgent: window.navigator.userAgent,
+            percentDecrease: donation.percentDecrease,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            citizenId: data.citizenId,
+            areaCode: data.areaCode,
+            email: data.email,
+            mPhoneNumber: data.mobilePhoneNumber,
+          });
+          dispatch({ type: 'SUBMITTED' });
+          if(result.error) {
+            console.log('Error inesperado', result.message);
+          } else {
+            history.push(`${path}/thank-you`);
+          }
+        })();
+      }
     }
   }, [
     path,
     data,
     donation,
     currentIndex,
+    errors,
+    totalErrors,
+    showGeneralError,
+    setShowFieldErrors,
   ]);
   
   useEffect(() => {
@@ -105,11 +119,7 @@ const Component: React.FunctionComponent<{}> = () => {
   }, []);
 
   return useMemo(() => (
-    <Elements.Wrapper
-      customCss={css`
-        padding-bottom: ${pixelToRem(45)};
-      `}
-    >
+    <Elements.Wrapper customCss={css`padding-bottom: ${pixelToRem(45)};`}>
       <Switch>
         <Route exact path={`${path}/thank-you`}>
           <Suspense fallback={<Loader mode='default' />}>
@@ -118,7 +128,7 @@ const Component: React.FunctionComponent<{}> = () => {
         </Route>
         <Route path={path}>
           <Form.Main
-             ref={formRef}
+            ref={formRef}
             onSubmit={onSubmit}
           >
             <Form.NavigationNav />
@@ -135,20 +145,20 @@ const Component: React.FunctionComponent<{}> = () => {
             </Route>
             
             <Form.Message>* Datos obligatorios</Form.Message>
-            {(showGeneralError) && (
-              <Form.ErrorMessage>Tenés campos incompletos o con errores. Revisalos para continuar.</Form.ErrorMessage>
-            )}
             <Form.Nav>
-              <Form.Button
-                type='submit'
-                format='contained'
-                disabled={!allowNext || submitting}
+            <Form.Button
+              type='submit'
+              format='contained'
               >
-                {(submitting) ? (
-                  <Loader mode='light' />
+              {(submitting) ? (
+                <Loader mode='light' />
                 ) : (((currentIndex < (pathnames.length - 1)) ? 'Continuar' : 'Confimar'))}
               </Form.Button>
             </Form.Nav>
+            <Snackbar
+              ref={snackbarRef}
+              text='Tenés campos incompletos o con errores. Revisalos para continuar.'
+            />
           </Form.Main>
         </Route>
       </Switch>
@@ -158,8 +168,8 @@ const Component: React.FunctionComponent<{}> = () => {
     donation,
     feedback,
     path,
-    // carouselRef,
     currentIndex,
+    totalErrors,
     errors,
     userDataFormRef,
     userDonationFormRef,
@@ -171,7 +181,9 @@ const Component: React.FunctionComponent<{}> = () => {
     submitted,
     submitting,
     formRef,
+    snackbarRef,
     setCurrentIndex,
+    setShowFieldErrors,
     dispatch,
   ]);
 };

@@ -9,6 +9,7 @@ interface IContext {
   errors: ErrorsType;
   pathnames: string[];
   currentIndex: number;
+  totalErrors: number;
   showFieldErrors: boolean;
   showGeneralError: boolean;
   isEdited: boolean;
@@ -16,6 +17,8 @@ interface IContext {
   submitted: boolean;
   submitting: boolean;
   setPathnames: React.Dispatch<React.SetStateAction<string[]>>;
+  setShowGeneralError: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowFieldErrors: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentIndex: React.Dispatch<React.SetStateAction<number>>;
   onUpdateFieldHandler: (fieldName: string, isValid: boolean, value?: string|number) => void;
   dispatch: (action: FormContextActionType) => void;
@@ -36,9 +39,10 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
     submitted,
     submitting,
   }, dispatch ] = useReducer(reducer, initialState);
-  const [ showFieldErrors, setShowFieldErrors ] = useState<boolean>(true);
-  const [ showGeneralError, setShowGeneralError ] = useState<boolean>(true);
+  const [ showFieldErrors, setShowFieldErrors ] = useState<boolean>(false);
+  const [ showGeneralError, setShowGeneralError ] = useState<boolean>(false);
   const [ currentIndex, setCurrentIndex ] = useState<number>(0);
+  const [ totalErrors, setTotalErrors ] = useState<number>(0);
   const [ pathnames, setPathnames ] = useState<string[]>([]);
   const { path } = useRouteMatch();
   const [ allowNext, setAllowNext ] = useState<boolean>(true);
@@ -64,10 +68,7 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
   useEffect(() => {
     if(errors && errors[currentIndex]) {
       const tmp = {...errors[currentIndex]};
-      const totalErrors = Object.values(tmp).length;
-      setAllowNext((totalErrors > 0) ? false : true);
-      setShowFieldErrors((totalErrors < 2) ? true : false);
-      setShowGeneralError((isEdited && totalErrors >= 2) ? true : false);
+      setTotalErrors(Object.values(tmp).length);
     }
   }, [
     currentIndex,
@@ -80,6 +81,7 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
       errors,
       pathnames,
       currentIndex,
+      totalErrors,
       showFieldErrors,
       showGeneralError,
       allowNext,
@@ -87,7 +89,9 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
       submitted,
       submitting,
       setCurrentIndex,
+      setShowGeneralError,
       setPathnames,
+      setShowFieldErrors,
       onUpdateFieldHandler,
       dispatch,
     }}>
@@ -104,6 +108,7 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
     errors,
     path,
     currentIndex,
+    totalErrors,
     showFieldErrors,
     showGeneralError,
     allowNext,
@@ -112,6 +117,9 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
     submitting,
     setPathnames,
     setCurrentIndex,
+    setTotalErrors,
+    setShowGeneralError,
+    setShowFieldErrors,
     onUpdateFieldHandler,
     dispatch,
   ]);

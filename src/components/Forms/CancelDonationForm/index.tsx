@@ -1,6 +1,6 @@
 import React, { FormEvent, lazy, memo, Suspense, useCallback, useContext, useEffect, useMemo, useRef } from 'react';
 import Elements from '@bit/meema.ui-components.elements';
-// import Carousel, { IRef as ICarouselRef } from '@bit/meema.ui-components.carousel';
+import { isMobile } from 'meema.utils';
 import { Loader } from '../../Shared';
 import Form from '../../Shared/Form'; // Move to bit
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
@@ -10,7 +10,7 @@ import UserFeedbackForm, { IRef as IUserFeedbackRef } from '../SplittedForms/Use
 import { UserDataFormContext } from '../SplittedForms/UserDataForm/context';
 import { UserFeedbackFormContext } from '../SplittedForms/UserFeedbackForm/context';
 import { save } from './service';
-import { isMobile } from 'meema.utils';
+import Snackbar, { IRef as ISnackbarRef } from '../../Snackbar';
 
 const ReduceDonationFormThankYou = lazy(() => import('./ThankYou'));
 
@@ -24,50 +24,60 @@ const Component: React.FunctionComponent<{}> = () => {
   const {
     errors,
     currentIndex,
+    totalErrors,
     allowNext,
     showFieldErrors,
     showGeneralError,
     submitting,
     setCurrentIndex,
+    setShowFieldErrors,
     dispatch,
   } = useContext(FormContext);
   const { data } = useContext(UserDataFormContext);
   const { feedback } = useContext(UserFeedbackFormContext);
-  // const carouselRef = useRef<ICarouselRef>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const userFormRef = useRef<IUserFormRef>(null);
   const userFeedbackFormRef = useRef<IUserFeedbackRef>(null);
   const { path } = useRouteMatch();
+  const snackbarRef = useRef<ISnackbarRef>(null);
 
   const onSubmit = useCallback((evt: FormEvent) => {
     evt.preventDefault();
 
-    if(currentIndex + 1 < pathnames.length) {
-      setCurrentIndex(currentIndex + 1);
+    if(totalErrors > 0) {
+      setShowFieldErrors(true);
+      if(snackbarRef && snackbarRef.current) {
+        snackbarRef.current.showSnackbar();
+      }
     } else {
-      (async () => {
-        dispatch({ type: 'SUBMIT' });
-        const result = await save({
-          userAgent: window.navigator.userAgent,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          citizenId: data.citizenId,
-          areaCode: data.areaCode,
-          email: data.email,
-          mPhoneNumber: data.mobilePhoneNumber,
-          userFeedback: feedback.selectedOption,
-          userComment: feedback.comment,
-        });
-        dispatch({ type: 'SUBMITTED' });
-        if(result.error) {
-          console.log('Error inesperado', result.message);
-        } else {
-          history.push(`${path}/thank-you`);
-        }
-      })();
+      if(currentIndex + 1 < pathnames.length) {
+        setCurrentIndex(currentIndex + 1);
+      } else {
+        (async () => {
+          dispatch({ type: 'SUBMIT' });
+          const result = await save({
+            userAgent: window.navigator.userAgent,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            citizenId: data.citizenId,
+            areaCode: data.areaCode,
+            email: data.email,
+            mPhoneNumber: data.mobilePhoneNumber,
+            userFeedback: feedback.selectedOption,
+            userComment: feedback.comment,
+          });
+          dispatch({ type: 'SUBMITTED' });
+          if(result.error) {
+            console.log('Error inesperado', result.message);
+          } else {
+            history.push(`${path}/thank-you`);
+          }
+        })();
+      }
     }
   }, [
     currentIndex,
+    totalErrors,
     data,
     feedback,
     history,
@@ -134,31 +144,32 @@ const Component: React.FunctionComponent<{}> = () => {
               </Form.CarouselWrapper>
             </Route>
                 
-            {(showGeneralError) && (
-              <Form.ErrorMessage>Tenés campos incompletos o con errores. Revisalos para continuar.</Form.ErrorMessage>
-            )}
             <Form.Nav>
               <Form.Button
                 type='submit'
                 format='contained'
                 disabled={!allowNext || submitting}
-              >
+                >
                 {(submitting) ? (
                   <Loader mode='light' />
-                ) : (((currentIndex < (pathnames.length - 1)) ? 'Continuar' : 'Confimar'))}
+                  ) : (((currentIndex < (pathnames.length - 1)) ? 'Continuar' : 'Confimar'))}
               </Form.Button>
 
               <Form.ButtonLink to='/donation/reduce'>
                 Disminuir el monto
               </Form.ButtonLink>
             </Form.Nav>
+            <Snackbar
+              ref={snackbarRef}
+              text='Tenés campos incompletos o con errores. Revisalos para continuar.'
+            />
           </Form.Main>
         </Route>
       </Switch>
     </Elements.Wrapper>
   ), [
     path,
-    // carouselRef,
+    totalErrors,
     currentIndex,
     errors,
     userFormRef,
@@ -169,7 +180,9 @@ const Component: React.FunctionComponent<{}> = () => {
     showGeneralError,
     submitting,
     formRef,
+    snackbarRef,
     setCurrentIndex,
+    setShowFieldErrors,
     dispatch,
   ]);
 };

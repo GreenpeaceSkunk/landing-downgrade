@@ -3,6 +3,7 @@ import React, {
   useContext,
   useImperativeHandle,
   useMemo,
+  useState,
 } from 'react';
 import { pixelToRem } from 'meema.utils';
 import { Wrapper, Button, } from '@bit/meema.ui-components.elements';
@@ -14,7 +15,10 @@ import { FormContext } from '../../context';
 import { UserDonationFormContext } from './context';
 
 interface IProps {}
-export interface IRef {}
+export interface IRef {
+  isValid: boolean;
+  errors: any;
+}
 
 const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
   props: IProps,
@@ -23,11 +27,12 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
   // const [{ donation }, dispatch ] = useReducer(reducer, initialState);
   const { donation, dispatch } = useContext(UserDonationFormContext);
   const { path } = useRouteMatch();
-  const { showFieldErrors, onUpdateFieldHandler } = useContext(FormContext);
-  // const [ isValid, setIsValid ] = useState<boolean>(false);
+  const { showFieldErrors, errors, onUpdateFieldHandler } = useContext(FormContext);
+  const [ isValid, setIsValid ] = useState<boolean>(false);
 
   const onClick = useCallback((evt: OnClickEvent) => {
     evt.preventDefault();
+    console.log('onClick', 'UPDATE_USER_DONATION');
     dispatch({
       type: 'UPDATE_USER_DONATION',
       payload: {
@@ -40,7 +45,10 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
   ]);
   
   useImperativeHandle(innerRef, () => {
-    return {}
+    return {
+      isValid,
+      errors,
+    }
   });
   
   return useMemo(() => (
@@ -107,6 +115,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
   ), [
     path,
     showFieldErrors,
+    errors,
     donation,
     onUpdateFieldHandler,
     onClick,
