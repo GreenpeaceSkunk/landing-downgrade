@@ -35,7 +35,7 @@ const MainHeader: FunctionComponent<{}> = memo(() => {
         }
       `}
     >
-      <Logo />
+      <Logo color='green' />
       <Wrapper
         customCss={css`
           display: flex;
