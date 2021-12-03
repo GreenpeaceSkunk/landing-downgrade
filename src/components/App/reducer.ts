@@ -3,8 +3,6 @@ import {
   UserContextStateType as ContextStateType,
   UserContextActionType as ContextActionType,
   IUser,
-  IUserDonation,
-  IUserFeedback,
 } from 'greenpeace';
 
 const autofill = process.env.REACT_APP_AUTOFILL_VALUES ? (process.env.REACT_APP_AUTOFILL_VALUES === 'true') ? true : false : false;
@@ -24,7 +22,7 @@ export const initialState: ContextStateType = {
         citizenId: '10234567',
         email: 'doe.deer@email.com',
         areaCode: '11',
-        mobilePhoneNumber: '4000111',
+        mobilePhoneNumber: '41239876',
       } : {}),
     },
     donation: {
