@@ -38,9 +38,11 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ({
     <Wrapper
       customCss={css`
         display: ${animate ? 'flex' : 'none'};
+        position: fixed;
+        bottom: 0;
+        left: 0;
         align-items: center;
         padding: ${pixelToRem(12)};
-        border-radius: ${pixelToRem(5)};
         background-color: ${({theme}) => theme.color.error.normal};
         color: white;
         opacity: 0;
@@ -49,6 +51,11 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ({
         animation-direction: alternate;
         animation-fill-mode: forwards;
         animation-iteration-count: 1;
+
+        @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+          border-radius: ${pixelToRem(5)};
+          position: relative;
+        }
 
         ${(animate) && css`
           animation-name: show-snackbar;

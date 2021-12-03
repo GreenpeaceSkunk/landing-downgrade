@@ -29,16 +29,13 @@ const innerMargin = (marginRight: number, marginLeft: number) => css`
 
 const Main = styled(Elements.Form)`
   flex-direction: column;
-  padding: ${pixelToRem(20)} ${pixelToRem(24)} ${pixelToRem(70)};
-  /* background-color: ${({theme}) => theme.color.secondary.light}; */
-  /* position: fixed; */
-  /* left: 0; */
-  /* top: 0; */
+  padding: ${pixelToRem(20)} ${pixelToRem(24)} ${pixelToRem(40)};
   width: 100%;
   overflow: auto;
 
   @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
     position: relative;
+    padding-bottom: ${pixelToRem(70)};
   }
 `;
 
