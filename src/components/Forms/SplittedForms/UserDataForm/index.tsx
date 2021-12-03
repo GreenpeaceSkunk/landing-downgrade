@@ -109,7 +109,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
           >
             <Input
               name='citizenId'
-              type='text'
+              type='number'
               placeholder='23755211'
               value={data.citizenId}
               onChange={onChangeHandler}
@@ -131,7 +131,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
           >
             <Input
               name='areaCode'
-              type='text'
+              type='number'
               placeholder='0011'
               value={data.areaCode}
               maxLength={4}
