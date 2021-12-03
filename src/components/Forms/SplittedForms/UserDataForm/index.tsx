@@ -113,7 +113,6 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
               placeholder='23755211'
               value={data.citizenId}
               onChange={onChangeHandler}
-              maxLength={8}
             />
           </Form.Group>
         </Form.Column>
