@@ -7,24 +7,10 @@ import {
   IUserFeedback,
 } from 'greenpeace';
 
+const autofill = process.env.REACT_APP_AUTOFILL_VALUES ? (process.env.REACT_APP_AUTOFILL_VALUES === 'true') ? true : false : false;
+
 export const initialState: ContextStateType = {
-  // user: {
-  //   firstName: '',
-  //   lastName: '',
-  //   citizenId: '',
-  //   email: '',
-  //   areaCode: '',
-  //   mobilePhoneNumber: '',
-  // } as IUserData,
   user: {
-    // data: {
-    //   firstName: 'Doe',
-    //   lastName: 'Deer',
-    //   citizenId: '1023456',
-    //   email: 'doe.deer@email.com',
-    //   areaCode: '11',
-    //   mobilePhoneNumber: '4000011',
-    // },
     data: {
       firstName: '',
       lastName: '',
@@ -32,14 +18,26 @@ export const initialState: ContextStateType = {
       email: '',
       areaCode: '',
       mobilePhoneNumber: '',
+      ...(autofill ? {
+        firstName: 'Doe',
+        lastName: 'Deer',
+        citizenId: '10234567',
+        email: 'doe.deer@email.com',
+        areaCode: '11',
+        mobilePhoneNumber: '4000111',
+      } : {}),
     },
     donation: {
       percentDecrease: 10,
-    } as IUserDonation,
+    },
     feedback: {
       selectedOption: '',
       comment: '',
-    } as IUserFeedback,
+      ...(autofill ? {
+        selectedOption: '',
+        comment: 'Acá va el comentario',
+      } : {}),
+    },
   } as IUser,
   error: null,
 }
