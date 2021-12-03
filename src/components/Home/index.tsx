@@ -78,7 +78,7 @@ const Component: React.FunctionComponent<{}> = memo(() => {
           </Layout.Cards>
           <VideoPlayer
             fixByScroll={true}
-            videoUrl='https://www.youtube.com/watch?v=t4-sDoVfjxw'
+            videoUrl='https://www.youtube.com/watch?v=FXr3_zGc0O4'
           />
         </Layout.PanelWrapper>
       </Layout.Panel>
