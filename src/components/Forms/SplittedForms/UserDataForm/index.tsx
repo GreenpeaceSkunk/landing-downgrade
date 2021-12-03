@@ -132,9 +132,9 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
             <Input
               name='areaCode'
               type='text'
-              placeholder='11'
+              placeholder='0011'
               value={data.areaCode}
-              maxLength={2}
+              maxLength={4}
               onChange={onChangeHandler}
             />
           </Form.Group>
