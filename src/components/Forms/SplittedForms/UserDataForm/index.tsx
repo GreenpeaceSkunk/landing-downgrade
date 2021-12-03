@@ -131,8 +131,8 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
           >
             <Input
               name='areaCode'
-              type='number'
-              placeholder='0011'
+              type='text'
+              placeholder='1234'
               value={data.areaCode}
               maxLength={4}
               onChange={onChangeHandler}
@@ -152,7 +152,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
               type='text'
               placeholder='61234567'
               value={data.mobilePhoneNumber}
-              maxLength={8}
+              maxLength={12}
               onChange={onChangeHandler}
             />
           </Form.Group>
