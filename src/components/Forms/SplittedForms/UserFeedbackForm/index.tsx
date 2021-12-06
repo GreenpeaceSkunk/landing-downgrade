@@ -19,7 +19,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
   innerRef: React.ForwardedRef<IRef>
 ) => {
   const { path } = useRouteMatch();
-  const { showFieldErrors, onUpdateFieldHandler } = useContext(FormContext);
+  const { showFieldErrors, onUpdateFieldHandler, onFocusHandler } = useContext(FormContext);
   const { feedback, dispatch } = useContext(UserFeedbackFormContext);
 
   const onChangeHandler = useCallback((evt: OnChangeEvent) => {
@@ -86,8 +86,9 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
               name='comment'
               placeholder='Ingresar detalles'
               value={feedback.comment}
-              onChange={onChangeHandler}
               maxLength={150}
+              onChange={onChangeHandler}
+              onFocus={onFocusHandler}
             />
           </Form.Group>
         </Form.Column>

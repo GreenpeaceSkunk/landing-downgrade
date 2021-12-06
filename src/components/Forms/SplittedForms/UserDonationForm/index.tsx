@@ -24,7 +24,6 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
   props: IProps,
   innerRef: React.ForwardedRef<IRef>
 ) => {
-  // const [{ donation }, dispatch ] = useReducer(reducer, initialState);
   const { donation, dispatch } = useContext(UserDonationFormContext);
   const { path } = useRouteMatch();
   const { showFieldErrors, errors, onUpdateFieldHandler } = useContext(FormContext);
@@ -32,7 +31,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
 
   const onClick = useCallback((evt: OnClickEvent) => {
     evt.preventDefault();
-    console.log('onClick', 'UPDATE_USER_DONATION');
+    evt.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
     dispatch({
       type: 'UPDATE_USER_DONATION',
       payload: {
@@ -77,7 +76,6 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
                   border-radius: ${pixelToRem(5)};
                   border-color: #BDBDBD !important;
                   border-width: ${pixelToRem(1)};
-                  /* border-color: ${({theme}) => theme.color.secondary.normal} !important; */
                   color: ${({theme}) => theme.color.secondary.dark} !important;
                   background-color: white;
                   font-size: ${pixelToRem(16)};

@@ -108,8 +108,8 @@ const Component: React.FunctionComponent<{}> = () => {
     setCurrentIndex(0);
     if(isMobile()) {
       document.body.style.overflow = "hidden";
-  
-      return () => {
+      
+     return () => {
         document.body.style.overflow = "auto";
       }
     }

@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useEffect, useMemo, useReducer, useState } from 'react';
+import React, { createContext, FocusEvent, useCallback, useEffect, useMemo, useReducer, useState, VFC } from 'react';
 import { reducer, initialState, ContextActionType as FormContextActionType, ErrorsType } from './reducer';
 import { UserDonationFormProvider } from './SplittedForms/UserDonationForm/context';
 import { UserDataFormProvider } from './SplittedForms/UserDataForm/context';
@@ -21,6 +21,7 @@ interface IContext {
   setShowFieldErrors: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentIndex: React.Dispatch<React.SetStateAction<number>>;
   onUpdateFieldHandler: (fieldName: string, isValid: boolean, value?: string|number) => void;
+  onFocusHandler: (evt: FocusEvent) => void
   dispatch: (action: FormContextActionType) => void;
 }
 
@@ -46,6 +47,10 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
   const [ pathnames, setPathnames ] = useState<string[]>([]);
   const { path } = useRouteMatch();
   const [ allowNext, setAllowNext ] = useState<boolean>(true);
+
+  const onFocusHandler = useCallback((evt: FocusEvent) => {
+    evt.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, []);
 
   const onUpdateFieldHandler = useCallback(( fieldName: string, isValid: boolean, value?: string|number ) => {
     if(value && value !== '' && !isEdited) {
@@ -93,6 +98,7 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
       setPathnames,
       setShowFieldErrors,
       onUpdateFieldHandler,
+      onFocusHandler,
       dispatch,
     }}>
       <UserDataFormProvider>
@@ -121,6 +127,7 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
     setShowGeneralError,
     setShowFieldErrors,
     onUpdateFieldHandler,
+    onFocusHandler,
     dispatch,
   ]);
 };

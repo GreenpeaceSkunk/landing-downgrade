@@ -5,7 +5,6 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { Input } from '@bit/meema.gpar-ui-components.form';
 import Form from '../../../Shared/Form'; // Move to bit
 import { useRouteMatch } from 'react-router-dom';
 import { FormContext } from '../../context';
@@ -32,7 +31,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
   innerRef: React.ForwardedRef<IRef>
 ) => {
   const { path } = useRouteMatch();
-  const { showFieldErrors, onUpdateFieldHandler } = useContext(FormContext);
+  const { showFieldErrors, onUpdateFieldHandler, onFocusHandler } = useContext(FormContext);
   const { data, dispatch } = useContext(UserDataFormContext);
   const [ isValid, setIsValid ] = useState<boolean>(false);
 
@@ -63,35 +62,39 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
           <Form.Group
             value={data.firstName}
             fieldName='firstName'
-            labelText='Nombre *'
+            labelText='Nombre'
             validateFn={validateFirstName}
             onUpdateHandler={onUpdateFieldHandler}
             showErrorMessage={showFieldErrors}
+            isRequired={true}
           >
-            <Input
+            <Form.Input
               name='firstName'
               type='text'
               placeholder='Daniel'
               value={data.firstName}
               onChange={onChangeHandler}
-              />
+              onFocus={onFocusHandler}
+            />
           </Form.Group>
         </Form.Column>
         <Form.Column>
           <Form.Group
             value={data.lastName}
             fieldName='lastName'
-            labelText='Apellido *'
+            labelText='Apellido'
             showErrorMessage={showFieldErrors}
+            isRequired={true}
             validateFn={validateLastName}
             onUpdateHandler={onUpdateFieldHandler}
             >
-            <Input
+            <Form.Input
               name='lastName'
               type='text'
               placeholder='Alvarez'
               value={data.lastName}
               onChange={onChangeHandler}
+              onFocus={onFocusHandler}
             />
           </Form.Group>
         </Form.Column>
@@ -102,17 +105,19 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
           <Form.Group
             fieldName='citizenId'
             value={data.citizenId}
-            labelText='DNI *'
+            labelText='DNI'
             showErrorMessage={showFieldErrors}
+            isRequired={true}
             validateFn={validateCitizenId}
             onUpdateHandler={onUpdateFieldHandler}
           >
-            <Input
+            <Form.Input
               name='citizenId'
               type='number'
               placeholder='23755211'
               value={data.citizenId}
               onChange={onChangeHandler}
+              onFocus={onFocusHandler}
             />
           </Form.Group>
         </Form.Column>
@@ -120,40 +125,44 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
           <Form.Group
             fieldName='areaCode'
             value={data.areaCode}
-            labelText='Cod. Área *'
+            labelText='Cod. Área'
             labelBottomText='Sin el 0'
             showErrorMessage={showFieldErrors}
+            isRequired={true}
             customCss={css`
               flex-basis: ${pixelToRem(140)};
             `}
             validateFn={validateAreaCode}
             onUpdateHandler={onUpdateFieldHandler}
           >
-            <Input
+            <Form.Input
               name='areaCode'
               type='text'
               placeholder='1234'
               value={data.areaCode}
               maxLength={4}
               onChange={onChangeHandler}
+              onFocus={onFocusHandler}
             />
           </Form.Group>
           <Form.Group
             fieldName='mobilePhoneNumber'
             value={data.mobilePhoneNumber}
-            labelText='Celular *'
+            labelText='Celular'
             labelBottomText='Sin el 15'
             showErrorMessage={showFieldErrors}
+            isRequired={true}
             validateFn={validatePhoneNumber}
             onUpdateHandler={onUpdateFieldHandler}
           >
-            <Input
+            <Form.Input
               name='mobilePhoneNumber'
               type='text'
               placeholder='61234567'
               value={data.mobilePhoneNumber}
               maxLength={12}
               onChange={onChangeHandler}
+              onFocus={onFocusHandler}
             />
           </Form.Group>
         </Form.Column>
@@ -167,17 +176,19 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
           <Form.Group
             value={data.email}
             fieldName='email'
-            labelText='Email *'
+            labelText='Email'
             showErrorMessage={showFieldErrors}
+            isRequired={true}
             validateFn={validateEmail}
             onUpdateHandler={onUpdateFieldHandler}
           >
-            <Input
+            <Form.Input
               name='email'
               type='email'
               placeholder='daniel.alvarez@gmail.com'
               value={data.email}
               onChange={onChangeHandler}
+              onFocus={onFocusHandler}
             />
           </Form.Group>
         </Form.Column>
