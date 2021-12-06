@@ -50,6 +50,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
             labelText='¿Qué motivo te llevó a tomar esta decisión?'
             labelBottomText='* Obligatorio'
             showErrorMessage={showFieldErrors}
+            isRequired={true}
             validateFn={validateNotEmptyField}
             onUpdateHandler={onUpdateFieldHandler}
             >
@@ -77,6 +78,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
             labelBottomText='* Obligatorio'
             value={feedback.comment}
             showErrorMessage={showFieldErrors}
+            isRequired={true}
             validateFn={validateNotEmptyField}
             onUpdateHandler={onUpdateFieldHandler}
           >

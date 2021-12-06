@@ -128,6 +128,7 @@ const Group: React.FunctionComponent<{
   labelBottomText?: string;
   value?: string|number;
   showErrorMessage?: boolean;
+  isRequired?: boolean;
   customCss?: CustomCSSType;
   validateFn?: (value: any) => any;
   onUpdateHandler?: (fieldName: string, isValid: boolean, value?: string|number) => void;
@@ -137,6 +138,7 @@ const Group: React.FunctionComponent<{
   labelText,
   labelBottomText,
   showErrorMessage = false,
+  isRequired = false,
   value = '',
   customCss,
   validateFn,
@@ -172,7 +174,8 @@ const Group: React.FunctionComponent<{
         &:after {
           width: 100%;
           margin-top: ${pixelToRem(10)};
-          font-size: ${pixelToRem(15)};
+          font-size: ${pixelToRem(14)};
+          line-height: 1;
           color: ${({theme}) => theme.color.error.normal};
           text-align: left;
           content: "${(!isValid && showErrorMessage && errorMessage) ? errorMessage : ""}";
@@ -199,6 +202,17 @@ const Group: React.FunctionComponent<{
           htmlFor={fieldName}
           customCss={css`
             text-align: left;
+            line-height: 1;
+            font-size: ${pixelToRem(14)};
+            margin-bottom: ${pixelToRem(6)};
+            
+            &:after {
+              ${(isRequired) && css`
+                content: "*";
+                margin-left: ${pixelToRem(2)};
+                color: ${({theme}) => theme.color.error.normal};
+              `}
+            }
           `}
         >{labelText}</Elements.Label>
       )}
@@ -222,6 +236,7 @@ const Group: React.FunctionComponent<{
     value,
     customCss,
     isValid,
+    isRequired,
     validateFn,
     onUpdateHandler,
   ]);
@@ -304,17 +319,43 @@ const CarouselWrapper = styled(Elements.Wrapper)`
   flex: 0 0 100%;
 `;
 
+const Input = styled(Elements.Input)`
+  display: flex;
+  margin: 0;
+  padding: ${pixelToRem(13)} ${pixelToRem(16)};
+  width: 100%;
+  font-size: ${pixelToRem(16)};
+  border: ${pixelToRem(1)} solid #BDBDBD;
+  /* border: ${pixelToRem(1)} solid ${({theme}) => theme.color.secondary.normal}; */
+  border-radius: ${pixelToRem(10)};
+  color: #333;
+  outline: none;
+  appearance: none;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: #828282;
+  }
+
+  &:focus {
+    border-color: ${({theme}) => theme.color.primary.normal};
+    box-shadow: 0 ${pixelToRem(4)} ${pixelToRem(4)} rgba(0, 0, 0, .05);
+  }
+`;
+
 const TextArea = styled(Elements.TextArea)`
   display: flex;
   width: 100%;
   margin: 0;
   min-height: ${pixelToRem(100)};
-  padding: ${pixelToRem(12)} ${pixelToRem(12)};
+  padding: ${pixelToRem(12)};
   border: none;
   background-color: white;
   border: ${pixelToRem(1)} solid ${({theme}) => theme.color.secondary.normal};
   border-radius: ${pixelToRem(10)};
   font-size: ${pixelToRem(16)};
+  line-height: ${pixelToRem(18)};
+  font-family: ${({theme}) => theme.font.family.primary.regular} !important;
   overflow: auto;
   outline: none;
   resize: none;
@@ -335,7 +376,7 @@ const Button = styled(Elements.Button)`
   background-color: ${({theme}) => theme.color.primary.normal};
   border-radius: ${pixelToRem(5)};
   font-size: ${pixelToRem(16)};
-  font-family: ${({theme}) => theme.font.family.primary.normal};
+  font-family: ${({theme}) => theme.font.family.primary.regular};
   padding: ${pixelToRem(13)} ${pixelToRem(60)};
   width: fit-content;
 
@@ -418,26 +459,29 @@ const RadioButton: React.FunctionComponent<{
           flex: 0 0 ${pixelToRem(20)};
           width: ${pixelToRem(20)};
           height: ${pixelToRem(20)};
-          border-radius: ${pixelToRem(2)};
-          background-color: white;
-          border: solid ${pixelToRem(1)} ${({theme}) => theme.color.secondary.normal};
+          border-radius: 50%;
+          background-color: #EEEEEE;
+          border: solid ${pixelToRem(2)} ${({theme}) => theme.color.secondary.normal};
           margin-right: ${pixelToRem(10)};
 
           ${(checkedValue === value) && css`
+            position: relative;
             border-color: ${({theme}) => theme.color.primary.normal};
             background-color: ${({theme}) => theme.color.primary.normal};
-            border-width: ${pixelToRem(4)};
 
             &:after {
-              flex: 0 0 auto;
-              width: ${pixelToRem(12)};
-              height: ${pixelToRem(12)};
-              background-size: ${pixelToRem(12)} ${pixelToRem(12)};
-              background-position: center center;
-              background-repeat: no-repeat;
-              transform-origin: center;
-              background-image: url(${Icons.TickIcon});
               position: absolute;
+              flex: 0 0 ${pixelToRem(10)};
+              width: ${pixelToRem(10)};
+              height: ${pixelToRem(10)};
+              border: solid ${pixelToRem(3)} #EEEEEE;;
+              background-color: ${({theme}) => theme.color.primary.normal};
+              border-radius: 50%;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              left: 0;
+              margin: auto;
               content: "";
             }
           `}
@@ -470,6 +514,7 @@ const _ = {
   Message,
   ErrorMessage,
   CarouselWrapper,
+  Input,
   TextArea,
   Button,
   ButtonLink,

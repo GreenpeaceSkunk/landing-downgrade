@@ -75,7 +75,9 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
                 customCss={css`
                   padding: ${pixelToRem(10)} ${pixelToRem(34)};
                   border-radius: ${pixelToRem(5)};
-                  border-color: ${({theme}) => theme.color.secondary.normal} !important;
+                  border-color: #BDBDBD !important;
+                  border-width: ${pixelToRem(1)};
+                  /* border-color: ${({theme}) => theme.color.secondary.normal} !important; */
                   color: ${({theme}) => theme.color.secondary.dark} !important;
                   background-color: white;
                   font-size: ${pixelToRem(16)};
