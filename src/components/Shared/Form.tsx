@@ -175,7 +175,7 @@ const Group: React.FunctionComponent<{
           font-size: ${pixelToRem(15)};
           color: ${({theme}) => theme.color.error.normal};
           text-align: left;
-          content: "${(!isValid && value !== '' && showErrorMessage && errorMessage) ? errorMessage : ""}";
+          content: "${(!isValid && showErrorMessage && errorMessage) ? errorMessage : ""}";
         }
   
         input[type="text"], input[type="email"], textarea {
@@ -185,7 +185,7 @@ const Group: React.FunctionComponent<{
             border-color: ${({theme}) => theme.color.secondary.normal};
           `}
           
-          ${(!isValid && value !== '') && css`
+          ${(!isValid && showErrorMessage) && css`
             border-color: ${({theme}) => theme.color.error.normal};
           `}
         }
