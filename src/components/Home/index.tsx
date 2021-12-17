@@ -1,5 +1,6 @@
 import React, { lazy, useMemo, memo, Suspense } from 'react';
 import { View, Wrapper } from '@bit/meema.ui-components.elements';
+import Carousel from '@bit/meema.ui-components.carousel';
 import { HomeProvider } from './context';
 import { css } from 'styled-components';
 import { isMobile, pixelToRem } from 'meema.utils';
@@ -18,15 +19,44 @@ const Component: React.FunctionComponent<{}> = memo(() => {
     <View
       id='home'
       customCss={css`
-        padding-bottom: 0;
         background-color: yellow;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: ${pixelToRem(20)};
         
         @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+          padding: 0;
           height: 50vh;
           height: calc(100vh - ${({ theme }) => pixelToRem(theme.header.tablet.height)} - ${({ theme }) => pixelToRem(theme.footer.tablet.height)});
-        } 
+        }
       `}
     >
+      <Layout.Panel
+        customCss={css`
+          background-color: lightblue;
+          width: 100%;
+          
+          @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+            width: 70%;
+            height: 70%;
+          }
+
+          @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.desktop.minWidth)}) {
+            width: 50%;
+          }
+        `}
+      >
+        <Carousel
+          index={0}
+          showControls={true}
+          showIndicators={true}
+        >
+          <Wrapper customCss={css`flex: 0 0 100%; background-color: orange;`}>Element #1</Wrapper>
+          <Wrapper customCss={css`flex: 0 0 100%; background-color: pink;`}>Element #2</Wrapper>
+          <Wrapper customCss={css`flex: 0 0 100%; background-color: orangered;`}>Element #3</Wrapper>
+        </Carousel>
+      </Layout.Panel>
       {/* <Layout.Panel>
         <Layout.PanelWrapper
           customCss={css`
