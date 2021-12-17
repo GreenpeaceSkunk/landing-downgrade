@@ -102,6 +102,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ({
     >{text}</Wrapper>
   ), [
     text,
+    miliseconds,
     animate,
   ]);
 }

@@ -22,12 +22,8 @@ const pathnames = [
 const Component: React.FunctionComponent<{}> = () => {
   const history = useHistory();
   const {
-    errors,
     currentIndex,
     totalErrors,
-    allowNext,
-    showFieldErrors,
-    showGeneralError,
     submitting,
     setCurrentIndex,
     setShowFieldErrors,
@@ -82,8 +78,8 @@ const Component: React.FunctionComponent<{}> = () => {
     feedback,
     history,
     path,
-    pathnames,
     dispatch,
+    setShowFieldErrors,
     setCurrentIndex,
   ]);
 
@@ -92,16 +88,17 @@ const Component: React.FunctionComponent<{}> = () => {
       pathname: `${path}${pathnames[currentIndex]}`,
     });
   }, [
+    path,
     currentIndex,
     history,
   ]);
 
   useEffect(() => {
-    if(formRef.current && !isMobile()) {
+    if(formRef && formRef.current && !isMobile()) {
       formRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [
-    formRef.current,
+    formRef,
   ]);
 
   useEffect(() => {
@@ -113,7 +110,9 @@ const Component: React.FunctionComponent<{}> = () => {
         document.body.style.overflow = "auto";
       }
     }
-  }, []);
+  }, [
+    setCurrentIndex,
+  ]);
 
   return useMemo(() => (
     <Elements.Wrapper>
@@ -148,7 +147,7 @@ const Component: React.FunctionComponent<{}> = () => {
               <Form.Button
                 type='submit'
                 format='contained'
-                disabled={!allowNext || submitting}
+                disabled={submitting}
                 >
                 {(submitting) ? (
                   <Loader mode='light' />
@@ -169,21 +168,13 @@ const Component: React.FunctionComponent<{}> = () => {
     </Elements.Wrapper>
   ), [
     path,
-    totalErrors,
     currentIndex,
-    errors,
     userFormRef,
     userFeedbackFormRef,
-    history,
-    allowNext,
-    showFieldErrors,
-    showGeneralError,
     submitting,
     formRef,
     snackbarRef,
-    setCurrentIndex,
-    setShowFieldErrors,
-    dispatch,
+    onSubmit,
   ]);
 };
 

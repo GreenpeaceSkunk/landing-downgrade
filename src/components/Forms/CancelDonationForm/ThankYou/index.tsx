@@ -9,11 +9,11 @@ const Component: React.FunctionComponent<{}> = () => {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if(wrapperRef.current && !isMobile()) {
+    if(wrapperRef && wrapperRef.current && !isMobile()) {
       wrapperRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [
-    wrapperRef.current,
+    wrapperRef,
   ]);
 
   return useMemo(() => (

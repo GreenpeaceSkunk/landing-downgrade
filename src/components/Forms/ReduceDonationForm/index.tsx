@@ -10,7 +10,6 @@ import UserDonationForm, { IRef as IUserDonationFormRef } from '../SplittedForms
 import { save } from './service';
 import { UserDataFormContext } from '../SplittedForms/UserDataForm/context';
 import { UserDonationFormContext } from '../SplittedForms/UserDonationForm/context';
-import { UserFeedbackFormContext } from '../SplittedForms/UserFeedbackForm/context';
 import { css } from 'styled-components';
 import Snackbar, { IRef as ISnackbarRef } from '../../Snackbar';
 
@@ -27,14 +26,8 @@ const Component: React.FunctionComponent<{}> = () => {
   const userDonationFormRef = useRef<IUserDonationFormRef>(null);
   const { path } = useRouteMatch();
   const {
-    errors,
     totalErrors,
     currentIndex,
-    allowNext,
-    isEdited,
-    showFieldErrors,
-    showGeneralError,
-    submitted,
     submitting,
     setCurrentIndex,
     setShowFieldErrors,
@@ -42,7 +35,6 @@ const Component: React.FunctionComponent<{}> = () => {
   } = useContext(FormContext);
   const { data } = useContext(UserDataFormContext);
   const { donation } = useContext(UserDonationFormContext);
-  const { feedback } = useContext(UserFeedbackFormContext);
   const snackbarRef = useRef<ISnackbarRef>(null);
 
   const onSubmit = useCallback((evt: FormEvent) => {
@@ -83,9 +75,10 @@ const Component: React.FunctionComponent<{}> = () => {
     data,
     donation,
     currentIndex,
-    errors,
     totalErrors,
-    showGeneralError,
+    history,
+    dispatch,
+    setCurrentIndex,
     setShowFieldErrors,
   ]);
   
@@ -96,15 +89,17 @@ const Component: React.FunctionComponent<{}> = () => {
       })
     }
   }, [
+    history,
+    path,
     currentIndex,
   ]);
 
   useEffect(() => {
-    if(formRef.current && !isMobile()) {
+    if(formRef && formRef.current && !isMobile()) {
       formRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [
-    formRef.current,
+    formRef,
   ]);
 
   useEffect(() => {
@@ -116,7 +111,9 @@ const Component: React.FunctionComponent<{}> = () => {
         document.body.style.overflow = "auto";
       }
     }
-  }, []);
+  }, [
+    setCurrentIndex,
+  ]);
 
   return useMemo(() => (
     <Elements.Wrapper customCss={css`padding-bottom: ${pixelToRem(45)};`}>
@@ -164,27 +161,14 @@ const Component: React.FunctionComponent<{}> = () => {
       </Switch>
     </Elements.Wrapper>
   ), [
-    data,
-    donation,
-    feedback,
     path,
     currentIndex,
-    totalErrors,
-    errors,
     userDataFormRef,
     userDonationFormRef,
-    history,
-    allowNext,
-    isEdited,
-    showFieldErrors,
-    showGeneralError,
-    submitted,
     submitting,
     formRef,
     snackbarRef,
-    setCurrentIndex,
-    setShowFieldErrors,
-    dispatch,
+    onSubmit,
   ]);
 };
 

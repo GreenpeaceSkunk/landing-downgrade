@@ -5,7 +5,6 @@ import React, {
   useMemo,
 } from 'react';
 import { OnChangeEvent } from 'greenpeace';
-import { useRouteMatch } from 'react-router-dom';
 import Form from '../../../Shared/Form'; // Move to bit
 import { FormContext } from '../../context';
 import { UserFeedbackFormContext } from './context';
@@ -18,7 +17,6 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
   props: IProps,
   innerRef: React.ForwardedRef<IRef>
 ) => {
-  const { path } = useRouteMatch();
   const { showFieldErrors, onUpdateFieldHandler, onFocusHandler } = useContext(FormContext);
   const { feedback, dispatch } = useContext(UserFeedbackFormContext);
 
@@ -31,7 +29,6 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
       },
     });
   }, [
-    feedback,
     dispatch,
   ]);
   
@@ -95,11 +92,11 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
       </Form.Row>
     </Form.Content>
   ), [
-    path,
     showFieldErrors,
     feedback,
     onUpdateFieldHandler,
-    // onClick,
+    onChangeHandler,
+    onFocusHandler,
   ]);
 });
 

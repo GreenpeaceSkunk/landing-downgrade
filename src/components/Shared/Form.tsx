@@ -82,7 +82,6 @@ const NavigationNav: React.FunctionComponent<{ allowGoBack?: boolean }> = memo((
   ), [
     allowGoBack,
     currentIndex,
-    setCurrentIndex,
     onBack,
     onClose,
   ]);
@@ -160,6 +159,8 @@ const Group: React.FunctionComponent<{
   }, [
     fieldName,
     value,
+    validateFn,
+    onUpdateHandler,
   ]);
 
   return useMemo(() => (
@@ -232,13 +233,12 @@ const Group: React.FunctionComponent<{
     fieldName,
     labelText,
     labelBottomText,
+    errorMessage,
     showErrorMessage,
     value,
     customCss,
     isValid,
     isRequired,
-    validateFn,
-    onUpdateHandler,
   ]);
 };
 

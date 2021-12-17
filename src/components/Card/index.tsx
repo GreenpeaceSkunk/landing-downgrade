@@ -17,8 +17,8 @@ const Component: React.FunctionComponent<IProps> = ({
   const [ imageSrc, setImageSrc ] = useState<string>();
 
   useEffect(() => {
-    let isMounted = true;
     (async () => {
+      let isMounted = true;
       try {
         const { default: src } = await import(`../../images/icons/${icon}.svg`);
         setImageSrc(src);
@@ -27,6 +27,7 @@ const Component: React.FunctionComponent<IProps> = ({
       }
       
       return () => {
+        /* eslint-disable @typescript-eslint/no-unused-vars */
         isMounted = false;
       }
     })()
@@ -77,6 +78,9 @@ const Component: React.FunctionComponent<IProps> = ({
     </Wrapper>
   ), [
     imageSrc,
+    description,
+    icon,
+    title,
   ]);
 };
 

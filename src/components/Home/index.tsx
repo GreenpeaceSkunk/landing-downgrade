@@ -76,10 +76,7 @@ const Component: React.FunctionComponent<{}> = memo(() => {
               title='Protección de humedales'
             />
           </Layout.Cards>
-          <VideoPlayer
-            fixByScroll={true}
-            videoUrl='https://www.youtube.com/watch?v=FXr3_zGc0O4'
-          />
+          <VideoPlayer videoUrl='https://www.youtube.com/watch?v=FXr3_zGc0O4' />
         </Layout.PanelWrapper>
       </Layout.Panel>
       <Layout.Panel

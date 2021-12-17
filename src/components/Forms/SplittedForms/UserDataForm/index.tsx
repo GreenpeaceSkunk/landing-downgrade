@@ -1,12 +1,5 @@
-import React, {
-  useCallback,
-  useContext,
-  useImperativeHandle,
-  useMemo,
-  useState,
-} from 'react';
+import React, { useCallback, useContext, useImperativeHandle, useMemo } from 'react';
 import Form from '../../../Shared/Form'; // Move to bit
-import { useRouteMatch } from 'react-router-dom';
 import { FormContext } from '../../context';
 import { 
   validateFirstName,
@@ -22,18 +15,14 @@ import { OnChangeEvent } from 'greenpeace';
 import { UserDataFormContext } from './context';
 
 interface IProps {}
-export interface IRef {
-  isValid: boolean;
-}
+export interface IRef {}
 
 const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
   props: IProps,
   innerRef: React.ForwardedRef<IRef>
 ) => {
-  const { path } = useRouteMatch();
   const { showFieldErrors, onUpdateFieldHandler, onFocusHandler } = useContext(FormContext);
   const { data, dispatch } = useContext(UserDataFormContext);
-  const [ isValid, setIsValid ] = useState<boolean>(false);
 
   const onChangeHandler = useCallback((evt: OnChangeEvent) => {
     evt.preventDefault();
@@ -44,14 +33,11 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
       },
     });
   }, [
-    data,
     dispatch,
   ]);
 
   useImperativeHandle(innerRef, () => {
-    return {
-      isValid,
-    }
+    return {}
   });
 
   return useMemo(() => (
@@ -195,10 +181,9 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
       </Form.Row>
     </Form.Content>
   ), [
-    path,
     data,
-    isValid,
     showFieldErrors,
+    onFocusHandler,
     onChangeHandler,
     onUpdateFieldHandler,
   ]);
