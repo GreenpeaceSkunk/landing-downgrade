@@ -55,12 +55,13 @@ const Component: React.FunctionComponent<{}> = memo(() => {
           padding: 0;
           height: calc(100vh - ${({ theme }) => pixelToRem(theme.header.tablet.height)} - ${({ theme }) => pixelToRem(theme.footer.tablet.height)});
         }
-      `}
+        `}
     >
       <Layout.Panel
         customCss={css`
-          /* background-color: lightblue; */
+          background-color: lightblue;
           width: 100%;
+          padding: 0;
           
           @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
             width: 80%;

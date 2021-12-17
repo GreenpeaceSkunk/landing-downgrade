@@ -29,7 +29,7 @@ const innerMargin = (marginRight: number, marginLeft: number) => css`
 
 const Main = styled(Elements.Form)`
   flex-direction: column;
-  padding: ${pixelToRem(20)} ${pixelToRem(24)} ${pixelToRem(40)};
+  /* padding: ${pixelToRem(20)} ${pixelToRem(24)} ${pixelToRem(40)}; */
   width: 100%;
   overflow: auto;
 
