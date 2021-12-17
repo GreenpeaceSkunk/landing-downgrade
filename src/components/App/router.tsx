@@ -16,7 +16,7 @@ const HomeView = React.lazy(() => import('../Home'));
 const Component: React.FunctionComponent<{}> = memo(() => {
   return useMemo(() => (
     <>
-      <ErrorBoundary fallback='Header error'>
+      {/* <ErrorBoundary fallback='Header error'>
         <Suspense 
           fallback={
             <Wrapper
@@ -42,7 +42,7 @@ const Component: React.FunctionComponent<{}> = memo(() => {
         >
           <MainHeader />
         </Suspense>
-      </ErrorBoundary>
+      </ErrorBoundary> */}
       <Wrapper
         customCss={css`
           display: flex;

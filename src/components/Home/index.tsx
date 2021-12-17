@@ -11,6 +11,7 @@ import Card from '../Card';
 import VideoPlayer from '../VideoPlayer';
 import UserDataForm from '../Forms/UserDataForm';
 import { useLocation } from 'react-router-dom';
+import MainHeader from '../Header';
 
 type PathType = {
   path: string;
@@ -45,45 +46,83 @@ const Component: React.FunctionComponent<{}> = memo(() => {
     <View
       id='home'
       customCss={css`
-        background-color: yellow;
         display: flex;
-        align-items: center;
-        justify-content: center;
+        flex-direction: column;
         padding: ${pixelToRem(20)};
+        background-color: #000;
+        background-image: linear-gradient(0deg, rgba(0, 0, 0, .75) 0%, rgba(0, 0, 0, .75) 100%), url("https://unite.greenpeace.org.ar/sk/assets/landing-bajas/home.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
         
         @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
           padding: 0;
-          height: calc(100vh - ${({ theme }) => pixelToRem(theme.header.tablet.height)} - ${({ theme }) => pixelToRem(theme.footer.tablet.height)});
+          height: calc(100vh - ${({ theme }) => pixelToRem(theme.footer.tablet.height)});
         }
         `}
     >
-      <Layout.Panel
-        customCss={css`
-          background-color: lightblue;
-          width: 100%;
-          padding: 0;
-          
-          @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-            width: 80%;
-          }
+      <ErrorBoundary fallback='Header error'>
+        <Suspense 
+          fallback={
+            <Wrapper
+              customCss={css`
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                min-height: ${({theme}) => pixelToRem(theme.header.mobile.height)};
+                background-color: ${({theme}) => theme.color.secondary.light};
 
-          @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.desktop.minWidth)}) {
-            width: 60%;
+                @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+                  min-height: ${({theme}) => pixelToRem(theme.header.tablet.height)};
+                }
+                
+                @media (min-width: ${({theme}) => pixelToRem(theme.responsive.desktop.minWidth)}) {
+                  min-height: ${({theme}) => pixelToRem(theme.header.desktop.height)};
+                }
+              `}
+            >
+              <Loader mode='default' />
+            </Wrapper>
           }
+        >
+          <MainHeader />
+        </Suspense>
+      </ErrorBoundary>
+      <Wrapper
+        customCss={css`
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
         `}
       >
-        <Carousel
-          index={currentIndex}
-          showControls={false}
-          showIndicators={false}
+        <Layout.Panel
+          customCss={css`
+            width: 100%;
+            padding: 0;
+            
+            @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+              width: 80%;
+            }
+
+            @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.desktop.minWidth)}) {
+              width: 60%;
+            }
+          `}
         >
-          <Wrapper customCss={css`flex: 0 0 100%;`}>
-            <UserDataForm />
-          </Wrapper>
-          <Wrapper customCss={css`flex: 0 0 100%; background-color: pink;`}>Element #2</Wrapper>
-          <Wrapper customCss={css`flex: 0 0 100%; background-color: orangered;`}>Element #3</Wrapper>
-        </Carousel>
-      </Layout.Panel>
+          <Carousel
+            index={currentIndex}
+            showControls={false}
+            showIndicators={false}
+          >
+            <Wrapper customCss={css`flex: 0 0 100%;`}>
+              <UserDataForm />
+            </Wrapper>
+            <Wrapper customCss={css`flex: 0 0 100%; background-color: pink;`}>Element #2</Wrapper>
+            <Wrapper customCss={css`flex: 0 0 100%; background-color: orangered;`}>Element #3</Wrapper>
+          </Carousel>
+        </Layout.Panel>
+      </Wrapper>
       {/* <Layout.Panel>
         <Layout.PanelWrapper
           customCss={css`
