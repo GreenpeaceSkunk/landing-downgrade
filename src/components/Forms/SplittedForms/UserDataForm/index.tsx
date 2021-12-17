@@ -6,8 +6,8 @@ import {
   validateLastName,
   validateCitizenId,
   validateEmail,
-  validatePhoneNumber,
-  validateAreaCode,
+  // validatePhoneNumber,
+  // validateAreaCode,
 } from '../../../../utils/validators';
 import { css } from 'styled-components';
 import { pixelToRem } from 'meema.utils';
@@ -91,7 +91,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
           <Form.Group
             fieldName='citizenId'
             value={data.citizenId}
-            labelText='DNI'
+            labelText='Número de documento (DNI, CUIL, CUIT)'
             showErrorMessage={showFieldErrors}
             isRequired={true}
             validateFn={validateCitizenId}

@@ -117,8 +117,8 @@ const Component: React.FunctionComponent<{}> = () => {
               <Form.Text>Para nosotros es muy importante que sigamos trabajando juntos en las causas más importantes</Form.Text>
             </Form.Header>
 
+            {/* Isolate this form */}
             <UserDataForm ref={userDataFormRef} />
-            {/* <Route exact path={`${path}user/information`}></Route> */}
             
             <Form.Message>* Datos obligatorios</Form.Message>
             <Form.Nav>

@@ -206,6 +206,7 @@ const Group: React.FunctionComponent<{
             line-height: 1;
             font-size: ${pixelToRem(14)};
             margin-bottom: ${pixelToRem(6)};
+            color: white;
             
             &:after {
               ${(isRequired) && css`
@@ -224,6 +225,7 @@ const Group: React.FunctionComponent<{
             font-size: ${pixelToRem(14)};
             margin-top: ${pixelToRem(4)};
             text-align: left;
+            color: white;
           `}
         >{labelBottomText}</Elements.Label>
       ) : null}
@@ -250,16 +252,27 @@ const Text = styled(Elements.P)`
   font-size: ${pixelToRem(16)};
   font-style: normal;
   font-weight: 400;
-  line-height: ${pixelToRem(18)};
-  text-align: left;
+  color: white;
+  text-align: center;
+
+  @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+    font-size: ${pixelToRem(18)};
+  }
 `;
 
 const MainTitle = styled(Elements.H1)`
-  font-size: ${pixelToRem(24)};
+  font-size: ${pixelToRem(26)};
+  margin-bottom: ${pixelToRem(10)};
   font-style: normal;
   font-weight: 600;
-  line-height: ${pixelToRem(30)};
   text-align: left;
+  color: white;
+  text-align: center;
+  font-family: ${({theme}) => theme.font.family.primary.bold};
+  
+  @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+    font-size: ${pixelToRem(32)};
+  }
 `;
 
 const Title = styled(Elements.H2)`
