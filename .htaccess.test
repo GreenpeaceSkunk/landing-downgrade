@@ -1,8 +1,8 @@
 RewriteEngine on
 # Only for app in subdirectory
-RewriteBase /sk/membership-downgrade-test/
+RewriteBase /sk/membership-downgrade-test/new/
 RewriteRule ^index\.html$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-l
-RewriteRule . /sk/membership-downgrade-test/index.html [L]
+RewriteRule . /sk/membership-downgrade-test/new/index.html [L]
