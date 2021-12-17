@@ -107,7 +107,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
             />
           </Form.Group>
         </Form.Column>
-        <Form.Column>
+        {/* <Form.Column>
           <Form.Group
             fieldName='areaCode'
             value={data.areaCode}
@@ -151,14 +151,8 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
               onFocus={onFocusHandler}
             />
           </Form.Group>
-        </Form.Column>
-      </Form.Row>
-      <Form.Row>
-        <Form.Column
-          customCss={css`
-            flex-basis: 50%;
-          `}
-        >
+        </Form.Column> */}
+        <Form.Column>
           <Form.Group
             value={data.email}
             fieldName='email'

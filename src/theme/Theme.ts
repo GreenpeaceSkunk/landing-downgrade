@@ -127,21 +127,21 @@ const DefaultTheme: ITheme = {
       height: 66,
     },
     desktop: {
-      backgroundColor: 'purple',
+      backgroundColor: 'transparent',
       height: 66,
     },
   },
   footer: {
     mobile: {
-      backgroundColor: colorSecondaryExtraDark,
+      backgroundColor: '#000',
       height: 80,
     },
     tablet: {
-      backgroundColor: colorSecondaryExtraDark,
+      backgroundColor: '#000',
       height: 80,
     },
     desktop: {
-      backgroundColor: colorSecondaryExtraDark,
+      backgroundColor: '#000',
       height: 80,
     },
   },

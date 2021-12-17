@@ -1,4 +1,4 @@
-import React, { lazy, useMemo, memo, Suspense } from 'react';
+import React, { lazy, useMemo, memo, Suspense, useEffect, useState } from 'react';
 import { View, Wrapper } from '@bit/meema.ui-components.elements';
 import Carousel from '@bit/meema.ui-components.carousel';
 import { HomeProvider } from './context';
@@ -9,11 +9,37 @@ import Layout from '../Shared/Layout';
 import ErrorBoundary from '../ErrorBoundary';
 import Card from '../Card';
 import VideoPlayer from '../VideoPlayer';
+import UserDataForm from '../Forms/UserDataForm';
+import { useLocation } from 'react-router-dom';
 
-const FormRouter = lazy(() => import('../Forms/router'));
+type PathType = {
+  path: string;
+  index: number;
+}
+
+// const FormRouter = lazy(() => import('../Forms/router'));
+const mobile = isMobile();
+const paths: Array<PathType> = [
+  { path: '/user/information', index: 0 },
+  { path: '/video', index: 1 },
+];
 
 const Component: React.FunctionComponent<{}> = memo(() => {
-  const mobile = isMobile();
+  const [ currentIndex, setCurrentIndex ] = useState(0);
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    const path = paths.filter((_: PathType) => _.path === pathname);
+    if(path.length) {
+      const timeout = setTimeout(() => {
+        setCurrentIndex(path[0].index);
+      }, 500) 
+
+      return () => {
+        clearTimeout(timeout);
+      }
+    }
+  }, [ pathname ]);
 
   return useMemo(() => (
     <View
@@ -27,32 +53,32 @@ const Component: React.FunctionComponent<{}> = memo(() => {
         
         @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
           padding: 0;
-          height: 50vh;
           height: calc(100vh - ${({ theme }) => pixelToRem(theme.header.tablet.height)} - ${({ theme }) => pixelToRem(theme.footer.tablet.height)});
         }
       `}
     >
       <Layout.Panel
         customCss={css`
-          background-color: lightblue;
+          /* background-color: lightblue; */
           width: 100%;
           
           @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-            width: 70%;
-            height: 70%;
+            width: 80%;
           }
 
           @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.desktop.minWidth)}) {
-            width: 50%;
+            width: 60%;
           }
         `}
       >
         <Carousel
-          index={0}
-          showControls={true}
-          showIndicators={true}
+          index={currentIndex}
+          showControls={false}
+          showIndicators={false}
         >
-          <Wrapper customCss={css`flex: 0 0 100%; background-color: orange;`}>Element #1</Wrapper>
+          <Wrapper customCss={css`flex: 0 0 100%;`}>
+            <UserDataForm />
+          </Wrapper>
           <Wrapper customCss={css`flex: 0 0 100%; background-color: pink;`}>Element #2</Wrapper>
           <Wrapper customCss={css`flex: 0 0 100%; background-color: orangered;`}>Element #3</Wrapper>
         </Carousel>
@@ -179,6 +205,7 @@ const Component: React.FunctionComponent<{}> = memo(() => {
     </View>
   ), [
     mobile,
+    currentIndex,
   ]);
 });
 

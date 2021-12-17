@@ -12,6 +12,7 @@ import { Loader } from '../Shared'; // TODO Import directly from bit
 import { Wrapper } from '@bit/meema.ui-components.elements';
 import { css } from 'styled-components';
 import { pixelToRem } from 'meema.utils';
+import { FormProvider } from '../Forms/context';
 
 const AppRouter = lazy(() => import('./router'));
 
@@ -58,7 +59,9 @@ Component.displayName = 'App';
 export default function App() {
   return useMemo(() => (
     <AppProvider>
-      <Component />
+      <FormProvider>
+        <Component />
+      </FormProvider>
     </AppProvider>
   ), []);
 };
