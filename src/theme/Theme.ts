@@ -120,15 +120,15 @@ const DefaultTheme: ITheme = {
   header: {
     mobile: {
       backgroundColor: 'transparent',
-      height: 295,
+      height: 66,
     },
     tablet: {
       backgroundColor: 'transparent',
-      height: 372,
+      height: 66,
     },
     desktop: {
-      backgroundColor: 'transparent',
-      height: 372,
+      backgroundColor: 'purple',
+      height: 66,
     },
   },
   footer: {
@@ -138,11 +138,11 @@ const DefaultTheme: ITheme = {
     },
     tablet: {
       backgroundColor: colorSecondaryExtraDark,
-      height: 120,
+      height: 80,
     },
     desktop: {
       backgroundColor: colorSecondaryExtraDark,
-      height: 100,
+      height: 80,
     },
   },
   responsive: {

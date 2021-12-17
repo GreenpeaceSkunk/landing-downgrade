@@ -19,9 +19,15 @@ const Component: React.FunctionComponent<{}> = memo(() => {
       id='home'
       customCss={css`
         padding-bottom: 0;
+        background-color: yellow;
+        
+        @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+          height: 50vh;
+          height: calc(100vh - ${({ theme }) => pixelToRem(theme.header.tablet.height)} - ${({ theme }) => pixelToRem(theme.footer.tablet.height)});
+        } 
       `}
     >
-      <Layout.Panel>
+      {/* <Layout.Panel>
         <Layout.PanelWrapper
           customCss={css`
             padding-top: ${pixelToRem(35)};
@@ -81,12 +87,10 @@ const Component: React.FunctionComponent<{}> = memo(() => {
       </Layout.Panel>
       <Layout.Panel
         customCss={css`
-          /* padding-top: ${pixelToRem(30)}; */
           padding-bottom: ${pixelToRem(30)};
           background-color: ${({ theme }) => theme.color.secondary.light};
           
           @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-            /* padding-top: ${pixelToRem(55)}; */
             padding-bottom: ${pixelToRem(55)};
           }
           `}
@@ -141,7 +145,7 @@ const Component: React.FunctionComponent<{}> = memo(() => {
             <FormRouter />
           </Suspense>
         </ErrorBoundary>
-      </Layout.Panel>
+      </Layout.Panel> */}
     </View>
   ), [
     mobile,

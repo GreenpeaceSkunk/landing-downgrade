@@ -11,6 +11,7 @@ import { initialize as initializeHotjar } from '../../utils/hotjar';
 import { Loader } from '../Shared'; // TODO Import directly from bit
 import { Wrapper } from '@bit/meema.ui-components.elements';
 import { css } from 'styled-components';
+import { pixelToRem } from 'meema.utils';
 
 const AppRouter = lazy(() => import('./router'));
 
@@ -37,7 +38,11 @@ const Component: React.FunctionComponent<{}> = memo(() => {
     <Wrapper
       customCss={css`
         width: 100vw;
-        overflow: hidden;
+        
+        @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+          height: 100vh;
+          /* overflow: hidden; */
+        }
       `}
     >
       <ErrorBoundary fallback='App Error.'>

@@ -29,15 +29,17 @@ const Component: React.FunctionComponent<{}> = memo(() => useMemo(() => (
       background-color: ${({theme}) => theme.footer.mobile.backgroundColor};
       color: white;
       transition: all 250ms ease;
+      overflow: hidden;
 
       @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
         flex-direction: row-reverse;
-        min-height: ${({theme}) => pixelToRem(theme.footer.tablet.height)};
+        min-height:initial;
+        height: ${({theme}) => pixelToRem(theme.footer.tablet.height)};
         background-color: ${({theme}) => theme.footer.tablet.backgroundColor};
       }
       
       @media (min-width: ${({theme}) => pixelToRem(theme.responsive.desktop.minWidth)}) {
-        min-height: ${({theme}) => pixelToRem(theme.footer.desktop.height)};
+        height: ${({theme}) => pixelToRem(theme.footer.desktop.height)};
         background-color: ${({theme}) => theme.footer.desktop.backgroundColor};
       }
       `}
