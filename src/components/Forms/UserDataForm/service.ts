@@ -6,7 +6,8 @@ const save = async (data: any): Promise<any | AxiosResquestError> => (
     method: 'POST',
     url: `${process.env.REACT_APP_API_URL}/forms/save`,
     data: {
-      form_id: `${process.env.REACT_APP_MEMBERSHIP_DOWNGRADE_FORM_ID}`,
+      form_id: `${process.env.REACT_APP_MEMBERSHIP_DOWNGRADE_USERS_FORM_ID}`,
+      campaignName: `${process.env.REACT_APP_MEMBERSHIP_DOWNGRADE_USERS_FORM_ID}`,
       ...data,
     },
   })

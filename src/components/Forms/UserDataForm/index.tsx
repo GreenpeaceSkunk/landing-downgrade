@@ -6,7 +6,7 @@ import Form from '../../Shared/Form'; // Move to bit
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import { FormContext } from '../context';
 import UserDataForm, { IRef as IUserDataFormRef } from '../SplittedForms/UserDataForm';
-// import { save } from './service';
+import { save } from './service';
 import { UserDataFormContext } from '../SplittedForms/UserDataForm/context';
 import { css } from 'styled-components';
 import Snackbar, { IRef as ISnackbarRef } from '../../Snackbar';
@@ -39,26 +39,28 @@ const Component: React.FunctionComponent<{}> = () => {
       // if(currentIndex + 1 < pathnames.length) {
       //   setCurrentIndex(currentIndex + 1);
       // } else {
-        // (async () => {
-        //   dispatch({ type: 'SUBMIT' });
-        //   const result = await save({
-        //     userAgent: window.navigator.userAgent,
-        //     firstName: data.firstName,
-        //     lastName: data.lastName,
-        //     citizenId: data.citizenId,
-        //     areaCode: data.areaCode,
-        //     email: data.email,
-        //     mPhoneNumber: data.mobilePhoneNumber,
-        //   });
-        //   dispatch({ type: 'SUBMITTED' });
-        //   if(result.error) {
-        //     console.log('Error inesperado', result.message);
-        //   } else {
-        //     history.push(`${path}/thank-you`);
-        //   }
-        // })();
+        (async () => {
+          dispatch({ type: 'SUBMIT' });
+          const result = await save({
+            // userAgent: window.navigator.userAgent,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            citizenId: data.citizenId,
+            // areaCode: data.areaCode,
+            email: data.email,
+            campaignName: '',
+            // mPhoneNumber: data.mobilePhoneNumber,
+          });
+          dispatch({ type: 'SUBMITTED' });
+          if(result.error) {
+            console.log('Error inesperado', result.message);
+          } else {
+            // history.push(`${path}/thank-you`);
+            history.push(`/video`);
+          }
+        })();
       // }
-      history.push(`/video`);
+      // history.push(`/video`);
     }
   }, [
     path,
