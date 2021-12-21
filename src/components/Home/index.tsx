@@ -110,17 +110,23 @@ const Component: React.FunctionComponent<{}> = memo(() => {
             }
           `}
         >
-          <Carousel
+          {/* <Carousel
             index={currentIndex}
             showControls={false}
             showIndicators={false}
           >
             <Wrapper customCss={css`flex: 0 0 100%;`}>
+              <Layout.Title color='light' dangerouslySetInnerHTML={{__html: 'Reducir mi donación'}}/>
+              <Layout.Text color='light'>Para nosotros es muy importante que sigamos trabajando juntos en las causas más importantes</Layout.Text>
               <UserDataForm />
             </Wrapper>
-            <Wrapper customCss={css`flex: 0 0 100%; background-color: pink;`}>Element #2</Wrapper>
+            <Wrapper customCss={css`flex: 0 0 100%;`}>
+              <Layout.Title color='light' dangerouslySetInnerHTML={{__html: 'Tu solicitud aún no termina.<br>Por favor, <em>mirá el video</em> antes de continuar'}}/>
+              <VideoPlayer videoUrl='https://www.youtube.com/watch?v=FXr3_zGc0O4' />
+            </Wrapper>
             <Wrapper customCss={css`flex: 0 0 100%; background-color: orangered;`}>Element #3</Wrapper>
-          </Carousel>
+          </Carousel> */}
+          <ContentSlider />
         </Layout.Panel>
       </Wrapper>
       {/* <Layout.Panel>
