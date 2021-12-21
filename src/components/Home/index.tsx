@@ -30,7 +30,7 @@ const Component: React.FunctionComponent<{}> = memo(() => {
           padding: 0;
           height: calc(100vh - ${({ theme }) => pixelToRem(theme.footer.tablet.height)});
         }
-        `}
+      `}
     >
       <ErrorBoundary fallback='Header error'>
         <Suspense 
