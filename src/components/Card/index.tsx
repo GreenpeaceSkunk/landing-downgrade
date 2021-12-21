@@ -38,9 +38,9 @@ const Component: React.FunctionComponent<IProps> = ({
   return useMemo(() => (
     <Wrapper
       customCss={css`
-        width: ${pixelToRem(400)};
-        padding: ${pixelToRem(52)} ${pixelToRem(31)};
-        background: #FFFFFF;
+        width: ${pixelToRem(280)};
+        padding: ${pixelToRem(31)} ${pixelToRem(31)};
+        background: #FFFFFFB3;
         box-shadow: 0 ${pixelToRem(4)} ${pixelToRem(34)} rgba(0, 0, 0, .08);
         border-radius: ${pixelToRem(8)};
         text-align: center;
