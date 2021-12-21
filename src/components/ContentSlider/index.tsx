@@ -1,16 +1,18 @@
-import React, { memo, MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { memo, MouseEvent, useEffect, useMemo, useRef, useState, Suspense, lazy } from 'react';
+import { Switch, Route, useLocation, useRouteMatch, useHistory } from 'react-router-dom';
 import Carousel, { IRef as ICarouselRef} from '@bit/meema.ui-components.carousel';
 import ContentSliderItem from './ContentSliderItem';
 import UserDataForm from '../Forms/UserDataForm';
-import VideoPlayer from '../VideoPlayer';
 import Elements from '@bit/meema.ui-components.elements';
 import { css } from 'styled-components';
 import { pixelToRem } from 'meema.utils';
 import Layout from '../Shared/Layout';
 import Card from '../Card';
 import { Loader } from '../Shared';
-import CancelDonationForm from '../Forms/CancelDonationForm';
+
+const CancelDonationForm = lazy(() => import('../Forms/CancelDonationForm'));
+const ReduceDonationForm = lazy(() => import('../Forms/ReduceDonationForm'));
+const VideoPlayer = lazy(() => import('../VideoPlayer'));
 
 type PathType = {
   path: string;
@@ -19,8 +21,11 @@ type PathType = {
 };
 
 const paths: Array<PathType> = [
-  { path: '/user/information', index: 0, showContinueButton: false, },
-  { path: '/video', index: 1, showContinueButton: true, },
+  { path: '/user/information', index: 0, showContinueButton: false },
+  { path: '/video', index: 1, showContinueButton: true },
+  { path: '/about-us', index: 2, showContinueButton: false },
+  { path: '/form/reduce', index: 3, showContinueButton: false },
+  { path: '/form/cancel', index: 3, showContinueButton: false },
 ];
 
 const ContentSlider: React.FunctionComponent<{}> = memo(() => {
@@ -28,16 +33,22 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
   const { pathname } = useLocation();
   const [ total, setTotal ] = useState<number>(0);
   const carouselRef = useRef<ICarouselRef>(null);
+  const { path } = useRouteMatch();
+  const history = useHistory();
 
   useEffect(() => {
-    const path = paths.filter((_: PathType) => _.path === pathname);
-    if(path.length) {
-      const timeout = setTimeout(() => {
-        setCurrentIndex(path[0].index);
-      }, 500) 
-
-      return () => {
-        clearTimeout(timeout);
+    if(pathname === '/' && paths.length) {
+      setCurrentIndex(paths[0].index)
+    } else {
+      const path = paths.filter((_: PathType) => _.path === pathname);
+      if(path.length) {
+        const timeout = setTimeout(() => {
+          setCurrentIndex(path[0].index);
+        }, 100) 
+        
+        return () => {
+          clearTimeout(timeout);
+        }
       }
     }
   }, [ pathname ]);
@@ -49,6 +60,14 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
   }, [ 
     carouselRef.current?.getTotal,
     total,
+  ]);
+
+   useEffect(() => {
+    history.push({
+      pathname: `${paths[0].path}`,
+    });
+  }, [
+    path,
   ]);
 
   return useMemo(() => (
@@ -69,12 +88,12 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
         </ContentSliderItem>
 
         <ContentSliderItem title='Tu solicitud aún no termina.<br>Por favor, <em>mirá el video</em> antes de continuar'>
-          <VideoPlayer videoUrl='https://www.youtube.com/watch?v=FXr3_zGc0O4' />
+          <React.Suspense fallback={'Video error'}>
+            <VideoPlayer videoUrl='https://www.youtube.com/watch?v=FXr3_zGc0O4' />
+          </React.Suspense>
         </ContentSliderItem>
 
-        <ContentSliderItem
-          title='Antes de seguir, recordá que en Greenpeace:'
-        >
+        <ContentSliderItem title='Antes de seguir, recordá que en Greenpeace:'>
           <Layout.Cards>
             <Card
               title='No recibimos aportes de empresas privadas.'
@@ -85,21 +104,31 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
               icon='government'
             />
           </Layout.Cards>
-          <Layout.Text>También podemos asegurarte que siempre podrás reducir el monto de tu donación o cancelarla, sin vueltas.</Layout.Text>
-          <Elements.Nav customCss={css`display: flex; justify-content: center; width: 100%;`}>
-            <Layout.ButtonLink to='/form/reduce/checkout'>Reducir el monto</Layout.ButtonLink>
-            <Layout.ButtonLink to='/form/cancel/checkout'>Cancelar mi donación</Layout.ButtonLink>
+          <Layout.Text color='light'>También podemos asegurarte que siempre podrás reducir el monto de tu donación o cancelarla, sin vueltas.</Layout.Text>
+          <Elements.Nav
+            customCss={css`
+              display: flex;
+              justify-content: center;
+              align-self: flex-end;
+              width: 100%;
+            
+              & > *:not(:last-child) {
+                margin-right: ${pixelToRem(30)};
+              }
+            `}>
+            <Layout.ButtonLink to='/form/reduce'>Reducir el monto</Layout.ButtonLink>
+            <Layout.ButtonLink to='/form/cancel'>Cancelar mi donación</Layout.ButtonLink>
           </Elements.Nav>
         </ContentSliderItem>
 
         <ContentSliderItem>
           <Switch>
-            <Route exact path={`/form/reduce/checkout`}>
-              Reduce
-              {/* <Suspense fallback={<Loader mode='default' />}>
-              </Suspense> */}
+            <Route path={`/form/reduce`}>
+              <Suspense fallback={<Loader mode='default' />}>
+                <ReduceDonationForm />
+              </Suspense>
             </Route>
-            <Route path={`/form/cancel/checkout`}>
+            <Route path={`/form/cancel`}>
               <Suspense fallback={<Loader mode='default' />}>
                 <CancelDonationForm />
               </Suspense>
@@ -144,15 +173,9 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
           ))}
         </Elements.Wrapper>
         {(paths[currentIndex] && paths[currentIndex].showContinueButton) && (
-          <Layout.Button
-            type='submit'
-            format='contained'
-            disabled={!true}
-            onClick={(evt: MouseEvent) => {
-              evt.preventDefault();
-              setCurrentIndex(currentIndex + 1)
-            }}
-          >Continuar</Layout.Button>
+          <Layout.ButtonLink
+            to='/about-us'
+          >Continuar</Layout.ButtonLink>
         )}
       </Elements.Wrapper>
     </>
