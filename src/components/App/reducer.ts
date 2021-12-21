@@ -25,14 +25,6 @@ export const initialState: ContextStateType = {
         mobilePhoneNumber: '41239876',
       } : {}),
     },
-    // data: {
-    //   firstName: '',
-    //   lastName: '',
-    //   citizenId: '',
-    //   email: '',
-    //   areaCode: '',
-    //   mobilePhoneNumber: '',
-    // },
     donation: {
       percentDecrease: 10,
     },

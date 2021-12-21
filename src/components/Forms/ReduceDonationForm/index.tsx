@@ -1,12 +1,12 @@
 import React, { FormEvent, lazy, memo, Suspense, useCallback, useContext, useEffect, useMemo, useRef } from 'react';
 import Elements from '@bit/meema.ui-components.elements';
-import { isMobile, pixelToRem } from 'meema.utils';
+import { pixelToRem } from 'meema.utils';
 import { Loader } from '../../Shared';
-import Form from '../../Shared/Form'; // Move to bit
+import Form from '../../Shared/Form';
 import Layout from '../../Shared/Layout';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import { FormContext } from '../context';
-import UserDataForm, { IRef as IUserDataFormRef } from '../SplittedForms/UserDataForm';
+import { IRef as IUserDataFormRef } from '../SplittedForms/UserDataForm';
 import UserDonationForm, { IRef as IUserDonationFormRef } from '../SplittedForms/UserDonationForm';
 import { save } from './service';
 import { UserDataFormContext } from '../SplittedForms/UserDataForm/context';
@@ -15,10 +15,6 @@ import { css } from 'styled-components';
 import Snackbar, { IRef as ISnackbarRef } from '../../Snackbar';
 
 const ReduceDonationFormThankYou = lazy(() => import('./ThankYou'));
-
-const pathnames = [
-  '/form-user/information',
-];
 
 const Component: React.FunctionComponent<{}> = () => {
   const history = useHistory();
@@ -90,40 +86,7 @@ const Component: React.FunctionComponent<{}> = () => {
   }, [
     path,
   ]);
-
-  // useEffect(() => {
-  //   if(currentIndex === 0) {
-  //     history.push({
-  //       pathname: `${path}/form-user/information`,
-  //     })
-  //   }
-  // }, [
-  //   history,
-  //   path,
-  //   currentIndex,
-  // ]);
-
-  // useEffect(() => {
-  //   if(formRef && formRef.current && !isMobile()) {
-  //     formRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  //   }
-  // }, [
-  //   formRef,
-  // ]);
-
-  // useEffect(() => {
-  //   setCurrentIndex(0);
-  //   if(isMobile()) {
-  //     document.body.style.overflow = "hidden";
   
-  //     return () => {
-  //       document.body.style.overflow = "auto";
-  //     }
-  //   }
-  // }, [
-  //   setCurrentIndex,
-  // ]);
-
   return useMemo(() => (
     <Elements.View customCss={css`
       width: 100%; 

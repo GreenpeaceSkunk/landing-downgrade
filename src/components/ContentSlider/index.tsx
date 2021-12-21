@@ -1,4 +1,4 @@
-import React, { memo, MouseEvent, useEffect, useMemo, useRef, useState, Suspense, lazy } from 'react';
+import React, { memo, useEffect, useMemo, useRef, useState, Suspense, lazy } from 'react';
 import { Switch, Route, useLocation, useRouteMatch, useHistory } from 'react-router-dom';
 import Carousel, { IRef as ICarouselRef} from '@bit/meema.ui-components.carousel';
 import ContentSliderItem from './ContentSliderItem';

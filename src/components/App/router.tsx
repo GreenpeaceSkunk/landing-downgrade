@@ -10,39 +10,9 @@ const MainHeader = React.lazy(() => import('../Header'));  // TODO Import direct
 const MainFooter = React.lazy(() => import('../Footer'));  // TODO Import directly from bit
 const HomeView = React.lazy(() => import('../Home'));
 
-// const ThankYouView = React.lazy(() => import('../ThankYou'));
-
-
 const Component: React.FunctionComponent<{}> = memo(() => {
   return useMemo(() => (
     <>
-      {/* <ErrorBoundary fallback='Header error'>
-        <Suspense 
-          fallback={
-            <Wrapper
-              customCss={css`
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                min-height: ${({theme}) => pixelToRem(theme.header.mobile.height)};
-                background-color: ${({theme}) => theme.color.secondary.light};
-
-                @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-                  min-height: ${({theme}) => pixelToRem(theme.header.tablet.height)};
-                }
-                
-                @media (min-width: ${({theme}) => pixelToRem(theme.responsive.desktop.minWidth)}) {
-                  min-height: ${({theme}) => pixelToRem(theme.header.desktop.height)};
-                }
-              `}
-            >
-              <Loader mode='default' />
-            </Wrapper>
-          }
-        >
-          <MainHeader />
-        </Suspense>
-      </ErrorBoundary> */}
       <Wrapper
         customCss={css`
           display: flex;

@@ -1,4 +1,4 @@
-import React, { FormEvent, /*lazy,*/ memo, /*Suspense,*/ useCallback, useContext, useEffect, useMemo, useRef } from 'react';
+import React, { FormEvent, memo, useCallback, useContext, useEffect, useMemo, useRef } from 'react';
 import Elements from '@bit/meema.ui-components.elements';
 import { isMobile, pixelToRem } from 'meema.utils';
 import { Loader } from '../../Shared';
@@ -37,31 +37,22 @@ const Component: React.FunctionComponent<{}> = () => {
         snackbarRef.current.showSnackbar();
       }
     } else {
-      // if(currentIndex + 1 < pathnames.length) {
-      //   setCurrentIndex(currentIndex + 1);
-      // } else {
-        (async () => {
-          dispatch({ type: 'SUBMIT' });
-          const result = await save({
-            // userAgent: window.navigator.userAgent,
-            firstName: data.firstName,
-            lastName: data.lastName,
-            citizenId: data.citizenId,
-            // areaCode: data.areaCode,
-            email: data.email,
-            campaignName: '',
-            // mPhoneNumber: data.mobilePhoneNumber,
-          });
-          dispatch({ type: 'SUBMITTED' });
-          if(result.error) {
-            console.log('Error inesperado', result.message);
-          } else {
-            // history.push(`${path}/thank-you`);
-            history.push(`/video`);
-          }
-        })();
-      // }
-      // history.push(`/video`);
+      (async () => {
+        dispatch({ type: 'SUBMIT' });
+        const result = await save({
+          firstName: data.firstName,
+          lastName: data.lastName,
+          citizenId: data.citizenId,
+          email: data.email,
+          campaignName: '',
+        });
+        dispatch({ type: 'SUBMITTED' });
+        if(result.error) {
+          console.log('Error inesperado', result.message);
+        } else {
+          history.push(`/video`);
+        }
+      })();
     }
   }, [
     path,
@@ -73,18 +64,6 @@ const Component: React.FunctionComponent<{}> = () => {
     setCurrentIndex,
     setShowFieldErrors,
   ]);
-  
-  // useEffect(() => {
-  //   if(currentIndex === 0) {
-  //     history.push({
-  //       pathname: `${path}user/information`,
-  //     })
-  //   }
-  // }, [
-  //   history,
-  //   path,
-  //   currentIndex,
-  // ]);
 
   useEffect(() => {
     if(formRef && formRef.current && !isMobile()) {
@@ -115,11 +94,6 @@ const Component: React.FunctionComponent<{}> = () => {
             ref={formRef}
             onSubmit={onSubmit}
           >
-            {/* <Form.Header>
-              <Form.MainTitle>Reducir mi donación</Form.MainTitle>
-              <Form.Text>Para nosotros es muy importante que sigamos trabajando juntos en las causas más importantes</Form.Text>
-            </Form.Header> */}
-
             {/* Isolate this form */}
             <UserDataForm ref={userDataFormRef} />
             
@@ -129,9 +103,7 @@ const Component: React.FunctionComponent<{}> = () => {
               type='submit'
               format='contained'
               >
-              {(submitting) ? (
-                <Loader mode='light' />
-                ) : 'Confimar'}
+              {(submitting) ? <Loader mode='light' /> : 'Confimar'}
               </Layout.Button>
             </Form.Nav>
             <Snackbar

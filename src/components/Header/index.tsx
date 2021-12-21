@@ -1,15 +1,12 @@
 import React, { FunctionComponent, memo, useMemo } from 'react';
-import { Wrapper, Header, H1, HGroup, P } from '@bit/meema.ui-components.elements';
-import { isMobile, pixelToRem } from 'meema.utils';
+import Elements from '@bit/meema.ui-components.elements';
+import { pixelToRem } from 'meema.utils';
 import { css } from 'styled-components';
 import { Logo } from '../Shared';
-import Images from '../../images';
 
 const MainHeader: FunctionComponent<{}> = memo(() => {
-  const mobile = isMobile();
-
   return useMemo(() => (
-    <Header
+    <Elements.Header
       customCss={css`
         display: flex;
         flex-direction: column;
@@ -31,11 +28,8 @@ const MainHeader: FunctionComponent<{}> = memo(() => {
       `}
     >
       <Logo color='green' />
-     
-    </Header>
-  ), [
-    mobile,
-  ])
+    </Elements.Header>
+  ), [])
 });
 
 export default MainHeader;

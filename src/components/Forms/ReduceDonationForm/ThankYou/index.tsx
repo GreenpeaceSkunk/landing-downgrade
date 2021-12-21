@@ -1,7 +1,7 @@
-import React, { memo, useEffect, useMemo, useRef } from 'react';
-import { isMobile, pixelToRem } from 'meema.utils';
+import React, { memo, useMemo, useRef } from 'react';
+import { pixelToRem } from 'meema.utils';
 import { css } from 'styled-components';
-import Elements, { Img, H1, P } from '@bit/meema.ui-components.elements';
+import Elements, { Img } from '@bit/meema.ui-components.elements';
 import Images from '../../../../images';
 import Layout from '../../../Shared/Layout';
 
