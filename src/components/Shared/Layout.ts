@@ -70,12 +70,6 @@ const Cards = styled(Elements.Wrapper)`
     }
   }
 
-  > * {
-    &:not(:last-child) {
-      /* margin-right: ${pixelToRem(36)}; */
-    }
-  }
-
   ${({customCss}) => customCss && customCss};
 `;
 
@@ -83,7 +77,6 @@ const Title = styled(Elements.H1)<{ color?: 'light' | 'dark' | 'primary' }>`
   font-size: ${pixelToRem(20)};
   font-family: ${({theme}) => theme.font.family.primary.bold};
   font-weight: 700;
-  line-height: ${pixelToRem(22)};
   color: ${({ theme }) => theme.color.secondary.dark};
   text-align: center;
   margin-bottom: ${pixelToRem(16)};
