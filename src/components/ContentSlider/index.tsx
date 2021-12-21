@@ -9,6 +9,8 @@ import { css } from 'styled-components';
 import { pixelToRem } from 'meema.utils';
 import Layout from '../Shared/Layout';
 import Card from '../Card';
+import { Loader } from '../Shared';
+import CancelDonationForm from '../Forms/CancelDonationForm';
 
 type PathType = {
   path: string;
@@ -83,6 +85,26 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
               icon='government'
             />
           </Layout.Cards>
+          <Layout.Text>También podemos asegurarte que siempre podrás reducir el monto de tu donación o cancelarla, sin vueltas.</Layout.Text>
+          <Elements.Nav customCss={css`display: flex; justify-content: center; width: 100%;`}>
+            <Layout.ButtonLink to='/form/reduce/checkout'>Reducir el monto</Layout.ButtonLink>
+            <Layout.ButtonLink to='/form/cancel/checkout'>Cancelar mi donación</Layout.ButtonLink>
+          </Elements.Nav>
+        </ContentSliderItem>
+
+        <ContentSliderItem>
+          <Switch>
+            <Route exact path={`/form/reduce/checkout`}>
+              Reduce
+              {/* <Suspense fallback={<Loader mode='default' />}>
+              </Suspense> */}
+            </Route>
+            <Route path={`/form/cancel/checkout`}>
+              <Suspense fallback={<Loader mode='default' />}>
+                <CancelDonationForm />
+              </Suspense>
+            </Route>
+          </Switch>
         </ContentSliderItem>
       </Carousel>
       <Elements.Wrapper

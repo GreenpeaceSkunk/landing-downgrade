@@ -4,6 +4,7 @@ import { css } from 'styled-components';
 import Elements, { Img, H1, P, Wrapper, Span } from '@bit/meema.ui-components.elements';
 import Images from '../../../../images';
 import Form from '../../../Shared/Form';
+import Layout from '../../../Shared/Layout';
 
 const Component: React.FunctionComponent<{}> = () => {
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -23,69 +24,47 @@ const Component: React.FunctionComponent<{}> = () => {
         display: flex;
         flex-direction: column;
         align-items: center;
-        align-self: center;
-        padding: ${pixelToRem(40)} ${pixelToRem(40)} ${pixelToRem(70)};
-
-        > * {
-          margin-bottom: ${pixelToRem(10)};
-        }
-
-        @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-          padding-left: 0;
-          padding-right: 0;
-        }
+        justify-content: space-between;
+        height: 100%;
+        /* background-color: purple; */
       `}
     >
-      <Form.NavigationNav
-        allowGoBack={false}
-      />
-      <Img
-        src={Images.Icons.DoneIcon}
-        alt="ok"
+      <Elements.Wrapper
         customCss={css`
-          width: ${pixelToRem(34)};
-          height: ${pixelToRem(34)};
-          filter: drop-shadow(0 ${pixelToRem(4)} ${pixelToRem(20)} rgba(0, 0, 0, .15));
-        `}
-      />
-      <H1
-        customCss={css`
-          font-size: ${pixelToRem(32)};
-        `}
-      >Cancelaremos tu donación</H1>
-      <P>En las próximas 72 horas haremos el cambio y lo verás reflejado en el próximo resumen.</P>
-      <Wrapper
-        customCss={css`
-          width: 100%; 
-          background-color: white;
-          border-radius: ${pixelToRem(10)};
-          padding: ${pixelToRem(35)} ${pixelToRem(24)};
-          margin-top: ${pixelToRem(24)};
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          align-self: center;
 
           > * {
-            &:not(:last-child.child) {
-              margin-bottom: ${pixelToRem(24)};
-              font-size: ${pixelToRem(18)};
-            }
-          }
-
-          @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-            width: ${pixelToRem(400)}; 
+            margin-bottom: ${pixelToRem(10)};
           }
         `}
       >
-        <P>Recordá que para nosotros siempre serás muy importante y podrás volver a colaborar cuando quieras.</P>
-        <P
+        <Img
+          src={Images.Icons.DoneIcon}
+          alt="ok"
           customCss={css`
-            font-family: ${({theme}) => theme.font.family.primary.bold};
+            width: ${pixelToRem(66)};
+            height: ${pixelToRem(66)};
+            filter: drop-shadow(0 ${pixelToRem(4)} ${pixelToRem(20)} rgba(0, 0, 0, .15));
           `}
-        >¡Gracias por tu ayuda y dedicación!</P>
-        <Span
-          customCss={css`
-            font-size: ${pixelToRem(14)};
-          `}
-        >El equipo de Greenpeace</Span>
-      </Wrapper>
+        />
+        <Layout.Title color='light'>Listo, reduciremos tu donación</Layout.Title>
+        <Layout.Text color='light'>En las próximas 72 horas haremos el cambio y se aplicará<br/> en tu próxima donación.</Layout.Text>
+      </Elements.Wrapper>
+      <Elements.Nav customCss={css`
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      
+        > *:not(:last-child) {
+          margin-bottom: ${pixelToRem(20)};
+        }
+      `}>
+        <Layout.ButtonLink to='/'>Conocé más sobre Greenpeace</Layout.ButtonLink>
+        <Layout.ButtonLink to='/'>Volver al inicio</Layout.ButtonLink>
+      </Elements.Nav>
     </Elements.Wrapper>
   ), [
     wrapperRef,

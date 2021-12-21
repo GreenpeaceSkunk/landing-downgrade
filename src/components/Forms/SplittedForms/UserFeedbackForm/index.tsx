@@ -67,12 +67,11 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
                 />
               ))}
           </Form.Group>
-        </Form.Column>
+        </Form.Column> */}
         <Form.Column>
           <Form.Group
             fieldName='comment'
-            labelText='Contanos más sobre el motivo que elegiste'
-            labelBottomText='* Obligatorio'
+            labelText='¿Qué motivo te llevó a tomar esta decisión?'
             value={feedback.comment}
             showErrorMessage={showFieldErrors}
             isRequired={true}
