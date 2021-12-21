@@ -47,29 +47,25 @@ const Component: React.FunctionComponent<{}> = () => {
         snackbarRef.current.showSnackbar();
       }
     } else {
-      if(currentIndex + 1 < pathnames.length) {
-        setCurrentIndex(currentIndex + 1);
-      } else {
-        (async () => {
-          dispatch({ type: 'SUBMIT' });
-          const result = await save({
-            userAgent: window.navigator.userAgent,
-            percentDecrease: donation.percentDecrease,
-            firstName: data.firstName,
-            lastName: data.lastName,
-            citizenId: data.citizenId,
-            areaCode: data.areaCode,
-            email: data.email,
-            mPhoneNumber: data.mobilePhoneNumber,
-          });
-          dispatch({ type: 'SUBMITTED' });
-          if(result.error) {
-            console.log('Error inesperado', result.message);
-          } else {
-            history.push(`${path}/thank-you`);
-          }
-        })();
-      }
+      (async () => {
+        dispatch({ type: 'SUBMIT' });
+        const result = await save({
+          userAgent: window.navigator.userAgent,
+          percentDecrease: donation.percentDecrease,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          citizenId: data.citizenId,
+          areaCode: data.areaCode,
+          email: data.email,
+          mPhoneNumber: data.mobilePhoneNumber,
+        });
+        dispatch({ type: 'SUBMITTED' });
+        if(result.error) {
+          console.log('Error inesperado', result.message);
+        } else {
+          history.push(`${path}/thankyou`);
+        }
+      })();
     }
   }, [
     path,
@@ -84,42 +80,61 @@ const Component: React.FunctionComponent<{}> = () => {
   ]);
   
   useEffect(() => {
-    if(currentIndex === 0) {
-      history.push({
-        pathname: `${path}/form-user/information`,
-      })
+    const timeout = setTimeout(() => {
+      history.push({ pathname: `${path}/amounts` });
+    }, 200);
+
+    return () => {
+      clearTimeout(timeout);
     }
   }, [
-    history,
     path,
-    currentIndex,
   ]);
 
-  useEffect(() => {
-    if(formRef && formRef.current && !isMobile()) {
-      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }, [
-    formRef,
-  ]);
+  // useEffect(() => {
+  //   if(currentIndex === 0) {
+  //     history.push({
+  //       pathname: `${path}/form-user/information`,
+  //     })
+  //   }
+  // }, [
+  //   history,
+  //   path,
+  //   currentIndex,
+  // ]);
 
-  useEffect(() => {
-    setCurrentIndex(0);
-    if(isMobile()) {
-      document.body.style.overflow = "hidden";
+  // useEffect(() => {
+  //   if(formRef && formRef.current && !isMobile()) {
+  //     formRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  //   }
+  // }, [
+  //   formRef,
+  // ]);
+
+  // useEffect(() => {
+  //   setCurrentIndex(0);
+  //   if(isMobile()) {
+  //     document.body.style.overflow = "hidden";
   
-      return () => {
-        document.body.style.overflow = "auto";
-      }
-    }
-  }, [
-    setCurrentIndex,
-  ]);
+  //     return () => {
+  //       document.body.style.overflow = "auto";
+  //     }
+  //   }
+  // }, [
+  //   setCurrentIndex,
+  // ]);
 
   return useMemo(() => (
-    <Elements.Wrapper customCss={css`padding-bottom: ${pixelToRem(45)};`}>
+    <Elements.View customCss={css`
+      width: 100%; 
+      height: 100%;
+    
+      @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+        width: 60%;
+      }
+    `}>
       <Switch>
-        <Route exact path={`${path}/thank-you`}>
+        <Route exact path={`${path}/thankyou`}>
           <Suspense fallback={<Loader mode='default' />}>
             <ReduceDonationFormThankYou />
           </Suspense>
@@ -129,28 +144,33 @@ const Component: React.FunctionComponent<{}> = () => {
             ref={formRef}
             onSubmit={onSubmit}
           >
-            <Form.NavigationNav />
-            <Form.Header>
-              <Form.MainTitle>Reducir mi donación</Form.MainTitle>
-              <Form.Text>Para nosotros es muy importante que sigamos trabajando juntos en las causas más importantes</Form.Text>
+            <Form.Header customCss={css`> * { text-align: left !important; }`}>
+              <Layout.Title color='primary'>Reducir mi donación</Layout.Title>
+              <Form.Text>Para nosotros es muy importante que sigamos trabajando juntos en las causas que más nos mueven.</Form.Text>
             </Form.Header>
 
-            <Route exact path={`${path}/form-user/information`}>
-              <Form.CarouselWrapper>
-                <UserDonationForm ref={userDonationFormRef} />
-                <UserDataForm ref={userDataFormRef} />
-              </Form.CarouselWrapper>
+            <Route exact path={`${path}/amounts`}>
+              <UserDonationForm ref={userDonationFormRef} />
             </Route>
             
-            <Form.Message>* Datos obligatorios</Form.Message>
-            <Form.Nav>
-              <Layout.Button
-                type='submit'
-                format='contained'
-              >{(submitting) ? (
-                <Loader mode='light' />
-                ) : (((currentIndex < (pathnames.length - 1)) ? 'Continuar' : 'Confimar'))}
-              </Layout.Button>
+            <Form.Nav
+              customCss={css`
+                display: flex;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: flex-end;
+                width: 100%;
+
+                > * {
+                  margin-bottom: 0 !important;
+                  height: 100%;
+                }
+              `}>
+                <Layout.Button
+                  type='submit'
+                  format='contained'
+                  disabled={submitting}
+                  >{(submitting) ? <Loader mode='light' /> : 'Finalizar'}</Layout.Button>
             </Form.Nav>
             <Snackbar
               ref={snackbarRef}
@@ -159,7 +179,7 @@ const Component: React.FunctionComponent<{}> = () => {
           </Form.Main>
         </Route>
       </Switch>
-    </Elements.Wrapper>
+    </Elements.View>
   ), [
     path,
     currentIndex,
