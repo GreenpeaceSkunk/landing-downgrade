@@ -41,8 +41,8 @@ const Component: React.FunctionComponent<{}> = memo(() => {
         width: 100vw;
         
         @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+          min-height: inherit;
           height: 100vh;
-          /* overflow: hidden; */
         }
       `}
     >
