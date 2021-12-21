@@ -38,9 +38,9 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
 
   return useMemo(() => (
     <Form.Content>
-      <Form.Title>Datos personales</Form.Title>
+      {/* <Form.Title>Datos personales</Form.Title> */}
       <Form.Row>
-        <Form.Column>
+        {/* <Form.Column>
           <Form.Group
             value={feedback.selectedOption}
             fieldName='selectedOption'
