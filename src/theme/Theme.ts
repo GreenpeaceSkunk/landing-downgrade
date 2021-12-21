@@ -133,15 +133,15 @@ const DefaultTheme: ITheme = {
   },
   footer: {
     mobile: {
-      backgroundColor: '#000',
+      backgroundColor: colorSecondaryExtraDark,
       height: 80,
     },
     tablet: {
-      backgroundColor: '#000',
+      backgroundColor: colorSecondaryExtraDark,
       height: 80,
     },
     desktop: {
-      backgroundColor: '#000',
+      backgroundColor: colorSecondaryExtraDark,
       height: 80,
     },
   },
