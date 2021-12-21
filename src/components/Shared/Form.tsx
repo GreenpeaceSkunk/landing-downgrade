@@ -383,12 +383,6 @@ const TextArea = styled(Elements.TextArea)`
   }
 `;
 
-const ButtonLink = styled(NavLink)`
-  color: ${({theme}) => theme.color.primary.normal};
-  text-decoration: underline;
-  width: fit-content;
-`;
-
 const RadioButton: React.FunctionComponent<{
   name: string;
   value: string;
@@ -495,7 +489,6 @@ const _ = {
   CarouselWrapper,
   Input,
   TextArea,
-  ButtonLink,
   RadioButton,
 };
 

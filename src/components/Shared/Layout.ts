@@ -1,6 +1,7 @@
 import Elements from "@bit/meema.ui-components.elements";
 import { CustomCSSType, pixelToRem } from "meema.utils";
 import styled, { css } from "styled-components";
+import { NavLink } from 'react-router-dom';
 
 const Panel = styled(Elements.Wrapper)`
   display: flex;
@@ -165,6 +166,41 @@ const Button = styled(Elements.Button)`
   `}
 `;
 
+const ButtonLink = styled(NavLink)<{ format?: 'text' | 'contained' | 'outlined'}>`
+  padding: ${pixelToRem(10)};
+  color: white;
+  background-color: ${({theme}) => theme.color.primary.normal};
+  border-radius: ${pixelToRem(5)};
+  font-size: ${pixelToRem(16)};
+  font-family: ${({theme}) => theme.font.family.primary.regular};
+  padding: ${pixelToRem(13)} ${pixelToRem(60)};
+  width: fit-content;
+
+  &:hover {
+    background-color: ${({theme}) => theme.color.primary.dark};
+  }
+  
+  &:disabled {
+    background-color: ${({theme}) => theme.color.secondary.normal};
+  
+    &:hover {
+      background-color: ${({theme}) => theme.color.secondary.normal};
+    }
+  }
+
+  ${({format}) => (format === 'text') && css`
+    background-color: transparent;
+    color: ${({theme}) => theme.color.secondary.normal};
+    text-decoration: underline;
+
+    &:hover {
+      background-color: transparent;
+      box-shadow: none !important;
+    }
+  `}
+`;
+
+
 const _ = {
   Panel,
   PanelWrapper,
@@ -173,6 +209,7 @@ const _ = {
   Text,
   HtmlText,
   Button,
+  ButtonLink,
 };
 
 export default _;
