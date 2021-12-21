@@ -7,14 +7,6 @@ import Layout from '../../../Shared/Layout';
 
 const Component: React.FunctionComponent<{}> = () => {
   const wrapperRef = useRef<HTMLDivElement>(null);
-
-  // useEffect(() => {
-  //   if(wrapperRef && wrapperRef.current && !isMobile()) {
-  //     wrapperRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  //   }
-  // }, [
-  //   wrapperRef,
-  // ]);
   
   return useMemo(() => (
     <Elements.Wrapper
