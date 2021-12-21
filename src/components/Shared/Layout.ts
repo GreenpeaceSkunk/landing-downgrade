@@ -81,6 +81,7 @@ const Cards = styled(Elements.Wrapper)`
 
 const Title = styled(Elements.H1)<{ color?: 'light' | 'dark' | 'primary' }>`
   font-size: ${pixelToRem(20)};
+  font-family: ${({theme}) => theme.font.family.primary.bold};
   font-weight: 700;
   line-height: ${pixelToRem(22)};
   color: ${({ theme }) => theme.color.secondary.dark};
@@ -101,20 +102,37 @@ const Title = styled(Elements.H1)<{ color?: 'light' | 'dark' | 'primary' }>`
     `};
   `};
 
+  em {
+    color: ${({ theme }) => theme.color.primary.normal};
+  }
+
   @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-    font-size: ${pixelToRem(26)};
-    line-height: ${pixelToRem(36)};
+    font-size: ${pixelToRem(32)};
   }
 
   ${({customCss}) => customCss && customCss};
 `;
 
-const Text = styled(Elements.P)`
+const Text = styled(Elements.P)<{ color?: 'light' | 'dark' | 'primary' }>`
   font-family: ${({theme}) => theme.font.family.primary.regular};
   font-size: ${pixelToRem(16)};
   font-weight: 400;
   line-height: ${pixelToRem(18)};
   text-align: center;
+
+  ${({ color }) => (color) && css`
+    ${(color === 'light') && css`
+      color: white;
+    `};
+    
+    ${(color === 'dark') && css`
+      color: ${({ theme }) => theme.color.secondary.dark};
+    `};
+    
+    ${(color === 'primary') && css`
+      color: ${({ theme }) => theme.color.primary.normal};
+    `};
+  `};
 
   @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
     font-size: ${pixelToRem(20)};
@@ -190,8 +208,9 @@ const ButtonLink = styled(NavLink)<{ format?: 'text' | 'contained' | 'outlined'}
 
   ${({format}) => (format === 'text') && css`
     background-color: transparent;
-    color: ${({theme}) => theme.color.secondary.normal};
+    color: ${({theme}) => theme.color.primary.normal};
     text-decoration: underline;
+    padding: 0;
 
     &:hover {
       background-color: transparent;
@@ -199,7 +218,6 @@ const ButtonLink = styled(NavLink)<{ format?: 'text' | 'contained' | 'outlined'}
     }
   `}
 `;
-
 
 const _ = {
   Panel,

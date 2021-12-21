@@ -3,7 +3,7 @@ import Elements from "@bit/meema.ui-components.elements";
 import { pixelToRem, CustomCSSType } from "meema.utils";
 import styled, { css } from "styled-components";
 import Icons from '../../images/icons';
-import { NavLink, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { OnChangeEvent } from 'greenpeace';
 import { FormContext } from '../Forms/context';
 
