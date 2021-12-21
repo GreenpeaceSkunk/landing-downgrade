@@ -3,6 +3,7 @@ import Elements from '@bit/meema.ui-components.elements';
 import { isMobile, pixelToRem } from 'meema.utils';
 import { Loader } from '../../Shared';
 import Form from '../../Shared/Form'; // Move to bit
+import Layout from '../../Shared/Layout';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import { FormContext } from '../context';
 import UserDataForm, { IRef as IUserDataFormRef } from '../SplittedForms/UserDataForm';
@@ -143,14 +144,13 @@ const Component: React.FunctionComponent<{}> = () => {
             
             <Form.Message>* Datos obligatorios</Form.Message>
             <Form.Nav>
-            <Form.Button
-              type='submit'
-              format='contained'
-              >
-              {(submitting) ? (
+              <Layout.Button
+                type='submit'
+                format='contained'
+              >{(submitting) ? (
                 <Loader mode='light' />
                 ) : (((currentIndex < (pathnames.length - 1)) ? 'Continuar' : 'Confimar'))}
-              </Form.Button>
+              </Layout.Button>
             </Form.Nav>
             <Snackbar
               ref={snackbarRef}

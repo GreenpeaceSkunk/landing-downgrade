@@ -3,6 +3,7 @@ import Elements from '@bit/meema.ui-components.elements';
 import { isMobile, pixelToRem } from 'meema.utils';
 import { Loader } from '../../Shared';
 import Form from '../../Shared/Form'; // Move to bit
+import Layout from '../../Shared/Layout';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import { FormContext } from '../context';
 import UserDataForm, { IRef as IUserDataFormRef } from '../SplittedForms/UserDataForm';
@@ -107,31 +108,31 @@ const Component: React.FunctionComponent<{}> = () => {
   ]);
 
   return useMemo(() => (
-    <Elements.Wrapper customCss={css`padding-bottom: ${pixelToRem(45)};`}>
+    <Elements.Wrapper customCss={css`padding-bottom: ${pixelToRem(45)}; width: 100%;`}>
       <Switch>
         <Route path={path}>
           <Form.Main
             ref={formRef}
             onSubmit={onSubmit}
           >
-            <Form.Header>
+            {/* <Form.Header>
               <Form.MainTitle>Reducir mi donación</Form.MainTitle>
               <Form.Text>Para nosotros es muy importante que sigamos trabajando juntos en las causas más importantes</Form.Text>
-            </Form.Header>
+            </Form.Header> */}
 
             {/* Isolate this form */}
             <UserDataForm ref={userDataFormRef} />
             
             <Form.Message>* Datos obligatorios</Form.Message>
             <Form.Nav>
-            <Form.Button
+            <Layout.Button
               type='submit'
               format='contained'
               >
               {(submitting) ? (
                 <Loader mode='light' />
                 ) : 'Confimar'}
-              </Form.Button>
+              </Layout.Button>
             </Form.Nav>
             <Snackbar
               ref={snackbarRef}

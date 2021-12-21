@@ -3,6 +3,7 @@ import Elements from '@bit/meema.ui-components.elements';
 import { isMobile } from 'meema.utils';
 import { Loader } from '../../Shared';
 import Form from '../../Shared/Form'; // Move to bit
+import Layout from '../../Shared/Layout';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import { FormContext } from '../context';
 import UserForm, { IRef as IUserFormRef } from '../SplittedForms/UserDataForm';
@@ -144,7 +145,7 @@ const Component: React.FunctionComponent<{}> = () => {
             </Route>
                 
             <Form.Nav>
-              <Form.Button
+              <Layout.Button
                 type='submit'
                 format='contained'
                 disabled={submitting}
@@ -152,7 +153,7 @@ const Component: React.FunctionComponent<{}> = () => {
                 {(submitting) ? (
                   <Loader mode='light' />
                   ) : (((currentIndex < (pathnames.length - 1)) ? 'Continuar' : 'Confimar'))}
-              </Form.Button>
+              </Layout.Button>
 
               <Form.ButtonLink to='/donation/reduce'>
                 Disminuir el monto
