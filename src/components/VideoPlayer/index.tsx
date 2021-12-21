@@ -18,13 +18,13 @@ const Component: React.FunctionComponent<IProps> = ({
     <Wrapper
       ref={wrapperRef}
       customCss={css`
-        width: 100%;
+        width: 100vw;
         height: ${pixelToRem(240)};
         background-color: black;
         
         @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-          width: ${pixelToRem(864)};
-          height: ${pixelToRem(487)};
+          width: ${pixelToRem(888)};
+          height: ${pixelToRem(450)};
           z-index: 999;
         }
       `}
@@ -40,7 +40,7 @@ const Component: React.FunctionComponent<IProps> = ({
           height='100%'
           url={videoUrl}
           loop={false}
-          playing={false}
+          playing={true}
           controls={true}
           muted={false}
           playbackRate={1}
