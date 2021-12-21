@@ -11,6 +11,7 @@ import { UserFeedbackFormContext } from '../SplittedForms/UserFeedbackForm/conte
 import { save } from './service';
 import Snackbar, { IRef as ISnackbarRef } from '../../Snackbar';
 import { css } from 'styled-components';
+import { pixelToRem } from 'meema.utils';
 
 const ReduceDonationFormThankYou = lazy(() => import('./ThankYou'));
 
@@ -57,7 +58,6 @@ const Component: React.FunctionComponent<{}> = () => {
         if(result.error) {
           console.log('Error inesperado', result.message);
         } else {
-          console.log(`${path}/thankyou`)
           history.push(`${path}/thankyou`);
         }
       })();
@@ -88,7 +88,14 @@ const Component: React.FunctionComponent<{}> = () => {
   ]);
 
   return useMemo(() => (
-    <Elements.View customCss={css`width: 60%; height: 100%;`}>
+    <Elements.View customCss={css`
+      width: 100%; 
+      height: 100%;
+    
+      @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+        width: 60%;
+      }
+    `}>
       <Switch>
         <Route exact path={`${path}/thankyou`}>
           <Suspense fallback={<Loader mode='default' />}>
@@ -103,9 +110,7 @@ const Component: React.FunctionComponent<{}> = () => {
             </Form.Header>
             
             <Route exact path={`${path}/feedback`}>
-              <Form.CarouselWrapper>
-                <UserFeedbackForm ref={userFeedbackFormRef} />
-              </Form.CarouselWrapper>
+              <UserFeedbackForm ref={userFeedbackFormRef} />
             </Route>
             
             <Form.Nav
@@ -121,7 +126,7 @@ const Component: React.FunctionComponent<{}> = () => {
                   height: 100%;
                 }
               `}>
-                <Layout.ButtonLink to='/donation/reduce'>Quiero reducir mi donación</Layout.ButtonLink>
+                <Layout.ButtonLink format='text' to='/form/reduce'>Quiero reducir mi donación</Layout.ButtonLink>
                 <Layout.Button
                   type='submit'
                   format='contained'

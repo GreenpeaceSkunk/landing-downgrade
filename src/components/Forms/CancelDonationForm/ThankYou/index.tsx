@@ -1,21 +1,20 @@
 import React, { memo, useEffect, useMemo, useRef } from 'react';
 import { isMobile, pixelToRem } from 'meema.utils';
 import { css } from 'styled-components';
-import Elements, { Img, H1, P, Wrapper, Span } from '@bit/meema.ui-components.elements';
+import Elements, { Img } from '@bit/meema.ui-components.elements';
 import Images from '../../../../images';
-import Form from '../../../Shared/Form';
 import Layout from '../../../Shared/Layout';
 
 const Component: React.FunctionComponent<{}> = () => {
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if(wrapperRef && wrapperRef.current && !isMobile()) {
-      wrapperRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }, [
-    wrapperRef,
-  ]);
+  // useEffect(() => {
+  //   if(wrapperRef && wrapperRef.current && !isMobile()) {
+  //     wrapperRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  //   }
+  // }, [
+  //   wrapperRef,
+  // ]);
 
   return useMemo(() => (
     <Elements.Wrapper
@@ -26,7 +25,6 @@ const Component: React.FunctionComponent<{}> = () => {
         align-items: center;
         justify-content: space-between;
         height: 100%;
-        /* background-color: purple; */
       `}
     >
       <Elements.Wrapper
@@ -50,8 +48,9 @@ const Component: React.FunctionComponent<{}> = () => {
             filter: drop-shadow(0 ${pixelToRem(4)} ${pixelToRem(20)} rgba(0, 0, 0, .15));
           `}
         />
-        <Layout.Title color='light'>Listo, reduciremos tu donación</Layout.Title>
-        <Layout.Text color='light'>En las próximas 72 horas haremos el cambio y se aplicará<br/> en tu próxima donación.</Layout.Text>
+        <Layout.Title color='primary'>Cancelamos tu donación,</Layout.Title>
+        <Layout.Title color='light'>¡Gracias por tu ayuda y dedicación!</Layout.Title>
+        <Layout.Text color='light'>En las próximas 72 horas haremos el cambio  y lo verás reflejado en el próximo resumen. Recordá que tu aporte para nosotros siempre es muy importante y podrás volver a colaborar cuando quieras. </Layout.Text>
       </Elements.Wrapper>
       <Elements.Nav customCss={css`
         display: flex;
@@ -63,7 +62,7 @@ const Component: React.FunctionComponent<{}> = () => {
         }
       `}>
         <Layout.ButtonLink to='/'>Conocé más sobre Greenpeace</Layout.ButtonLink>
-        <Layout.ButtonLink to='/'>Volver al inicio</Layout.ButtonLink>
+        <Layout.ButtonLink to='/' format='text' >Volver al inicio</Layout.ButtonLink>
       </Elements.Nav>
     </Elements.Wrapper>
   ), [
