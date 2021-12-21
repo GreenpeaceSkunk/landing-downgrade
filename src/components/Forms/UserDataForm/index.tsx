@@ -74,17 +74,17 @@ const Component: React.FunctionComponent<{}> = () => {
     setShowFieldErrors,
   ]);
   
-  useEffect(() => {
-    if(currentIndex === 0) {
-      history.push({
-        pathname: `${path}user/information`,
-      })
-    }
-  }, [
-    history,
-    path,
-    currentIndex,
-  ]);
+  // useEffect(() => {
+  //   if(currentIndex === 0) {
+  //     history.push({
+  //       pathname: `${path}user/information`,
+  //     })
+  //   }
+  // }, [
+  //   history,
+  //   path,
+  //   currentIndex,
+  // ]);
 
   useEffect(() => {
     if(formRef && formRef.current && !isMobile()) {
