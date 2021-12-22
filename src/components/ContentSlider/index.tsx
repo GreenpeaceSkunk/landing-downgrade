@@ -1,40 +1,58 @@
-import React, { memo, useEffect, useMemo, useRef, useState, Suspense, lazy } from 'react';
+import React, { memo, useEffect, useMemo, useRef, useState, Suspense, lazy, useCallback, useContext } from 'react';
 import { Switch, Route, useLocation, useRouteMatch, useHistory } from 'react-router-dom';
 import Carousel, { IRef as ICarouselRef} from '@bit/meema.ui-components.carousel';
 import ContentSliderItem from './ContentSliderItem';
 import UserDataForm from '../Forms/UserDataForm';
 import Elements from '@bit/meema.ui-components.elements';
 import { css } from 'styled-components';
-import { pixelToRem } from 'meema.utils';
+import { isMobile, pixelToRem } from 'meema.utils';
 import Layout from '../Shared/Layout';
 import Card from '../Card';
+import VideoPlayer, { IRef as IVideoPlayerRef } from '../VideoPlayer';
 import { Loader } from '../Shared';
+import { FormContext } from '../Forms/context';
 
 const CancelDonationForm = lazy(() => import('../Forms/CancelDonationForm'));
 const ReduceDonationForm = lazy(() => import('../Forms/ReduceDonationForm'));
-const VideoPlayer = lazy(() => import('../VideoPlayer'));
 
 type PathType = {
   path: string;
   index: number;
   showContinueButton: boolean;
+  goTo?: string;
 };
 
 const paths: Array<PathType> = [
   { path: '/user/information', index: 0, showContinueButton: false },
-  { path: '/video', index: 1, showContinueButton: true },
+  { path: '/video', goTo: '/about-us', index: 1, showContinueButton: true },
   { path: '/about-us', index: 2, showContinueButton: false },
   { path: '/form/reduce', index: 3, showContinueButton: false },
   { path: '/form/cancel', index: 3, showContinueButton: false },
 ];
 
 const ContentSlider: React.FunctionComponent<{}> = memo(() => {
+  const { submitted } = useContext(FormContext);
   const [ currentIndex, setCurrentIndex ] = useState(0);
+  const [ sliderHeight, setSliderHeight ] = useState(0);
   const { pathname } = useLocation();
   const [ total, setTotal ] = useState<number>(0);
   const carouselRef = useRef<ICarouselRef>(null);
+  const videoPlayerRef = useRef<IVideoPlayerRef>(null);
   const { path } = useRouteMatch();
   const history = useHistory();
+  const [ allowContinue, setAllowContinue ] = useState<boolean>(false);
+
+  const getCurrentIndex = useCallback(() => {
+    return carouselRef.current ? carouselRef.current.getIndex() : -1; 
+  }, []);
+  
+  const onResizeHandler = useCallback((evt: any) => {
+    setSliderHeight(
+      document
+        .querySelectorAll<HTMLElement>('.content-slider-item')
+        .item(currentIndex).getBoundingClientRect().height
+      );
+  }, [ currentIndex ]);
 
   useEffect(() => {
     if(pathname === '/' && paths.length) {
@@ -62,13 +80,37 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
     total,
   ]);
 
-   useEffect(() => {
+  useEffect(() => {
     history.push({
       pathname: `${paths[0].path}`,
     });
+  }, [ path ]);
+
+  useEffect(() => {
+    // setSliderHeight(
+    //   document
+    //     .querySelectorAll<HTMLElement>('.content-slider-item')
+    //     .item(currentIndex).getBoundingClientRect().height
+    // );
+    
+    if(currentIndex === 1 && videoPlayerRef.current) {
+      videoPlayerRef.current.onPlayVideo();
+    }
   }, [
-    path,
+    currentIndex,
+    sliderHeight,
   ]);
+
+  useEffect(() => {
+    // if(isMobile()) {
+    //   window.addEventListener('resize', onResizeHandler);
+
+    //   return () => {
+    //     window.removeEventListener('resize', onResizeHandler)
+    //   }
+
+    // }
+  }, []);
 
   return useMemo(() => (
     <>
@@ -77,6 +119,15 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
         index={currentIndex}
         showControls={false}
         showIndicators={false}
+        allowSlide={false}
+        customCss={css`
+          height: ${(sliderHeight <= 300) ? 'auto' : pixelToRem(sliderHeight)};
+          /* background-color: yellow; */
+          
+          @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+            height: 100% !important;
+          }
+        `}
       >
         <ContentSliderItem
           title='Subsistimos con aportes como el tuyo'
@@ -88,12 +139,17 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
         </ContentSliderItem>
 
         <ContentSliderItem title='Tu solicitud aún no termina.<br>Por favor, <em>mirá el video</em> antes de continuar'>
-          <React.Suspense fallback={'Video error'}>
-            <VideoPlayer videoUrl='https://www.youtube.com/watch?v=FXr3_zGc0O4' />
-          </React.Suspense>
+          <VideoPlayer
+            ref={videoPlayerRef}
+            // videoUrl='https://www.youtube.com/watch?v=FXr3_zGc0O4' 
+            videoUrl='https://www.youtube.com/watch?v=QohH89Eu5iM'
+            onEndedHandler={() => { setAllowContinue(true) }}  
+          />
         </ContentSliderItem>
 
-        <ContentSliderItem title='Antes de seguir, recordá que en Greenpeace:'>
+        <ContentSliderItem
+          title='Antes de seguir, recordá que en Greenpeace:'
+        >
           <Layout.Cards>
             <Card
               title='No recibimos aportes de empresas privadas.'
@@ -108,16 +164,33 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
           <Elements.Nav
             customCss={css`
               display: flex;
+              flex-direction: column;
               justify-content: center;
               align-self: flex-end;
               width: 100%;
-            
-              & > *:not(:last-child) {
-                margin-right: ${pixelToRem(30)};
+              min-height: ${pixelToRem(100)};
+              margin-top: ${pixelToRem(20)};
+              padding-bottom: ${pixelToRem(20)};
+
+              a {
+                width: 100%;
+                margin-bottom: ${pixelToRem(30)};
+              }
+
+              @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+                flex-direction: row;
+
+                a {
+                  width: fit-content;
+
+                  &:not(:last-child) {
+                    margin-right: ${pixelToRem(30)};
+                  }
+                }
               }
             `}>
-            <Layout.ButtonLink to='/form/reduce'>Reducir el monto</Layout.ButtonLink>
             <Layout.ButtonLink to='/form/cancel'>Cancelar mi donación</Layout.ButtonLink>
+            <Layout.ButtonLink to='/form/reduce'>Reducir el monto</Layout.ButtonLink>
           </Elements.Nav>
         </ContentSliderItem>
 
@@ -136,52 +209,80 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
           </Switch>
         </ContentSliderItem>
       </Carousel>
-      <Elements.Wrapper
-        customCss={css`
-          display: flex;
-          justify-content: space-between;
-          align-self: flex-end;
-          width: 50%;
-        `}
-      >
+
+      {!submitted && (
         <Elements.Wrapper
           customCss={css`
             display: flex;
+            position: relative;
+            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            width: auto;
+            width: 100%;
+            min-height: ${pixelToRem(54)};
+            align-items: center;
+            
+            @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+              flex-direction: row-reverse;
+              justify-content: flex-start;
+            }
           `}
         >
-          {Array.from({ length: total }, (_, i) => i).map((idx: number) => (
-            <Elements.Wrapper
-              key={idx}
-              customCss={css`
-                display: inline-flex;
-                width: ${pixelToRem(12)};
-                height: ${pixelToRem(12)};
-                border-radius: 50%;
-                border: ${pixelToRem(2)} solid ${({theme}) => theme.color.primary.normal};
+          {(paths[currentIndex] && paths[currentIndex].showContinueButton) && <Elements.Nav customCss={css`
+            display: flex;
+            align-self: flex-end;
+            /* margin-top: ${pixelToRem(40)}; */
+          `}><Layout.ButtonLink to={paths[currentIndex].goTo || ''} disabled={!allowContinue}>Continuar</Layout.ButtonLink>
+          </Elements.Nav>}
 
-                &:not(last-child) {
-                  margin-right: ${pixelToRem(9)};
-                }
+          <Elements.Wrapper
+            customCss={css`
+              display: flex;
+              align-items: center;
+              width: auto;
+              margin-top: ${pixelToRem(40)};
+              /* background-color: pink; */
+              pointer-events: none;
 
-                ${idx <= currentIndex && css`
-                  background-color: ${({theme}) => theme.color.primary.normal};
-                `};
-              `}
-            />
-          ))}
+              @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+                position: absolute;
+                width: 100%;
+                justify-content: center;
+                margin-top: 0;
+              }
+            `}
+          >
+            {Array.from({ length: total }, (_, i) => i).map((idx: number) => (
+              <Elements.Wrapper
+                key={idx}
+                customCss={css`
+                  display: inline-flex;
+                  width: ${pixelToRem(12)};
+                  height: ${pixelToRem(12)};
+                  border-radius: 50%;
+                  border: ${pixelToRem(2)} solid ${({theme}) => theme.color.primary.normal};
+
+                  &:not(:last-child) {
+                    margin-right: ${pixelToRem(9)};
+                  }
+
+                  ${idx <= currentIndex && css`
+                    background-color: ${({theme}) => theme.color.primary.normal};
+                  `};
+                `}
+              />
+            ))}
+          </Elements.Wrapper>  
         </Elements.Wrapper>
-        {(paths[currentIndex] && paths[currentIndex].showContinueButton) && (
-          <Layout.ButtonLink
-            to='/about-us'
-          >Continuar</Layout.ButtonLink>
-        )}
-      </Elements.Wrapper>
+      )}
     </>
   ), [
     currentIndex,
     total,
+    allowContinue,
+    sliderHeight,
+    submitted,
+    getCurrentIndex,
   ]);
 });
 
