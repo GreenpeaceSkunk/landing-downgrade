@@ -62,6 +62,7 @@ const Component: React.FunctionComponent<IProps> = ({
             margin-bottom: ${pixelToRem(18)};
             font-size: ${pixelToRem(18)};
             line-height: ${pixelToRem(22)};
+            color: ${({theme}) => theme.text.color.primary.dark};
           `}
           dangerouslySetInnerHTML={{__html: title}}
         />
