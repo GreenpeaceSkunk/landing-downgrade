@@ -86,6 +86,10 @@ const Component: React.FunctionComponent<{}> = () => {
   }, [
     path,
   ]);
+
+  useEffect(() => {
+    dispatch({ type: 'RESET' });
+  }, []);
   
   return useMemo(() => (
     <Elements.View customCss={css`
@@ -93,7 +97,7 @@ const Component: React.FunctionComponent<{}> = () => {
       height: 100%;
     
       @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-        width: 60%;
+        width: 80%;
       }
     `}>
       <Switch>

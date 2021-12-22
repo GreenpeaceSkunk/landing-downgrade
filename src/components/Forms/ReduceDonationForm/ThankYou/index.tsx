@@ -52,7 +52,7 @@ const Component: React.FunctionComponent<{}> = () => {
           margin-bottom: ${pixelToRem(20)};
         }
       `}>
-        <Layout.ButtonLink to='/'>Conocé más sobre Greenpeace</Layout.ButtonLink>
+        <Layout.Link href='https://www.greenpeace.org/argentina/campanas/' target='_blank'>Conocé más sobre Greenpeace</Layout.Link>
         <Layout.ButtonLink to='/' format='text'>Volver al inicio</Layout.ButtonLink>
       </Elements.Nav>
     </Elements.Wrapper>
