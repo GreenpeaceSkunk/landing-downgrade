@@ -18,7 +18,8 @@ const Component: React.FunctionComponent<{}> = memo(() => {
           display: flex;
           flex-direction: column;
           margin: auto;
-          min-height: 20rem;
+          height: 100%;
+          /* min-height: 20rem; */
         `}
       >
         <Switch>
