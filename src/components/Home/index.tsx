@@ -18,53 +18,34 @@ const Component: React.FunctionComponent<{}> = memo(() => {
       customCss={css`
         display: flex;
         flex-direction: column;
-        padding: ${pixelToRem(20)};
+        padding: 0 ${pixelToRem(20)} ${pixelToRem(20)};
         background-color: #000;
         background-image: linear-gradient(0deg, rgba(0, 0, 0, .75) 0%, rgba(0, 0, 0, .75) 100%), url("https://unite.greenpeace.org.ar/sk/assets/landing-bajas/home.jpg");
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center;
-        min-height: calc(100vh - ${({ theme }) => pixelToRem(theme.footer.tablet.height)});
+        height: 100%;
         
-        @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+        /* @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
           padding: 0;
-          height: calc(100vh - ${({ theme }) => pixelToRem(theme.footer.tablet.height)});
-        }
+          min-height: calc(100vh - ${({ theme }) => pixelToRem(theme.footer.tablet.height)});
+        } */
       `}
     >
-      <ErrorBoundary fallback='Header error'>
-        <Suspense 
-          fallback={
-            <Elements.Wrapper
-              customCss={css`
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                min-height: ${({theme}) => pixelToRem(theme.header.mobile.height)};
-                background-color: ${({theme}) => theme.color.secondary.light};
-
-                @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-                  min-height: ${({theme}) => pixelToRem(theme.header.tablet.height)};
-                }
-                
-                @media (min-width: ${({theme}) => pixelToRem(theme.responsive.desktop.minWidth)}) {
-                  min-height: ${({theme}) => pixelToRem(theme.header.desktop.height)};
-                }
-              `}
-            >
-              <Loader mode='default' />
-            </Elements.Wrapper>
-          }
-        >
-          <MainHeader />
-        </Suspense>
-      </ErrorBoundary>
+      <MainHeader />
       <Elements.Wrapper
         customCss={css`
           display: flex;
           align-items: center;
           justify-content: center;
-          height: 100%;
+          margin-top: ${pixelToRem(50)};
+          margin-bottom: ${pixelToRem(50)};
+          
+          @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+            height: 100%;
+            margin-top: 0;
+            /* background-color: red; */
+          }
         `}
       >
         <Layout.Panel
@@ -77,7 +58,7 @@ const Component: React.FunctionComponent<{}> = memo(() => {
             }
 
             @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.desktop.minWidth)}) {
-              width: 60%;
+              width: 50%;
             }
           `}
         >
