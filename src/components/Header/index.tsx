@@ -11,18 +11,19 @@ const MainHeader: FunctionComponent<{}> = memo(() => {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        padding: ${pixelToRem(30)};
+        padding: ${pixelToRem(20)};
         width: 100%;
-        height: ${({theme}) => pixelToRem(theme.header.mobile.height)};
+        /* min-height: ${({theme}) => pixelToRem(theme.header.mobile.height)}; */
         background-color: ${({theme}) => theme.header.mobile.backgroundColor};
   
         @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-          height: ${({theme}) => pixelToRem(theme.header.tablet.height)};
+          /* padding: ${pixelToRem(30)}; */
+          /* min-height: ${({theme}) => pixelToRem(theme.header.tablet.height)}; */
           background-color: ${({theme}) => theme.header.tablet.backgroundColor};
         }
         
         @media (min-width: ${({theme}) => pixelToRem(theme.responsive.desktop.minWidth)}) {
-          height: ${({theme}) => pixelToRem(theme.header.desktop.height)};
+          /* min-height: ${({theme}) => pixelToRem(theme.header.desktop.height)}; */
           background-color: ${({theme}) => theme.header.desktop.backgroundColor};
         }
       `}
