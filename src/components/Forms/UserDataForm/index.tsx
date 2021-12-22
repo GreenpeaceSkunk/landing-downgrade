@@ -21,6 +21,7 @@ const Component: React.FunctionComponent<{}> = () => {
     totalErrors,
     currentIndex,
     submitting,
+    submitted,
     setCurrentIndex,
     setShowFieldErrors,
     dispatch,
@@ -46,7 +47,7 @@ const Component: React.FunctionComponent<{}> = () => {
           email: data.email,
           campaignName: '',
         });
-        dispatch({ type: 'SUBMITTED' });
+        // dispatch({ type: 'SUBMITTED' });
         if(result.error) {
           console.log('Error inesperado', result.message);
         } else {
@@ -66,25 +67,32 @@ const Component: React.FunctionComponent<{}> = () => {
   ]);
 
   useEffect(() => {
-    if(formRef && formRef.current && !isMobile()) {
-      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+    console.log(path);
+    // dispatch({ type: 'RESET' });
   }, [
-    formRef,
+    submitted,
   ]);
 
-  useEffect(() => {
-    setCurrentIndex(0);
-    if(isMobile()) {
-      document.body.style.overflow = "hidden";
+  // useEffect(() => {
+  //   if(formRef && formRef.current && !isMobile()) {
+  //     formRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  //   }
+  // }, [
+  //   formRef,
+  // ]);
+
+  // useEffect(() => {
+  //   setCurrentIndex(0);
+  //   if(isMobile()) {
+  //     document.body.style.overflow = "hidden";
   
-      return () => {
-        document.body.style.overflow = "auto";
-      }
-    }
-  }, [
-    setCurrentIndex,
-  ]);
+  //     return () => {
+  //       document.body.style.overflow = "auto";
+  //     }
+  //   }
+  // }, [
+  //   setCurrentIndex,
+  // ]);
 
   return useMemo(() => (
     <Elements.Wrapper customCss={css`padding-bottom: ${pixelToRem(45)}; width: 100%;`}>
@@ -97,13 +105,11 @@ const Component: React.FunctionComponent<{}> = () => {
             {/* Isolate this form */}
             <UserDataForm ref={userDataFormRef} />
             
-            <Form.Message>* Datos obligatorios</Form.Message>
             <Form.Nav>
-            <Layout.Button
-              type='submit'
-              format='contained'
-              >
-              {(submitting) ? <Loader mode='light' /> : 'Confimar'}
+              <Layout.Button
+                type='submit'
+                format='contained'
+                >{(submitting) ? <Loader mode='light' /> : 'Confimar'}
               </Layout.Button>
             </Form.Nav>
             <Snackbar
