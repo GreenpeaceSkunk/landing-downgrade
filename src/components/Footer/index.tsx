@@ -24,6 +24,10 @@ const Component: React.FunctionComponent<{}> = memo(() => useMemo(() => (
       justify-content: space-between;
       padding: ${pixelToRem(30)};
       width: 100%;
+      flex-grow: 0;
+      flex-shrink: 0;
+      flex-basis: auto;
+      /* min-height: ${({theme}) => pixelToRem(theme.footer.mobile.height)}; */
       min-height: ${({theme}) => pixelToRem(theme.footer.mobile.height)};
       background-color: ${({theme}) => theme.footer.mobile.backgroundColor};
       color: white;
@@ -32,16 +36,17 @@ const Component: React.FunctionComponent<{}> = memo(() => useMemo(() => (
 
       @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
         flex-direction: row-reverse;
-        min-height:initial;
-        height: ${({theme}) => pixelToRem(theme.footer.tablet.height)};
+        /* min-height: initial; */
+        min-height: ${({theme}) => pixelToRem(theme.footer.tablet.height)};
         background-color: ${({theme}) => theme.footer.tablet.backgroundColor};
       }
       
       @media (min-width: ${({theme}) => pixelToRem(theme.responsive.desktop.minWidth)}) {
-        height: ${({theme}) => pixelToRem(theme.footer.desktop.height)};
-        background-color: ${({theme}) => theme.footer.desktop.backgroundColor};
+        min-height: ${({theme}) => pixelToRem(theme.footer.desktop.height)};
+        /* background-color: ${({theme}) => theme.footer.desktop.backgroundColor}; */
       }
-      `}
+      /* background-color: orange !important; */
+    `}
   >
     <Wrapper
       customCss={css`
