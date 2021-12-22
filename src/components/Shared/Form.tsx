@@ -263,7 +263,7 @@ const Text = styled(Elements.P)`
 const MainTitle = styled(Elements.H1)`
   font-size: ${pixelToRem(26)};
   margin-bottom: ${pixelToRem(10)};
-  font-style: normal;
+  font-style: normal; 
   font-weight: 600;
   text-align: left;
   color: white;
@@ -282,6 +282,7 @@ const Title = styled(Elements.H2)`
   font-weight: 600;
   line-height: ${pixelToRem(30)};
   text-align: left;
+  color: ${({theme}) => theme.text.color.secondary.normal};
 `;
 
 const Nav = styled(Elements.Nav)`

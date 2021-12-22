@@ -3,6 +3,57 @@ import { CustomCSSType, pixelToRem } from "meema.utils";
 import styled, { css } from "styled-components";
 import { NavLink } from 'react-router-dom';
 
+interface IButtonProps {
+  format?: 'text' | 'contained' | 'outlined';
+}
+
+interface IButtonDisabledProps {
+  disabled?: boolean;
+}
+
+const buttonDisabledStyles = css<IButtonDisabledProps>`
+  ${({ disabled }) => disabled && css`
+    background-color: white;
+    pointer-events: none;
+    user-select: none;
+    color: ${({theme}) => theme.text.color.primary.normal};
+
+    &:hover {
+      background-color: ${({theme}) => theme.color.secondary.normal};
+    }
+  `}
+`;
+
+const buttonStyles = css<IButtonProps>`
+  padding: ${pixelToRem(10)};
+  color: white;
+  background-color: ${({theme}) => theme.color.primary.normal};
+  border-radius: ${pixelToRem(5)};
+  font-size: ${pixelToRem(16)};
+  font-family: ${({theme}) => theme.font.family.primary.regular};
+  padding: ${pixelToRem(13)} ${pixelToRem(60)};
+  width: fit-content;
+  user-select: none;
+  transition: all 500ms ease;
+  text-align: center;
+
+  &:hover {
+    background-color: ${({theme}) => theme.color.primary.dark};
+  }
+  
+  ${({format}) => (format === 'text') && css`
+    background-color: transparent;
+    color: ${({theme}) => theme.color.primary.normal};
+    text-decoration: underline;
+    padding: 0;
+
+    &:hover {
+      background-color: transparent;
+      box-shadow: none !important;
+    }
+  `}
+`;
+
 const Panel = styled(Elements.Wrapper)`
   display: flex;
   flex-direction: column;
@@ -11,17 +62,11 @@ const Panel = styled(Elements.Wrapper)`
   padding: ${pixelToRem(28)} ${pixelToRem(24)};
   transition: all 250ms ease;
   font-family: ${({theme}) => theme.font.family.primary.regular};
+  margin-bottom: 0;
   
-  > * {
+  > * &:not(:last-child) {
     margin-bottom: ${pixelToRem(30)};
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-  
-  @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-    /* padding: ${pixelToRem(58)} ${pixelToRem(77)}; */
+    /* background-color: pink; */
   }
   
   ${({customCss}) => customCss && customCss};
@@ -96,6 +141,7 @@ const Title = styled(Elements.H1)<{ color?: 'light' | 'dark' | 'primary' }>`
   `};
 
   em {
+    font-style: normal;
     color: ${({ theme }) => theme.color.primary.normal};
   }
 
@@ -144,72 +190,16 @@ const HtmlText = styled(Elements.P)`
 `;
 
 const Button = styled(Elements.Button)`
-  padding: ${pixelToRem(10)};
-  color: white;
-  background-color: ${({theme}) => theme.color.primary.normal};
-  border-radius: ${pixelToRem(5)};
-  font-size: ${pixelToRem(16)};
-  font-family: ${({theme}) => theme.font.family.primary.regular};
-  padding: ${pixelToRem(13)} ${pixelToRem(60)};
-  width: fit-content;
-
-  &:hover {
-    background-color: ${({theme}) => theme.color.primary.dark};
-  }
-  
-  &:disabled {
-    background-color: ${({theme}) => theme.color.secondary.normal};
-  
-    &:hover {
-      background-color: ${({theme}) => theme.color.secondary.normal};
-    }
-  }
-
-  ${({format}) => (format === 'text') && css`
-    background-color: transparent;
-    color: ${({theme}) => theme.color.secondary.normal};
-    text-decoration: underline;
-
-    &:hover {
-      background-color: transparent;
-      box-shadow: none !important;
-    }
-  `}
+  ${buttonStyles};
 `;
 
-const ButtonLink = styled(NavLink)<{ format?: 'text' | 'contained' | 'outlined'}>`
-  padding: ${pixelToRem(10)};
-  color: white;
-  background-color: ${({theme}) => theme.color.primary.normal};
-  border-radius: ${pixelToRem(5)};
-  font-size: ${pixelToRem(16)};
-  font-family: ${({theme}) => theme.font.family.primary.regular};
-  padding: ${pixelToRem(13)} ${pixelToRem(60)};
-  width: fit-content;
-
-  &:hover {
-    background-color: ${({theme}) => theme.color.primary.dark};
-  }
-  
-  &:disabled {
-    background-color: ${({theme}) => theme.color.secondary.normal};
-  
-    &:hover {
-      background-color: ${({theme}) => theme.color.secondary.normal};
-    }
-  }
-
-  ${({format}) => (format === 'text') && css`
-    background-color: transparent;
-    color: ${({theme}) => theme.color.primary.normal};
-    text-decoration: underline;
-    padding: 0;
-
-    &:hover {
-      background-color: transparent;
-      box-shadow: none !important;
-    }
-  `}
+const ButtonLink = styled(NavLink)<IButtonProps & IButtonDisabledProps>`
+  ${buttonStyles};
+  ${buttonDisabledStyles};
+`;
+const Link = styled(Elements.A)<IButtonProps & IButtonDisabledProps>`
+  ${buttonStyles};
+  ${buttonDisabledStyles};
 `;
 
 const _ = {
@@ -221,6 +211,7 @@ const _ = {
   HtmlText,
   Button,
   ButtonLink,
+  Link,
 };
 
 export default _;
