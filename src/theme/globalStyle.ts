@@ -34,6 +34,7 @@ export const GlobalStyle = createGlobalStyle<DefaultTheme>`
     font-family: ${fontSecondaryRegular};
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: #000;
   }
 
   * {

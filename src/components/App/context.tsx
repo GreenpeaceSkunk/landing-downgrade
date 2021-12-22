@@ -3,7 +3,7 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 import useQuery from "../../hooks/useQuery";
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from '../../theme/globalStyle';
-import Theme from '../../theme/Theme';
+import {LightTheme as Theme} from '../../theme/Theme';
 import ErrorBoundary from '../ErrorBoundary';
 
 interface IContext {
