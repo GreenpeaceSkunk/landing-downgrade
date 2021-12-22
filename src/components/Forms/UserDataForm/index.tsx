@@ -1,6 +1,6 @@
-import React, { FormEvent, memo, useCallback, useContext, useEffect, useMemo, useRef } from 'react';
+import React, { FormEvent, memo, useCallback, useContext, useMemo, useRef } from 'react';
 import Elements from '@bit/meema.ui-components.elements';
-import { isMobile, pixelToRem } from 'meema.utils';
+import { pixelToRem } from 'meema.utils';
 import { Loader } from '../../Shared';
 import Form from '../../Shared/Form'; // Move to bit
 import Layout from '../../Shared/Layout';
@@ -19,10 +19,7 @@ const Component: React.FunctionComponent<{}> = () => {
   const { path } = useRouteMatch();
   const {
     totalErrors,
-    currentIndex,
     submitting,
-    submitted,
-    setCurrentIndex,
     setShowFieldErrors,
     dispatch,
   } = useContext(FormContext);
@@ -47,7 +44,6 @@ const Component: React.FunctionComponent<{}> = () => {
           email: data.email,
           campaignName: '',
         });
-        // dispatch({ type: 'SUBMITTED' });
         if(result.error) {
           console.log('Error inesperado', result.message);
         } else {
@@ -56,43 +52,12 @@ const Component: React.FunctionComponent<{}> = () => {
       })();
     }
   }, [
-    path,
     data,
-    currentIndex,
     totalErrors,
     history,
     dispatch,
-    setCurrentIndex,
     setShowFieldErrors,
   ]);
-
-  useEffect(() => {
-    console.log(path);
-    // dispatch({ type: 'RESET' });
-  }, [
-    submitted,
-  ]);
-
-  // useEffect(() => {
-  //   if(formRef && formRef.current && !isMobile()) {
-  //     formRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  //   }
-  // }, [
-  //   formRef,
-  // ]);
-
-  // useEffect(() => {
-  //   setCurrentIndex(0);
-  //   if(isMobile()) {
-  //     document.body.style.overflow = "hidden";
-  
-  //     return () => {
-  //       document.body.style.overflow = "auto";
-  //     }
-  //   }
-  // }, [
-  //   setCurrentIndex,
-  // ]);
 
   return useMemo(() => (
     <Elements.Wrapper customCss={css`padding-bottom: ${pixelToRem(45)}; width: 100%;`}>
@@ -102,9 +67,7 @@ const Component: React.FunctionComponent<{}> = () => {
             ref={formRef}
             onSubmit={onSubmit}
           >
-            {/* Isolate this form */}
             <UserDataForm ref={userDataFormRef} />
-            
             <Form.Nav>
               <Layout.Button
                 type='submit'
@@ -122,7 +85,6 @@ const Component: React.FunctionComponent<{}> = () => {
     </Elements.Wrapper>
   ), [
     path,
-    currentIndex,
     userDataFormRef,
     submitting,
     formRef,

@@ -6,7 +6,6 @@ import Form from '../../Shared/Form';
 import Layout from '../../Shared/Layout';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import { FormContext } from '../context';
-import { IRef as IUserDataFormRef } from '../SplittedForms/UserDataForm';
 import UserDonationForm, { IRef as IUserDonationFormRef } from '../SplittedForms/UserDonationForm';
 import { save } from './service';
 import { UserDataFormContext } from '../SplittedForms/UserDataForm/context';
@@ -19,14 +18,11 @@ const ReduceDonationFormThankYou = lazy(() => import('./ThankYou'));
 const Component: React.FunctionComponent<{}> = () => {
   const history = useHistory();
   const formRef = useRef<HTMLFormElement>(null);
-  const userDataFormRef = useRef<IUserDataFormRef>(null);
   const userDonationFormRef = useRef<IUserDonationFormRef>(null);
   const { path } = useRouteMatch();
   const {
     totalErrors,
-    currentIndex,
     submitting,
-    setCurrentIndex,
     setShowFieldErrors,
     dispatch,
   } = useContext(FormContext);
@@ -67,11 +63,9 @@ const Component: React.FunctionComponent<{}> = () => {
     path,
     data,
     donation,
-    currentIndex,
     totalErrors,
     history,
     dispatch,
-    setCurrentIndex,
     setShowFieldErrors,
   ]);
   
@@ -85,11 +79,12 @@ const Component: React.FunctionComponent<{}> = () => {
     }
   }, [
     path,
+    history,
   ]);
 
   useEffect(() => {
     dispatch({ type: 'RESET' });
-  }, []);
+  }, [ dispatch ]);
   
   return useMemo(() => (
     <Elements.View customCss={css`
@@ -149,8 +144,6 @@ const Component: React.FunctionComponent<{}> = () => {
     </Elements.View>
   ), [
     path,
-    currentIndex,
-    userDataFormRef,
     userDonationFormRef,
     submitting,
     formRef,

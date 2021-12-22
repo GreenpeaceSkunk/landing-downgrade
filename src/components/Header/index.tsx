@@ -13,17 +13,13 @@ const MainHeader: FunctionComponent<{}> = memo(() => {
         justify-content: center;
         padding: ${pixelToRem(20)};
         width: 100%;
-        /* min-height: ${({theme}) => pixelToRem(theme.header.mobile.height)}; */
         background-color: ${({theme}) => theme.header.mobile.backgroundColor};
   
         @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-          /* padding: ${pixelToRem(30)}; */
-          /* min-height: ${({theme}) => pixelToRem(theme.header.tablet.height)}; */
           background-color: ${({theme}) => theme.header.tablet.backgroundColor};
         }
         
         @media (min-width: ${({theme}) => pixelToRem(theme.responsive.desktop.minWidth)}) {
-          /* min-height: ${({theme}) => pixelToRem(theme.header.desktop.height)}; */
           background-color: ${({theme}) => theme.header.desktop.backgroundColor};
         }
       `}

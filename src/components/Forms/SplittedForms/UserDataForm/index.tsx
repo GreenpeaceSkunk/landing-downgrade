@@ -1,16 +1,7 @@
 import React, { useCallback, useContext, useImperativeHandle, useMemo } from 'react';
 import Form from '../../../Shared/Form'; // Move to bit
 import { FormContext } from '../../context';
-import { 
-  validateFirstName,
-  validateLastName,
-  validateCitizenId,
-  validateEmail,
-  // validatePhoneNumber,
-  // validateAreaCode,
-} from '../../../../utils/validators';
-import { css } from 'styled-components';
-import { pixelToRem } from 'meema.utils';
+import { validateFirstName, validateLastName, validateCitizenId, validateEmail } from '../../../../utils/validators';
 import { OnChangeEvent } from 'greenpeace';
 import { UserDataFormContext } from './context';
 
@@ -107,51 +98,6 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
             />
           </Form.Group>
         </Form.Column>
-        {/* <Form.Column>
-          <Form.Group
-            fieldName='areaCode'
-            value={data.areaCode}
-            labelText='Cod. Área'
-            labelBottomText='Sin el 0'
-            showErrorMessage={showFieldErrors}
-            isRequired={true}
-            customCss={css`
-              flex-basis: ${pixelToRem(140)};
-            `}
-            validateFn={validateAreaCode}
-            onUpdateHandler={onUpdateFieldHandler}
-          >
-            <Form.Input
-              name='areaCode'
-              type='text'
-              placeholder='1234'
-              value={data.areaCode}
-              maxLength={4}
-              onChange={onChangeHandler}
-              onFocus={onFocusHandler}
-            />
-          </Form.Group>
-          <Form.Group
-            fieldName='mobilePhoneNumber'
-            value={data.mobilePhoneNumber}
-            labelText='Celular'
-            labelBottomText='Sin el 15'
-            showErrorMessage={showFieldErrors}
-            isRequired={true}
-            validateFn={validatePhoneNumber}
-            onUpdateHandler={onUpdateFieldHandler}
-          >
-            <Form.Input
-              name='mobilePhoneNumber'
-              type='text'
-              placeholder='61234567'
-              value={data.mobilePhoneNumber}
-              maxLength={12}
-              onChange={onChangeHandler}
-              onFocus={onFocusHandler}
-            />
-          </Form.Group>
-        </Form.Column> */}
         <Form.Column>
           <Form.Group
             value={data.email}

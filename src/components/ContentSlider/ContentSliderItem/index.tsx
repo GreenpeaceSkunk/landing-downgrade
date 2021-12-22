@@ -13,9 +13,6 @@ const ContentSliderItem: FunctionComponent<{ title?: string; text?: string; }> =
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        /* height: fit-content; */
-        /* background-color: purple; */
-        /* height: 100%; */
       `}
     >
       <Elements.Header 
@@ -38,12 +35,15 @@ const ContentSliderItem: FunctionComponent<{ title?: string; text?: string; }> =
           
           @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
             height: 100%;
-            /* background-color: orange; */
           }
         `}
       >{children}</Elements.Wrapper>
     </Elements.View>
-  ), []);
+  ), [
+    children,
+    text,
+    title,
+  ]);
 })
 
 export default ContentSliderItem;

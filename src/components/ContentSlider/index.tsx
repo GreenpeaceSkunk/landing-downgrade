@@ -5,7 +5,7 @@ import ContentSliderItem from './ContentSliderItem';
 import UserDataForm from '../Forms/UserDataForm';
 import Elements from '@bit/meema.ui-components.elements';
 import { css } from 'styled-components';
-import { isMobile, pixelToRem } from 'meema.utils';
+import { pixelToRem } from 'meema.utils';
 import Layout from '../Shared/Layout';
 import Card from '../Card';
 import VideoPlayer, { IRef as IVideoPlayerRef } from '../VideoPlayer';

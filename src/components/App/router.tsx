@@ -6,7 +6,6 @@ import { Loader } from '../Shared';
 import ErrorBoundary from '../ErrorBoundary';
 import { pixelToRem } from 'meema.utils';
 
-const MainHeader = React.lazy(() => import('../Header'));  // TODO Import directly from bit
 const MainFooter = React.lazy(() => import('../Footer'));  // TODO Import directly from bit
 const HomeView = React.lazy(() => import('../Home'));
 

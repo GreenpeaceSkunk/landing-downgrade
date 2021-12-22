@@ -38,36 +38,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
 
   return useMemo(() => (
     <Form.Content>
-      {/* <Form.Title>Datos personales</Form.Title> */}
       <Form.Row>
-        {/* <Form.Column>
-          <Form.Group
-            value={feedback.selectedOption}
-            fieldName='selectedOption'
-            labelText='¿Qué motivo te llevó a tomar esta decisión?'
-            labelBottomText='* Obligatorio'
-            showErrorMessage={showFieldErrors}
-            isRequired={true}
-            validateFn={validateNotEmptyField}
-            onUpdateHandler={onUpdateFieldHandler}
-            >
-              {[
-                'No estoy conforme con el trabajo que hace Greenpeace por el medio ambiente.',
-                'Creo que Greenpeace esá vinculado con partidos políticos o sindicatos.',
-                'Creo que Greenpeace recibe aportes de grandes empresas.',
-                'Me gustaría que Greenpeace participe en otras causas de mi interés.',
-              ].map((text: string) => (
-                <Form.RadioButton
-                  key={text}
-                  text={text}
-                  name='selectedOption'
-                  value={text}
-                  checkedValue={feedback.selectedOption}
-                  onChangeHandler={onChangeHandler}
-                />
-              ))}
-          </Form.Group>
-        </Form.Column> */}
         <Form.Column>
           <Form.Group
             fieldName='comment'

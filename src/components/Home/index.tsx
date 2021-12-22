@@ -1,15 +1,11 @@
-import React, { useMemo, memo, Suspense } from 'react';
+import React, { useMemo, memo } from 'react';
 import Elements from '@bit/meema.ui-components.elements';
 import { HomeProvider } from './context';
 import { css } from 'styled-components';
-import { isMobile, pixelToRem } from 'meema.utils';
-import { Loader } from '../Shared';
+import { pixelToRem } from 'meema.utils';
 import Layout from '../Shared/Layout';
-import ErrorBoundary from '../ErrorBoundary';
 import MainHeader from '../Header';
 import ContentSlider from '../ContentSlider';
-
-const mobile = isMobile();
 
 const Component: React.FunctionComponent<{}> = memo(() => {
   return useMemo(() => (
@@ -25,11 +21,6 @@ const Component: React.FunctionComponent<{}> = memo(() => {
         background-size: cover;
         background-position: center;
         height: 100%;
-        
-        /* @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-          padding: 0;
-          min-height: calc(100vh - ${({ theme }) => pixelToRem(theme.footer.tablet.height)});
-        } */
       `}
     >
       <MainHeader />
@@ -44,7 +35,6 @@ const Component: React.FunctionComponent<{}> = memo(() => {
           @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
             height: 100%;
             margin-top: 0;
-            /* background-color: red; */
           }
         `}
       >
@@ -66,9 +56,7 @@ const Component: React.FunctionComponent<{}> = memo(() => {
         </Layout.Panel>
       </Elements.Wrapper>
     </Elements.View>
-  ), [
-    mobile,
-  ]);
+  ), []);
 });
 
 Component.displayName = 'HomeView';

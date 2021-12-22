@@ -18,10 +18,8 @@ const ReduceDonationFormThankYou = lazy(() => import('./ThankYou'));
 const Component: React.FunctionComponent<{}> = () => {
   const history = useHistory();
   const {
-    currentIndex,
     totalErrors,
     submitting,
-    setCurrentIndex,
     setShowFieldErrors,
     dispatch,
   } = useContext(FormContext);
@@ -63,7 +61,6 @@ const Component: React.FunctionComponent<{}> = () => {
       })();
     }
   }, [
-    currentIndex,
     totalErrors,
     data,
     feedback,
@@ -71,13 +68,11 @@ const Component: React.FunctionComponent<{}> = () => {
     path,
     dispatch,
     setShowFieldErrors,
-    setCurrentIndex,
   ]);
   
   useEffect(() => {
     const timeout = setTimeout(() => {
       history.push({ pathname: `${path}/feedback` });
-
     }, 200);
 
     return () => {
@@ -85,11 +80,12 @@ const Component: React.FunctionComponent<{}> = () => {
     }
   }, [
     path,
+    history,
   ]);
 
   useEffect(() => {
     dispatch({ type: 'RESET' });
-  }, []);
+  }, [ dispatch ]);
 
   return useMemo(() => (
     <Elements.View customCss={css`
@@ -147,7 +143,6 @@ const Component: React.FunctionComponent<{}> = () => {
     </Elements.View>
   ), [
     path,
-    currentIndex,
     userFeedbackFormRef,
     submitting,
     formRef,

@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { Wrapper } from '@bit/meema.ui-components.elements';
 import { pixelToRem } from 'meema.utils';
 import ReactPlayer from 'react-player/lazy';
@@ -48,7 +48,6 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
         background-color: black;
         
         @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-          /* width: ${pixelToRem(888)}; */
           width: 100%;
           height: ${pixelToRem(450)};
           z-index: 999;
@@ -91,6 +90,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
   ), [
     videoUrl,
     playingVideo,
+    onEnded,
   ]);
 });
 
