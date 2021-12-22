@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useRef } from 'react';
+import React, { memo, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { Wrapper } from '@bit/meema.ui-components.elements';
 import { pixelToRem } from 'meema.utils';
 import ReactPlayer from 'react-player/lazy';
@@ -7,12 +7,37 @@ import { Loader } from '../Shared';
 
 interface IProps {
   videoUrl: string;
+  onEndedHandler: () => void;
+}
+export interface IRef {
+  onPlayVideo: () => void;
 }
 
-const Component: React.FunctionComponent<IProps> = ({
-  videoUrl,
-}) => {
+const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
+  {
+    videoUrl,
+    onEndedHandler,
+  }: IProps,
+  innerRef: React.ForwardedRef<IRef>
+) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const [ playingVideo, setPlayingVideo ] = useState<boolean>(false);
+
+  const onEnded = useCallback(() => {
+    if(onEndedHandler) {
+      onEndedHandler();
+    }
+  }, [ onEndedHandler ]);
+
+  const onPlayVideo = useCallback(() => {
+    setPlayingVideo(true);
+  }, []);
+
+  useImperativeHandle(innerRef, () => {
+    return {
+      onPlayVideo,
+    }
+  });
 
   return useMemo(() => (
     <Wrapper
@@ -23,7 +48,8 @@ const Component: React.FunctionComponent<IProps> = ({
         background-color: black;
         
         @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-          width: ${pixelToRem(888)};
+          /* width: ${pixelToRem(888)}; */
+          width: 100%;
           height: ${pixelToRem(450)};
           z-index: 999;
         }
@@ -40,11 +66,12 @@ const Component: React.FunctionComponent<IProps> = ({
           height='100%'
           url={videoUrl}
           loop={false}
-          playing={true}
+          playing={playingVideo}
           controls={true}
           muted={false}
           playbackRate={1}
           onPause={() => {}}
+          onEnded={onEnded}
           fallback={
             <Wrapper customCss={css`
               display: flex;
@@ -63,8 +90,9 @@ const Component: React.FunctionComponent<IProps> = ({
     </Wrapper>
   ), [
     videoUrl,
+    playingVideo,
   ]);
-};
+});
 
 Component.displayName = 'VideoPlayer';
-export default memo(Component);
+export default React.forwardRef<IRef, IProps>(Component);
