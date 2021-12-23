@@ -51,6 +51,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ({
         animation-direction: alternate;
         animation-fill-mode: forwards;
         animation-iteration-count: 1;
+        z-index: 9999;
 
         @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
           border-radius: ${pixelToRem(5)};
@@ -65,6 +66,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ({
           flex: 0 0 auto;
           width: ${pixelToRem(20)};
           height: ${pixelToRem(20)};
+          margin-right: ${pixelToRem(20)};
           background-size: ${pixelToRem(20)} ${pixelToRem(20)};
           background-position: center center;
           background-repeat: no-repeat;
