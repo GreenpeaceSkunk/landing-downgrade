@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components';
 import { Footer, A, Nav, Span, Wrapper, } from '@bit/meema.ui-components.elements';
 import { pixelToRem } from 'meema.utils';
 import SocialMediaNav from '../SocialMediaNav';
-import { Logo } from '../Shared';
 
 const Link = styled(A)`
   color: white;
@@ -25,22 +24,29 @@ const Component: React.FunctionComponent<{}> = memo(() => useMemo(() => (
       justify-content: space-between;
       padding: ${pixelToRem(30)};
       width: 100%;
+      flex-grow: 0;
+      flex-shrink: 0;
+      flex-basis: auto;
+      /* min-height: ${({theme}) => pixelToRem(theme.footer.mobile.height)}; */
       min-height: ${({theme}) => pixelToRem(theme.footer.mobile.height)};
       background-color: ${({theme}) => theme.footer.mobile.backgroundColor};
       color: white;
       transition: all 250ms ease;
+      overflow: hidden;
 
       @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
         flex-direction: row-reverse;
+        /* min-height: initial; */
         min-height: ${({theme}) => pixelToRem(theme.footer.tablet.height)};
         background-color: ${({theme}) => theme.footer.tablet.backgroundColor};
       }
       
       @media (min-width: ${({theme}) => pixelToRem(theme.responsive.desktop.minWidth)}) {
         min-height: ${({theme}) => pixelToRem(theme.footer.desktop.height)};
-        background-color: ${({theme}) => theme.footer.desktop.backgroundColor};
+        /* background-color: ${({theme}) => theme.footer.desktop.backgroundColor}; */
       }
-      `}
+      /* background-color: orange !important; */
+    `}
   >
     <Wrapper
       customCss={css`
@@ -49,15 +55,7 @@ const Component: React.FunctionComponent<{}> = memo(() => useMemo(() => (
         align-items: center;
       `}
     >
-      <SocialMediaNav />
-      <Wrapper
-        customCss={css`
-          margin-top: ${pixelToRem(20)};
-        `}
-      >
-        <a href="//www.hotjar.com/?utm_source=badge"><img src="https://static.hotjar.com/b/hotjar-badge.png" alt="Hotjar - Unlimited insights from your web and mobile sites" /></a>
-      </Wrapper>
-
+      <SocialMediaNav/>
     </Wrapper>
     <Wrapper
       customCss={css`
@@ -66,14 +64,6 @@ const Component: React.FunctionComponent<{}> = memo(() => useMemo(() => (
         justify-content: space-between;
         `}
     >
-      <Logo customCss={css`
-        display: none;
-        
-        @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-          display: block;
-        }
-
-      `}/>
       <Nav
         customCss={css`
           display: flex;

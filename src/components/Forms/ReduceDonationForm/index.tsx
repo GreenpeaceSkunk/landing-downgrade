@@ -1,48 +1,33 @@
 import React, { FormEvent, lazy, memo, Suspense, useCallback, useContext, useEffect, useMemo, useRef } from 'react';
 import Elements from '@bit/meema.ui-components.elements';
-import { isMobile, pixelToRem } from 'meema.utils';
+import { pixelToRem } from 'meema.utils';
 import { Loader } from '../../Shared';
-import Form from '../../Shared/Form'; // Move to bit
+import Form from '../../Shared/Form';
+import Layout from '../../Shared/Layout';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import { FormContext } from '../context';
-import UserDataForm, { IRef as IUserDataFormRef } from '../SplittedForms/UserDataForm';
 import UserDonationForm, { IRef as IUserDonationFormRef } from '../SplittedForms/UserDonationForm';
 import { save } from './service';
 import { UserDataFormContext } from '../SplittedForms/UserDataForm/context';
 import { UserDonationFormContext } from '../SplittedForms/UserDonationForm/context';
-import { UserFeedbackFormContext } from '../SplittedForms/UserFeedbackForm/context';
 import { css } from 'styled-components';
 import Snackbar, { IRef as ISnackbarRef } from '../../Snackbar';
 
 const ReduceDonationFormThankYou = lazy(() => import('./ThankYou'));
 
-const pathnames = [
-  '/form-user/information',
-];
-
 const Component: React.FunctionComponent<{}> = () => {
   const history = useHistory();
   const formRef = useRef<HTMLFormElement>(null);
-  const userDataFormRef = useRef<IUserDataFormRef>(null);
   const userDonationFormRef = useRef<IUserDonationFormRef>(null);
   const { path } = useRouteMatch();
   const {
-    errors,
     totalErrors,
-    currentIndex,
-    allowNext,
-    isEdited,
-    showFieldErrors,
-    showGeneralError,
-    submitted,
     submitting,
-    setCurrentIndex,
     setShowFieldErrors,
     dispatch,
   } = useContext(FormContext);
   const { data } = useContext(UserDataFormContext);
   const { donation } = useContext(UserDonationFormContext);
-  const { feedback } = useContext(UserFeedbackFormContext);
   const snackbarRef = useRef<ISnackbarRef>(null);
 
   const onSubmit = useCallback((evt: FormEvent) => {
@@ -54,74 +39,64 @@ const Component: React.FunctionComponent<{}> = () => {
         snackbarRef.current.showSnackbar();
       }
     } else {
-      if(currentIndex + 1 < pathnames.length) {
-        setCurrentIndex(currentIndex + 1);
-      } else {
-        (async () => {
-          dispatch({ type: 'SUBMIT' });
-          const result = await save({
-            userAgent: window.navigator.userAgent,
-            percentDecrease: donation.percentDecrease,
-            firstName: data.firstName,
-            lastName: data.lastName,
-            citizenId: data.citizenId,
-            areaCode: data.areaCode,
-            email: data.email,
-            mPhoneNumber: data.mobilePhoneNumber,
-          });
-          dispatch({ type: 'SUBMITTED' });
-          if(result.error) {
-            console.log('Error inesperado', result.message);
-          } else {
-            history.push(`${path}/thank-you`);
-          }
-        })();
-      }
+      (async () => {
+        dispatch({ type: 'SUBMIT' });
+        const result = await save({
+          userAgent: window.navigator.userAgent,
+          percentDecrease: donation.percentDecrease,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          citizenId: data.citizenId,
+          areaCode: data.areaCode,
+          email: data.email,
+          mPhoneNumber: data.mobilePhoneNumber,
+        });
+        dispatch({ type: 'SUBMITTED' });
+        if(result.error) {
+          console.log('Error inesperado', result.message);
+        } else {
+          history.push(`${path}/thankyou`);
+        }
+      })();
     }
   }, [
     path,
     data,
     donation,
-    currentIndex,
-    errors,
     totalErrors,
-    showGeneralError,
+    history,
+    dispatch,
     setShowFieldErrors,
   ]);
   
   useEffect(() => {
-    if(currentIndex === 0) {
-      history.push({
-        pathname: `${path}/form-user/information`,
-      })
+    const timeout = setTimeout(() => {
+      history.push({ pathname: `${path}/amounts` });
+    }, 200);
+
+    return () => {
+      clearTimeout(timeout);
     }
   }, [
-    currentIndex,
+    path,
+    history,
   ]);
 
   useEffect(() => {
-    if(formRef.current && !isMobile()) {
-      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  }, [
-    formRef.current,
-  ]);
-
-  useEffect(() => {
-    setCurrentIndex(0);
-    if(isMobile()) {
-      document.body.style.overflow = "hidden";
+    dispatch({ type: 'RESET' });
+  }, [ dispatch ]);
   
-      return () => {
-        document.body.style.overflow = "auto";
-      }
-    }
-  }, []);
-
   return useMemo(() => (
-    <Elements.Wrapper customCss={css`padding-bottom: ${pixelToRem(45)};`}>
+    <Elements.View customCss={css`
+      width: 100%; 
+      height: 100%;
+    
+      @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+        width: 80%;
+      }
+    `}>
       <Switch>
-        <Route exact path={`${path}/thank-you`}>
+        <Route exact path={`${path}/thankyou`}>
           <Suspense fallback={<Loader mode='default' />}>
             <ReduceDonationFormThankYou />
           </Suspense>
@@ -131,29 +106,33 @@ const Component: React.FunctionComponent<{}> = () => {
             ref={formRef}
             onSubmit={onSubmit}
           >
-            <Form.NavigationNav />
-            <Form.Header>
-              <Form.MainTitle>Reducir mi donación</Form.MainTitle>
-              <Form.Text>Para nosotros es muy importante que sigamos trabajando juntos en las causas más importantes</Form.Text>
+            <Form.Header customCss={css`> * { text-align: left !important; }`}>
+              <Layout.Title color='primary'>Reducir mi donación</Layout.Title>
+              <Form.Text>Para nosotros es muy importante que sigamos trabajando juntos en las causas que más nos mueven.</Form.Text>
             </Form.Header>
 
-            <Route exact path={`${path}/form-user/information`}>
-              <Form.CarouselWrapper>
-                <UserDonationForm ref={userDonationFormRef} />
-                <UserDataForm ref={userDataFormRef} />
-              </Form.CarouselWrapper>
+            <Route exact path={`${path}/amounts`}>
+              <UserDonationForm ref={userDonationFormRef} />
             </Route>
             
-            <Form.Message>* Datos obligatorios</Form.Message>
-            <Form.Nav>
-            <Form.Button
-              type='submit'
-              format='contained'
-              >
-              {(submitting) ? (
-                <Loader mode='light' />
-                ) : (((currentIndex < (pathnames.length - 1)) ? 'Continuar' : 'Confimar'))}
-              </Form.Button>
+            <Form.Nav
+              customCss={css`
+                display: flex;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: flex-end;
+                width: 100%;
+
+                > * {
+                  margin-bottom: 0 !important;
+                  height: 100%;
+                }
+              `}>
+                <Layout.Button
+                  type='submit'
+                  format='contained'
+                  disabled={submitting}
+                  >{(submitting) ? <Loader mode='light' /> : 'Finalizar'}</Layout.Button>
             </Form.Nav>
             <Snackbar
               ref={snackbarRef}
@@ -162,29 +141,14 @@ const Component: React.FunctionComponent<{}> = () => {
           </Form.Main>
         </Route>
       </Switch>
-    </Elements.Wrapper>
+    </Elements.View>
   ), [
-    data,
-    donation,
-    feedback,
     path,
-    currentIndex,
-    totalErrors,
-    errors,
-    userDataFormRef,
     userDonationFormRef,
-    history,
-    allowNext,
-    isEdited,
-    showFieldErrors,
-    showGeneralError,
-    submitted,
     submitting,
     formRef,
     snackbarRef,
-    setCurrentIndex,
-    setShowFieldErrors,
-    dispatch,
+    onSubmit,
   ]);
 };
 

@@ -1,161 +1,166 @@
-import React, { lazy, useMemo, memo, Suspense } from 'react';
-import { View, Wrapper } from '@bit/meema.ui-components.elements';
+import React, { useMemo, memo } from 'react';
+import Elements from '@bit/meema.ui-components.elements';
 import { HomeProvider } from './context';
 import { css } from 'styled-components';
-import { isMobile, pixelToRem } from 'meema.utils';
-import { Loader } from '../Shared';
+import { pixelToRem } from 'meema.utils';
 import Layout from '../Shared/Layout';
-import ErrorBoundary from '../ErrorBoundary';
-import Card from '../Card';
-import VideoPlayer from '../VideoPlayer';
+import MainHeader from '../Header';
+import ContentSlider from '../ContentSlider';
+// import { Route, Switch, useRouteMatch } from 'react-router-dom';
+// import { Loader } from '../Shared';
 
-const FormRouter = lazy(() => import('../Forms/router'));
+// const VideoPlayer = lazy(() => import('../VideoPlayer'));
+// const UserDataForm = lazy(() => import('../Forms/UserDataForm'));
+// const CancelDonationForm = lazy(() => import('../Forms/CancelDonationForm'));
+// const ReduceDonationForm = lazy(() => import('../Forms/ReduceDonationForm'));
 
-const Component: React.FunctionComponent<{}> = memo(() => {
-  const mobile = isMobile();
+interface IHome {}
+
+const Component: React.FunctionComponent<IHome> = memo(() => {
+  // const { path } = useRouteMatch();
+  // const [ allowContinue, setAllowContinue ] = useState<boolean>(false);
 
   return useMemo(() => (
-    <View
+    <Elements.View
       id='home'
       customCss={css`
-        padding-bottom: 0;
+        display: flex;
+        flex-direction: column;
+        padding: 0 ${pixelToRem(20)} ${pixelToRem(20)};
+        background-color: #000;
+        background-image: linear-gradient(0deg, rgba(0, 0, 0, .75) 0%, rgba(0, 0, 0, .75) 100%), url("https://unite.greenpeace.org.ar/sk/assets/landing-bajas/home.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        height: 100%;
       `}
     >
-      <Layout.Panel>
-        <Layout.PanelWrapper
-          customCss={css`
-            padding-top: ${pixelToRem(35)};
-            padding-bottom: ${pixelToRem(35)};
-
-            @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-              padding-top: ${pixelToRem(55)};
-              padding-bottom: ${pixelToRem(55)};
-            }
-          `}
-        >
-          <Layout.Title
-            color='primary'
-          >Lamentamos que tengas que cancelar tu donación</Layout.Title>
-          <Layout.Text>Comprendemos que necesites dejar de aportar, debe ser una decisión difícil<br/>para vos. Lo es también para nosotros por la importancia de tu ayuda.</Layout.Text>
-        </Layout.PanelWrapper>
-      </Layout.Panel>
-      <Layout.Panel 
+      <MainHeader />
+      <Elements.Wrapper
         customCss={css`
-          background-color: ${({ theme }) => theme.color.secondary.light};
-        `}
-      >
-        <Layout.PanelWrapper
-          customCss={css`
-            padding-top: ${pixelToRem(30)};
-
-            @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-              padding-top: ${pixelToRem(55)};
-            }
-          `}
-        >
-          <Layout.Title>Continuaremos luchando por las causas que más nos necesitan</Layout.Title>
-          <Layout.Cards
-            customCss={css`
-              margin: ${pixelToRem(50)} 0 ${pixelToRem(80)};
-              justify-content: space-between !important;
-            `}
-          >
-            <Card
-              description='La agricultura es la principal causa de deforestación, por eso es necesario seguir generando conciencia.'
-              icon='sustentability'
-              title='Promover una vida sustentable'
-            />
-            <Card
-              description='6 de cada 7 especies de tortugas marinas están en peligro de extinción.'
-              icon='ocean'
-              title='Seguir protegiendo los océanos'
-            />
-            <Card
-              description='Los incendios en humedales que logramos visibilizar gracias a tu ayuda y tantas otras por las que seguiremos luchando cada día.'
-              icon='trees'
-              title='Protección de humedales'
-            />
-          </Layout.Cards>
-          <VideoPlayer
-            fixByScroll={true}
-            videoUrl='https://www.youtube.com/watch?v=FXr3_zGc0O4'
-          />
-        </Layout.PanelWrapper>
-      </Layout.Panel>
-      <Layout.Panel
-        customCss={css`
-          /* padding-top: ${pixelToRem(30)}; */
-          padding-bottom: ${pixelToRem(30)};
-          background-color: ${({ theme }) => theme.color.secondary.light};
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-top: ${pixelToRem(50)};
+          margin-bottom: ${pixelToRem(30)};
           
-          @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-            /* padding-top: ${pixelToRem(55)}; */
-            padding-bottom: ${pixelToRem(55)};
+          @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+            height: 100%;
+            margin-top: 0;
+            margin-bottom: 0;
           }
           `}
       >
-        <Wrapper
+        <Layout.Panel
           customCss={css`
-            display: flex;
-            flex-direction: column;
-            margin-bottom: ${pixelToRem(50)} !important;
-          `}
-        >
-          <Layout.Title color='primary'>Antes de seguir, tomate un minuto para pensarlo.</Layout.Title>
-          <Layout.Text>Recordá que en Greenpeace:</Layout.Text>
-        </Wrapper>
-        <Layout.Cards>
-          <Card
-            title='No recibimos aportes de empresas privadas.'
-            icon='factory'
-          />
-          <Card
-            title='No recibimos aportes de partidos políticos ni estamos vinculados con ellos.'
-            icon='government'
-          />
-        </Layout.Cards>
-      </Layout.Panel>
-      <Layout.Panel>
-        <Wrapper
-          customCss={css`
-            @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-              max-width: ${pixelToRem(1140)};
-              align-self: center;
-              justify-content: space-between;
+            width: 100%;
+            padding: 0;
+            
+            @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+              width: 80%;
+            }
+            
+            @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.desktop.minWidth)}) {
+              width: 50%;
             }
           `}
         >
-        <Layout.Title
-          color='primary'
-          customCss={css``}
-        >La decisión siempre está {mobile ? <br/> : null} en tus manos</Layout.Title>
-        <Layout.Text>Siempre podrás reducir el monto de tu donación o cancelarla directamente, sin vueltas. Si aún no estás seguro, podés hacerlo en otro momento.</Layout.Text>
-        </Wrapper>
-      </Layout.Panel>
-      <Layout.Panel
-        customCss={css`
-          padding-left: 0;
-          padding-right: 0;
-          padding-bottom: 0;
-        `}
-      >
-        <ErrorBoundary fallback='Form Error'>
-          <Suspense fallback={<Loader mode='default' />}>
-            <FormRouter />
-          </Suspense>
-        </ErrorBoundary>
-      </Layout.Panel>
-    </View>
+          {/* Move to router */}
+          <ContentSlider />
+          {/* <Switch>
+            <Route exact path={`${path}video`}>
+              <VideoPlayer
+                // videoUrl='https://www.youtube.com/watch?v=FXr3_zGc0O4' 
+                videoUrl='https://www.youtube.com/watch?v=QohH89Eu5iM'
+                onEndedHandler={() => { setAllowContinue(true) }}
+              />
+            </Route>
+
+            <Route path={path}>
+              <React.Suspense fallback={<Loader mode='default' />}>
+                  <UserDataForm />
+              </React.Suspense>
+            </Route>
+          </Switch> */}
+
+        </Layout.Panel>
+      </Elements.Wrapper>
+      {/* {!submitted && (
+        <Elements.Wrapper
+          customCss={css`
+            display: flex;
+            position: relative;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            align-items: center;
+            margin-top: ${pixelToRem(40)};
+            
+            @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+              flex-direction: row-reverse;
+              justify-content: flex-start;
+            }
+          `}
+        >
+          {(paths[currentIndex] && paths[currentIndex].showContinueButton) && <Elements.Nav customCss={css`
+            display: flex;
+            align-self: flex-end;
+            margin-bottom: ${pixelToRem(40)};
+          `}><Layout.ButtonLink to={paths[currentIndex].goTo || ''} disabled={!allowContinue}>Continuar</Layout.ButtonLink>
+          </Elements.Nav>}
+
+          <Elements.Wrapper
+            customCss={css`
+              display: flex;
+              align-items: center;
+              width: auto;
+              pointer-events: none;
+
+              @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+                position: absolute;
+                width: 100%;
+                justify-content: center;
+                margin-top: 0;
+              }
+            `}
+          >
+            {Array.from({ length: total }, (_, i) => i).map((idx: number) => (
+              <Elements.Wrapper
+                key={idx}
+                customCss={css`
+                  display: inline-flex;
+                  width: ${pixelToRem(12)};
+                  height: ${pixelToRem(12)};
+                  border-radius: 50%;
+                  border: ${pixelToRem(2)} solid ${({theme}) => theme.color.primary.normal};
+
+                  &:not(:last-child) {
+                    margin-right: ${pixelToRem(9)};
+                  }
+
+                  ${idx <= currentIndex && css`
+                    background-color: ${({theme}) => theme.color.primary.normal};
+                  `};
+                `}
+              />
+            ))}
+          </Elements.Wrapper>  
+        </Elements.Wrapper>
+      )} */}
+    </Elements.View>
   ), [
-    mobile,
+    // children,
+    // path,
+    // allowContinue,
   ]);
 });
 
 Component.displayName = 'HomeView';
-export default function HomeView() {
+export default function HomeView(props: IHome) {
   return (
     <HomeProvider>
-      <Component />
+      <Component {...props} />
     </HomeProvider>
   );
 };

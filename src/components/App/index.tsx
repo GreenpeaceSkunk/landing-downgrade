@@ -6,11 +6,13 @@ import { initialize as initializeTagManager, pushToDataLayer } from '../../utils
 import { initialize as inititalizeAnalytics, trackPage } from '../../utils/googleAnalytics';
 import { initialize as initializeFacebookPixel, trackEvent } from '../../utils/facebookPixel';
 import { initialize as initializeMercadopago } from '../../utils/mercadopago';
-// import { initialize as initializeHotjar } from '../../utils/hotjar';
-
+import { initialize as initializeHotjar } from '../../utils/hotjar';
 import { Loader } from '../Shared'; // TODO Import directly from bit
 import { Wrapper } from '@bit/meema.ui-components.elements';
 import { css } from 'styled-components';
+import { pixelToRem } from 'meema.utils';
+import { FormProvider } from '../Forms/context';
+import { scrollToTop } from '../../utils';
 
 const AppRouter = lazy(() => import('./router'));
 
@@ -19,13 +21,14 @@ if(process.env.NODE_ENV === 'production') {
   inititalizeAnalytics();
   initializeFacebookPixel();
   initializeMercadopago();
-  // initializeHotjar();
+  initializeHotjar();
 }
 
 const Component: React.FunctionComponent<{}> = memo(() => {
   const { pathname } = useLocation();
 
   useEffect(() => {
+    scrollToTop();
     if(process.env.NODE_ENV === 'production') {
       trackEvent('PageView');
       pushToDataLayer('pageview');
@@ -37,7 +40,11 @@ const Component: React.FunctionComponent<{}> = memo(() => {
     <Wrapper
       customCss={css`
         width: 100vw;
-        overflow: hidden;
+        
+        @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+          min-height: inherit;
+          height: 100vh;
+        }
       `}
     >
       <ErrorBoundary fallback='App Error.'>
@@ -53,7 +60,9 @@ Component.displayName = 'App';
 export default function App() {
   return useMemo(() => (
     <AppProvider>
-      <Component />
+      <FormProvider>
+        <Component />
+      </FormProvider>
     </AppProvider>
   ), []);
 };

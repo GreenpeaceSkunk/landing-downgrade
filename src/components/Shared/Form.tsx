@@ -3,7 +3,7 @@ import Elements from "@bit/meema.ui-components.elements";
 import { pixelToRem, CustomCSSType } from "meema.utils";
 import styled, { css } from "styled-components";
 import Icons from '../../images/icons';
-import { NavLink, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { OnChangeEvent } from 'greenpeace';
 import { FormContext } from '../Forms/context';
 
@@ -29,7 +29,7 @@ const innerMargin = (marginRight: number, marginLeft: number) => css`
 
 const Main = styled(Elements.Form)`
   flex-direction: column;
-  padding: ${pixelToRem(20)} ${pixelToRem(24)} ${pixelToRem(40)};
+  /* padding: ${pixelToRem(20)} ${pixelToRem(24)} ${pixelToRem(40)}; */
   width: 100%;
   overflow: auto;
 
@@ -82,7 +82,6 @@ const NavigationNav: React.FunctionComponent<{ allowGoBack?: boolean }> = memo((
   ), [
     allowGoBack,
     currentIndex,
-    setCurrentIndex,
     onBack,
     onClose,
   ]);
@@ -160,6 +159,8 @@ const Group: React.FunctionComponent<{
   }, [
     fieldName,
     value,
+    validateFn,
+    onUpdateHandler,
   ]);
 
   return useMemo(() => (
@@ -205,6 +206,7 @@ const Group: React.FunctionComponent<{
             line-height: 1;
             font-size: ${pixelToRem(14)};
             margin-bottom: ${pixelToRem(6)};
+            color: white;
             
             &:after {
               ${(isRequired) && css`
@@ -223,6 +225,7 @@ const Group: React.FunctionComponent<{
             font-size: ${pixelToRem(14)};
             margin-top: ${pixelToRem(4)};
             text-align: left;
+            color: white;
           `}
         >{labelBottomText}</Elements.Label>
       ) : null}
@@ -232,13 +235,12 @@ const Group: React.FunctionComponent<{
     fieldName,
     labelText,
     labelBottomText,
+    errorMessage,
     showErrorMessage,
     value,
     customCss,
     isValid,
     isRequired,
-    validateFn,
-    onUpdateHandler,
   ]);
 };
 
@@ -250,16 +252,27 @@ const Text = styled(Elements.P)`
   font-size: ${pixelToRem(16)};
   font-style: normal;
   font-weight: 400;
-  line-height: ${pixelToRem(18)};
-  text-align: left;
+  color: white;
+  text-align: center;
+
+  @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+    font-size: ${pixelToRem(18)};
+  }
 `;
 
 const MainTitle = styled(Elements.H1)`
-  font-size: ${pixelToRem(24)};
-  font-style: normal;
+  font-size: ${pixelToRem(26)};
+  margin-bottom: ${pixelToRem(10)};
+  font-style: normal; 
   font-weight: 600;
-  line-height: ${pixelToRem(30)};
   text-align: left;
+  color: white;
+  text-align: center;
+  font-family: ${({theme}) => theme.font.family.primary.bold};
+  
+  @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+    font-size: ${pixelToRem(32)};
+  }
 `;
 
 const Title = styled(Elements.H2)`
@@ -269,6 +282,7 @@ const Title = styled(Elements.H2)`
   font-weight: 600;
   line-height: ${pixelToRem(30)};
   text-align: left;
+  color: ${({theme}) => theme.text.color.secondary.normal};
 `;
 
 const Nav = styled(Elements.Nav)`
@@ -368,46 +382,6 @@ const TextArea = styled(Elements.TextArea)`
     border-color: ${({theme}) => theme.color.primary.normal};
     box-shadow: 0 ${pixelToRem(4)} ${pixelToRem(4)} rgba(0, 0, 0, .05);
   }
-`;
-
-const Button = styled(Elements.Button)`
-  padding: ${pixelToRem(10)};
-  color: white;
-  background-color: ${({theme}) => theme.color.primary.normal};
-  border-radius: ${pixelToRem(5)};
-  font-size: ${pixelToRem(16)};
-  font-family: ${({theme}) => theme.font.family.primary.regular};
-  padding: ${pixelToRem(13)} ${pixelToRem(60)};
-  width: fit-content;
-
-  &:hover {
-    background-color: ${({theme}) => theme.color.primary.dark};
-  }
-  
-  &:disabled {
-    background-color: ${({theme}) => theme.color.secondary.normal};
-  
-    &:hover {
-      background-color: ${({theme}) => theme.color.secondary.normal};
-    }
-  }
-
-  ${({format}) => (format === 'text') && css`
-    background-color: transparent;
-    color: ${({theme}) => theme.color.secondary.normal};
-    text-decoration: underline;
-
-    &:hover {
-      background-color: transparent;
-      box-shadow: none !important;
-    }
-  `}
-`;
-
-const ButtonLink = styled(NavLink)`
-  color: ${({theme}) => theme.color.primary.normal};
-  text-decoration: underline;
-  width: fit-content;
 `;
 
 const RadioButton: React.FunctionComponent<{
@@ -516,8 +490,6 @@ const _ = {
   CarouselWrapper,
   Input,
   TextArea,
-  Button,
-  ButtonLink,
   RadioButton,
 };
 

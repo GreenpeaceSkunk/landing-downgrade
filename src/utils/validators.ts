@@ -149,7 +149,7 @@ export const validateCreditCard = (value: string): ValidationType => {
 
 export const validateEmail = (value: string): ValidationType => {
   return {
-    isValid: validateField(value) ? (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) : false,
+    isValid: validateField(value) ? (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value)) : false,
     errorMessage: 'Error en el Email', 
   };
 }

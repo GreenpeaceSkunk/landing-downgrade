@@ -1,14 +1,7 @@
-import React, {
-  useCallback,
-  useContext,
-  useImperativeHandle,
-  useMemo,
-  useState,
-} from 'react';
+import React, { useCallback, useContext, useImperativeHandle, useMemo } from 'react';
 import { pixelToRem } from 'meema.utils';
 import { Wrapper, Button, } from '@bit/meema.ui-components.elements';
 import { OnClickEvent } from 'greenpeace';
-import { useRouteMatch } from 'react-router-dom';
 import { css } from 'styled-components';
 import Form from '../../../Shared/Form'; // Move to bit
 import { FormContext } from '../../context';
@@ -16,7 +9,6 @@ import { UserDonationFormContext } from './context';
 
 interface IProps {}
 export interface IRef {
-  isValid: boolean;
   errors: any;
 }
 
@@ -24,15 +16,12 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
   props: IProps,
   innerRef: React.ForwardedRef<IRef>
 ) => {
-  // const [{ donation }, dispatch ] = useReducer(reducer, initialState);
   const { donation, dispatch } = useContext(UserDonationFormContext);
-  const { path } = useRouteMatch();
-  const { showFieldErrors, errors, onUpdateFieldHandler } = useContext(FormContext);
-  const [ isValid, setIsValid ] = useState<boolean>(false);
+  const { errors } = useContext(FormContext);
 
   const onClick = useCallback((evt: OnClickEvent) => {
     evt.preventDefault();
-    console.log('onClick', 'UPDATE_USER_DONATION');
+    evt.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
     dispatch({
       type: 'UPDATE_USER_DONATION',
       payload: {
@@ -40,13 +29,11 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
       },
     });
   }, [
-    donation,
     dispatch,
   ]);
   
   useImperativeHandle(innerRef, () => {
     return {
-      isValid,
       errors,
     }
   });
@@ -77,7 +64,6 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
                   border-radius: ${pixelToRem(5)};
                   border-color: #BDBDBD !important;
                   border-width: ${pixelToRem(1)};
-                  /* border-color: ${({theme}) => theme.color.secondary.normal} !important; */
                   color: ${({theme}) => theme.color.secondary.dark} !important;
                   background-color: white;
                   font-size: ${pixelToRem(16)};
@@ -115,11 +101,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
       </Form.Row>
     </Form.Content>
   ), [
-    path,
-    showFieldErrors,
-    errors,
     donation,
-    onUpdateFieldHandler,
     onClick,
   ]);
 });

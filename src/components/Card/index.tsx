@@ -17,8 +17,8 @@ const Component: React.FunctionComponent<IProps> = ({
   const [ imageSrc, setImageSrc ] = useState<string>();
 
   useEffect(() => {
-    let isMounted = true;
     (async () => {
+      let isMounted = true;
       try {
         const { default: src } = await import(`../../images/icons/${icon}.svg`);
         setImageSrc(src);
@@ -27,6 +27,7 @@ const Component: React.FunctionComponent<IProps> = ({
       }
       
       return () => {
+        /* eslint-disable @typescript-eslint/no-unused-vars */
         isMounted = false;
       }
     })()
@@ -37,9 +38,9 @@ const Component: React.FunctionComponent<IProps> = ({
   return useMemo(() => (
     <Wrapper
       customCss={css`
-        width: ${pixelToRem(400)};
-        padding: ${pixelToRem(52)} ${pixelToRem(31)};
-        background: #FFFFFF;
+        width: ${pixelToRem(280)};
+        padding: ${pixelToRem(31)} ${pixelToRem(31)};
+        background: #FFFFFFB3;
         box-shadow: 0 ${pixelToRem(4)} ${pixelToRem(34)} rgba(0, 0, 0, .08);
         border-radius: ${pixelToRem(8)};
         text-align: center;
@@ -61,6 +62,7 @@ const Component: React.FunctionComponent<IProps> = ({
             margin-bottom: ${pixelToRem(18)};
             font-size: ${pixelToRem(18)};
             line-height: ${pixelToRem(22)};
+            color: ${({theme}) => theme.text.color.primary.dark};
           `}
           dangerouslySetInnerHTML={{__html: title}}
         />
@@ -77,6 +79,9 @@ const Component: React.FunctionComponent<IProps> = ({
     </Wrapper>
   ), [
     imageSrc,
+    description,
+    icon,
+    title,
   ]);
 };
 

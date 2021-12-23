@@ -4,10 +4,14 @@ import Images from '../../images';
 import { css } from 'styled-components';
 import { pixelToRem } from 'meema.utils';
 
-const Component: React.FunctionComponent<{}> = () => {
+const Component: React.FunctionComponent<{
+  text?: string;
+}> = ({
+  text, // ¡Seamos muchos más los que ayudamos al planeta!
+}) => {
   return useMemo(() => (
     <Wrapper>
-      <Span
+      {text && <Span
         customCss={css`
           display: flex;
           justify-content: center;
@@ -15,7 +19,7 @@ const Component: React.FunctionComponent<{}> = () => {
           margin-bottom: ${pixelToRem(36)};
           text-align: center;
         `}
-      >¡Seamos muchos más los que ayudamos al planeta!</Span>
+      >{text}</Span>}
       <Nav
         customCss={css`
           display: flex;
@@ -41,7 +45,9 @@ const Component: React.FunctionComponent<{}> = () => {
         </A>
       </Nav>
     </Wrapper>
-  ), []);
+  ), [
+    text,
+  ]);
 }
 
 export default memo(Component);

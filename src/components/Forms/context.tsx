@@ -1,9 +1,9 @@
-import React, { createContext, useCallback, useEffect, useMemo, useReducer, useState } from 'react';
+import React, { createContext, FocusEvent, useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import { reducer, initialState, ContextActionType as FormContextActionType, ErrorsType } from './reducer';
 import { UserDonationFormProvider } from './SplittedForms/UserDonationForm/context';
 import { UserDataFormProvider } from './SplittedForms/UserDataForm/context';
 import { UserFeedbackFormProvider } from './SplittedForms/UserFeedbackForm/context';
-import { RouteComponentProps, useRouteMatch, withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 interface IContext {
   errors: ErrorsType;
@@ -13,7 +13,6 @@ interface IContext {
   showFieldErrors: boolean;
   showGeneralError: boolean;
   isEdited: boolean;
-  allowNext: boolean;
   submitted: boolean;
   submitting: boolean;
   setPathnames: React.Dispatch<React.SetStateAction<string[]>>;
@@ -21,6 +20,7 @@ interface IContext {
   setShowFieldErrors: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentIndex: React.Dispatch<React.SetStateAction<number>>;
   onUpdateFieldHandler: (fieldName: string, isValid: boolean, value?: string|number) => void;
+  onFocusHandler: (evt: FocusEvent) => void
   dispatch: (action: FormContextActionType) => void;
 }
 
@@ -44,8 +44,10 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
   const [ currentIndex, setCurrentIndex ] = useState<number>(0);
   const [ totalErrors, setTotalErrors ] = useState<number>(0);
   const [ pathnames, setPathnames ] = useState<string[]>([]);
-  const { path } = useRouteMatch();
-  const [ allowNext, setAllowNext ] = useState<boolean>(true);
+
+  const onFocusHandler = useCallback((evt: FocusEvent) => {
+    evt.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, []);
 
   const onUpdateFieldHandler = useCallback(( fieldName: string, isValid: boolean, value?: string|number ) => {
     if(value && value !== '' && !isEdited) {
@@ -60,7 +62,7 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
       }
     });
   }, [
-    errors,
+    isEdited,
     currentIndex,
     dispatch,
   ]);
@@ -84,7 +86,6 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
       totalErrors,
       showFieldErrors,
       showGeneralError,
-      allowNext,
       isEdited,
       submitted,
       submitting,
@@ -93,6 +94,7 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
       setPathnames,
       setShowFieldErrors,
       onUpdateFieldHandler,
+      onFocusHandler,
       dispatch,
     }}>
       <UserDataFormProvider>
@@ -105,22 +107,21 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
     </Provider>
   ), [
     children,
+    pathnames,
     errors,
-    path,
     currentIndex,
     totalErrors,
     showFieldErrors,
     showGeneralError,
-    allowNext,
     isEdited,
     submitted,
     submitting,
     setPathnames,
     setCurrentIndex,
-    setTotalErrors,
     setShowGeneralError,
     setShowFieldErrors,
     onUpdateFieldHandler,
+    onFocusHandler,
     dispatch,
   ]);
 };

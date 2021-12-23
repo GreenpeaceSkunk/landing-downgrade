@@ -56,7 +56,6 @@ const Component: FunctionComponent<{}> = () => {
     }
   }, [
     triangleRef,
-    posArrowLeftX,
   ]);
 
   useEffect(() => {
@@ -69,6 +68,7 @@ const Component: FunctionComponent<{}> = () => {
     }
   }, [
     pathname,
+    onMoveTriangle,
   ]);
 
   return useMemo(() => (

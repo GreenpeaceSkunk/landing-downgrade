@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { Wrapper } from '@bit/meema.ui-components.elements';
 import { pixelToRem } from 'meema.utils';
 import ReactPlayer from 'react-player/lazy';
@@ -6,50 +6,50 @@ import { css } from 'styled-components';
 import { Loader } from '../Shared';
 
 interface IProps {
-  fixByScroll?: boolean;
   videoUrl: string;
+  onEndedHandler: () => void;
+}
+export interface IRef {
+  onPlayVideo: () => void;
 }
 
-const Component: React.FunctionComponent<IProps> = ({
-  fixByScroll = false,
-  videoUrl,
-}) => {
-  const [ isFixed, setIsFixed ] = useState<boolean>(false);
+const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
+  {
+    videoUrl,
+    onEndedHandler,
+  }: IProps,
+  innerRef: React.ForwardedRef<IRef>
+) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const [ playingVideo, setPlayingVideo ] = useState<boolean>(false);
 
-  const onScrollHandler = useCallback(() => {
-    if(wrapperRef.current) {
-      if(window.pageYOffset > (wrapperRef.current.offsetTop + (wrapperRef.current.clientHeight - 20))) {
-        // setIsFixed(true);
-      } else {
-        // setIsFixed(false);
-      }
+  const onEnded = useCallback(() => {
+    if(onEndedHandler) {
+      onEndedHandler();
     }
-  }, [
-    isFixed,
-  ]);
+  }, [ onEndedHandler ]);
 
-  useEffect(() => {
-    if(fixByScroll) {
-      window.addEventListener('scroll', onScrollHandler);
-    }
-
-    return () => {
-      window.removeEventListener('scroll', onScrollHandler);
-    }
+  const onPlayVideo = useCallback(() => {
+    setPlayingVideo(true);
   }, []);
+
+  useImperativeHandle(innerRef, () => {
+    return {
+      onPlayVideo,
+    }
+  });
 
   return useMemo(() => (
     <Wrapper
       ref={wrapperRef}
       customCss={css`
-        width: 100%;
+        width: 100vw;
         height: ${pixelToRem(240)};
         background-color: black;
         
         @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-          width: ${pixelToRem(864)};
-          height: ${pixelToRem(487)};
+          width: 100%;
+          height: ${pixelToRem(450)};
           z-index: 999;
         }
       `}
@@ -58,67 +58,6 @@ const Component: React.FunctionComponent<IProps> = ({
         customCss={css`
           width: 100%;
           height: 100%;
-          
-          ${(isFixed) && css`
-            flex: 0 0 auto;
-            top: ${pixelToRem(20)};
-            left: 0;
-            right: 0;
-            margin: auto;
-            transition: ease 250ms all;
-            animation-name: fixVideo;
-            animation-duration: 250ms;
-            animation-iteration-count: 1;
-            animation-direction: alternate;
-            animation-fill-mode: forwards;
-
-            @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-            }
-            
-            @keyframes fixVideo {
-              0% {
-                opacity: 0;
-                width: ${pixelToRem(322)};
-                height: ${pixelToRem(0)};
-              }
-
-              1% {
-                position: fixed;
-              }
-
-              100% {
-                position: fixed;
-                width: ${pixelToRem(322)};
-                height: ${pixelToRem(200)};
-                opacity: 1;
-              }
-            }
-
-            @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-              right: ${pixelToRem(20)};
-              left: auto;
-
-              @keyframes fixVideo {
-                0% {
-                  opacity: 0;
-                  width: ${pixelToRem(396)};
-                  height: ${pixelToRem(0)};
-                }
-
-                1% {
-                  position: fixed;
-                }
-
-                100% {
-                  position: fixed;
-                  width: ${pixelToRem(396)};
-                  height: ${pixelToRem(222)};
-                  opacity: 1;
-                }
-              }
-            }
-            
-          `}
         `}
       >
         <ReactPlayer
@@ -126,14 +65,12 @@ const Component: React.FunctionComponent<IProps> = ({
           height='100%'
           url={videoUrl}
           loop={false}
-          playing={false}
+          playing={playingVideo}
           controls={true}
           muted={false}
           playbackRate={1}
-          onPause={() => {
-            setIsFixed(false);
-            window.removeEventListener('scroll', onScrollHandler);
-          }}
+          onPause={() => {}}
+          onEnded={onEnded}
           fallback={
             <Wrapper customCss={css`
               display: flex;
@@ -151,9 +88,11 @@ const Component: React.FunctionComponent<IProps> = ({
       </Wrapper>
     </Wrapper>
   ), [
-    isFixed,
+    videoUrl,
+    playingVideo,
+    onEnded,
   ]);
-};
+});
 
 Component.displayName = 'VideoPlayer';
-export default memo(Component);
+export default React.forwardRef<IRef, IProps>(Component);
