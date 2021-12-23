@@ -99,6 +99,7 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
     // );
     
     if(currentIndex === 1 && videoPlayerRef.current) {
+      setAllowContinue(false);
       videoPlayerRef.current.onPlayVideo();
     }
   }, [
@@ -106,7 +107,7 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
     // sliderHeight,
   ]);
 
-  useEffect(() => {
+  // useEffect(() => {
     // if(isMobile()) {
     //   window.addEventListener('resize', onResizeHandler);
 
@@ -115,7 +116,7 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
     //   }
 
     // }
-  }, []);
+  // }, []);
 
   return useMemo(() => (
     <>
