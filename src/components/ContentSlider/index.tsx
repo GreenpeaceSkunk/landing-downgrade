@@ -133,8 +133,8 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
         <ContentSliderItem title='Tu solicitud aún no termina.<br>Por favor, <em>mirá el video</em> antes de continuar'>
           <VideoPlayer
             ref={videoPlayerRef}
-            // videoUrl='https://www.youtube.com/watch?v=FXr3_zGc0O4' 
-            videoUrl='https://www.youtube.com/watch?v=QohH89Eu5iM'
+            videoUrl='https://www.youtube.com/watch?v=FXr3_zGc0O4' 
+            // videoUrl='https://www.youtube.com/watch?v=QohH89Eu5iM'
             onEndedHandler={() => { setAllowContinue(true) }}  
           />
         </ContentSliderItem>
