@@ -13,7 +13,7 @@ import {
 } from './user';
 
 declare global {
-  interface Window {
+  interface Window {    
     dataLayer: [{
       event: EventType,
     }];

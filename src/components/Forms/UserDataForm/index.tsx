@@ -1,6 +1,5 @@
 import React, { FormEvent, memo, useCallback, useContext, useMemo, useRef } from 'react';
 import Elements from '@bit/meema.ui-components.elements';
-import { pixelToRem } from 'meema.utils';
 import { Loader } from '../../Shared';
 import Form from '../../Shared/Form'; // Move to bit
 import Layout from '../../Shared/Layout';
@@ -60,7 +59,7 @@ const Component: React.FunctionComponent<{}> = () => {
   ]);
 
   return useMemo(() => (
-    <Elements.Wrapper customCss={css`padding-bottom: ${pixelToRem(45)}; width: 100%;`}>
+    <Elements.Wrapper customCss={css`width: 100%;`}>
       <Switch>
         <Route path={path}>
           <Form.Main

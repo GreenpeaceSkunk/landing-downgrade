@@ -1,8 +1,7 @@
-import React, { memo, useEffect, useMemo, useRef, useState, Suspense, lazy, useCallback, useContext } from 'react';
+import React, { memo, useEffect, useMemo, useRef, useState, Suspense, lazy, useContext } from 'react';
 import { Switch, Route, useLocation, useRouteMatch, useHistory } from 'react-router-dom';
-import Carousel, { IRef as ICarouselRef} from '@bit/meema.ui-components.carousel';
+// import Carousel, { IRef as ICarouselRef} from '@bit/meema.ui-components.carousel';
 import ContentSliderItem from './ContentSliderItem';
-import UserDataForm from '../Forms/UserDataForm';
 import Elements from '@bit/meema.ui-components.elements';
 import { css } from 'styled-components';
 import { pixelToRem } from 'meema.utils';
@@ -12,6 +11,7 @@ import VideoPlayer, { IRef as IVideoPlayerRef } from '../VideoPlayer';
 import { Loader } from '../Shared';
 import { FormContext } from '../Forms/context';
 
+const UserDataForm = lazy(() => import('../Forms/UserDataForm'));
 const CancelDonationForm = lazy(() => import('../Forms/CancelDonationForm'));
 const ReduceDonationForm = lazy(() => import('../Forms/ReduceDonationForm'));
 
@@ -30,29 +30,31 @@ const paths: Array<PathType> = [
   { path: '/form/cancel', index: 3, showContinueButton: false },
 ];
 
+const total = 4;
+
 const ContentSlider: React.FunctionComponent<{}> = memo(() => {
   const { submitted } = useContext(FormContext);
   const [ currentIndex, setCurrentIndex ] = useState(0);
-  const [ sliderHeight, setSliderHeight ] = useState(0);
+  // const [ sliderHeight, setSliderHeight ] = useState(0);
   const { pathname } = useLocation();
-  const [ total, setTotal ] = useState<number>(0);
-  const carouselRef = useRef<ICarouselRef>(null);
+  // const [ total, setTotal ] = useState<number>(4);
+  // const carouselRef = useRef<ICarouselRef>(null);
   const videoPlayerRef = useRef<IVideoPlayerRef>(null);
   const { path } = useRouteMatch();
   const history = useHistory();
   const [ allowContinue, setAllowContinue ] = useState<boolean>(false);
 
-  const getCurrentIndex = useCallback(() => {
-    return carouselRef.current ? carouselRef.current.getIndex() : -1; 
-  }, []);
+  // const getCurrentIndex = useCallback(() => {
+  //   return carouselRef.current ? carouselRef.current.getIndex() : -1; 
+  // }, []);
   
-  const onResizeHandler = useCallback((evt: any) => {
-    setSliderHeight(
-      document
-        .querySelectorAll<HTMLElement>('.content-slider-item')
-        .item(currentIndex).getBoundingClientRect().height
-      );
-  }, [ currentIndex ]);
+  // const onResizeHandler = useCallback((evt: any) => {
+  //   setSliderHeight(
+  //     document
+  //       .querySelectorAll<HTMLElement>('.content-slider-item')
+  //       .item(currentIndex).getBoundingClientRect().height
+  //     );
+  // }, [ currentIndex ]);
 
   useEffect(() => {
     if(pathname === '/' && paths.length) {
@@ -71,20 +73,23 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
     }
   }, [ pathname ]);
 
-  useEffect(() => {
-    if(carouselRef.current) {
-      setTotal(carouselRef.current.getTotal());
-    }
-  }, [ 
-    carouselRef.current?.getTotal,
-    total,
-  ]);
+  // useEffect(() => {
+  //   if(carouselRef.current) {
+  //     setTotal(carouselRef.current.getTotal());
+  //   }
+  // }, [ 
+  //   carouselRef.current?.getTotal,
+  //   total,
+  // ]);
 
   useEffect(() => {
     history.push({
       pathname: `${paths[0].path}`,
     });
-  }, [ path ]);
+  }, [
+    path,
+    history,
+  ]);
 
   useEffect(() => {
     // setSliderHeight(
@@ -98,7 +103,7 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
     }
   }, [
     currentIndex,
-    sliderHeight,
+    // sliderHeight,
   ]);
 
   useEffect(() => {
@@ -114,21 +119,7 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
 
   return useMemo(() => (
     <>
-      <Carousel
-        ref={carouselRef}
-        index={currentIndex}
-        showControls={false}
-        showIndicators={false}
-        allowSlide={false}
-        customCss={css`
-          height: ${(sliderHeight <= 300) ? 'auto' : pixelToRem(sliderHeight)};
-          /* background-color: yellow; */
-          
-          @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-            height: 100% !important;
-          }
-        `}
-      >
+      {(currentIndex === 0) ? (
         <ContentSliderItem
           title='Subsistimos con aportes como el tuyo'
           text='Siempre podrás reducir el monto de tu donación o cancelarla directamente, sin vueltas.<br> Si aún no estás seguro, podés hacerlo en otro momento.'
@@ -137,7 +128,7 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
             <UserDataForm />
           </React.Suspense>
         </ContentSliderItem>
-
+      ) : (currentIndex === 1) ? (
         <ContentSliderItem title='Tu solicitud aún no termina.<br>Por favor, <em>mirá el video</em> antes de continuar'>
           <VideoPlayer
             ref={videoPlayerRef}
@@ -146,10 +137,8 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
             onEndedHandler={() => { setAllowContinue(true) }}  
           />
         </ContentSliderItem>
-
-        <ContentSliderItem
-          title='Antes de seguir, recordá que en Greenpeace:'
-        >
+      ) : (currentIndex === 2) ? (
+        <ContentSliderItem title='Antes de seguir, recordá que en Greenpeace:'>
           <Layout.Cards>
             <Card
               title='No recibimos aportes de empresas privadas.'
@@ -160,7 +149,13 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
               icon='government'
             />
           </Layout.Cards>
-          <Layout.Text color='light'>También podemos asegurarte que siempre podrás reducir el monto de tu donación o cancelarla, sin vueltas.</Layout.Text>
+          <Layout.Text
+            color='light'
+            customCss={css`
+              width: 80%;
+              margin: ${pixelToRem(20)};
+            `}
+          >También podemos asegurarte que siempre podrás reducir el monto de tu donación o cancelarla, sin vueltas.</Layout.Text>
           <Elements.Nav
             customCss={css`
               display: flex;
@@ -168,7 +163,7 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
               justify-content: center;
               align-self: flex-end;
               width: 100%;
-              min-height: ${pixelToRem(100)};
+              /* min-height: ${pixelToRem(100)}; */
               margin-top: ${pixelToRem(20)};
               padding-bottom: ${pixelToRem(20)};
 
@@ -182,6 +177,7 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
 
                 a {
                   width: fit-content;
+                  margin-bottom: 0;
 
                   &:not(:last-child) {
                     margin-right: ${pixelToRem(30)};
@@ -193,7 +189,7 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
             <Layout.ButtonLink to='/form/reduce'>Reducir el monto</Layout.ButtonLink>
           </Elements.Nav>
         </ContentSliderItem>
-
+      ) : (currentIndex === 3) ? (
         <ContentSliderItem>
           <Switch>
             <Route path={`/form/reduce`}>
@@ -208,7 +204,7 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
             </Route>
           </Switch>
         </ContentSliderItem>
-      </Carousel>
+      ) : null}
 
       {!submitted && (
         <Elements.Wrapper
@@ -219,8 +215,8 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
             justify-content: center;
             align-items: center;
             width: 100%;
-            min-height: ${pixelToRem(54)};
             align-items: center;
+            margin-top: ${pixelToRem(40)};
             
             @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
               flex-direction: row-reverse;
@@ -231,7 +227,7 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
           {(paths[currentIndex] && paths[currentIndex].showContinueButton) && <Elements.Nav customCss={css`
             display: flex;
             align-self: flex-end;
-            /* margin-top: ${pixelToRem(40)}; */
+            margin-bottom: ${pixelToRem(40)};
           `}><Layout.ButtonLink to={paths[currentIndex].goTo || ''} disabled={!allowContinue}>Continuar</Layout.ButtonLink>
           </Elements.Nav>}
 
@@ -240,8 +236,6 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
               display: flex;
               align-items: center;
               width: auto;
-              margin-top: ${pixelToRem(40)};
-              /* background-color: pink; */
               pointer-events: none;
 
               @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
@@ -278,11 +272,11 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
     </>
   ), [
     currentIndex,
-    total,
     allowContinue,
-    sliderHeight,
     submitted,
-    getCurrentIndex,
+    // total,
+    // sliderHeight,
+    // getCurrentIndex,
   ]);
 });
 

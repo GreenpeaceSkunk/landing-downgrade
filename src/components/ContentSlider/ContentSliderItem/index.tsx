@@ -12,7 +12,7 @@ const ContentSliderItem: FunctionComponent<{ title?: string; text?: string; }> =
         flex: 0 0 100%;
         display: flex;
         flex-direction: column;
-        overflow: hidden;
+        /* overflow: hidden; */
       `}
     >
       <Elements.Header 

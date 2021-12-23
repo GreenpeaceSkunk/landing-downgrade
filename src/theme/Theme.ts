@@ -1,6 +1,7 @@
 import { ITheme } from "../types/theme";
 import { pixelToRem } from 'meema.utils';
 
+export const colorPrimaryExtraLight = '#DDE0E3';
 export const colorPrimaryLight = '#88E846';
 export const colorPrimaryNormal = '#6ACA25';
 export const colorPrimaryDark = '#4CAC07';

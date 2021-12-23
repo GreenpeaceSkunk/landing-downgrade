@@ -47,6 +47,7 @@ const Component: React.FunctionComponent<{}> = () => {
         display: flex;
         flex-direction: column;
         align-items: center;
+        margin-top: ${pixelToRem(200)};
       
         > *:not(:last-child) {
           margin-bottom: ${pixelToRem(20)};

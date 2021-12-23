@@ -7,7 +7,7 @@ import ErrorBoundary from '../ErrorBoundary';
 import { pixelToRem } from 'meema.utils';
 
 const MainFooter = React.lazy(() => import('../Footer'));  // TODO Import directly from bit
-const HomeView = React.lazy(() => import('../Home'));
+const HomeRouter = React.lazy(() => import('../Home/router'));
 
 const Component: React.FunctionComponent<{}> = memo(() => {
   return useMemo(() => (
@@ -18,14 +18,13 @@ const Component: React.FunctionComponent<{}> = memo(() => {
           flex-direction: column;
           margin: auto;
           height: 100%;
-          /* min-height: 20rem; */
         `}
       >
         <Switch>
           <Route path='/'>
             <ErrorBoundary fallback='Home error'>
               <Suspense fallback={<Loader mode='default' />}>
-                <HomeView />
+                <HomeRouter />
               </Suspense>
             </ErrorBoundary>
           </Route>

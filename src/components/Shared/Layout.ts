@@ -13,10 +13,12 @@ interface IButtonDisabledProps {
 
 const buttonDisabledStyles = css<IButtonDisabledProps>`
   ${({ disabled }) => disabled && css`
-    background-color: white;
+    /* background-color: white; */
+    background-color: #DDE0E3;
     pointer-events: none;
     user-select: none;
-    color: ${({theme}) => theme.text.color.primary.normal};
+    /* color: ${({theme}) => theme.text.color.primary.normal}; */
+    color: #B6B6B6;
 
     &:hover {
       background-color: ${({theme}) => theme.color.secondary.normal};
