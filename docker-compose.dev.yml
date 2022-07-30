@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  landing-downgrade:
+    image: greenpeace-landing-downgrade:dev
+    container_name: greenpeace-landing-downgrade
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: base
+    volumes:
+      - ./:/home/app/landing-downgrade/
+      - /home/app/landing-downgrade/node_modules/
+    expose:
+      - '3004'
+    ports:
+      - '3004:3004'
+    environment:
+      - PORT=3004
+    command: npm run client:start:development
+    stdin_open: true

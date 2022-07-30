@@ -1,0 +1,15 @@
+FROM node:16
+
+WORKDIR /home/app/landing-downgrade
+
+ENV PATH /home/app/landing-downgrade/node_modules/.bin:$PATH
+
+COPY package*.json ./
+COPY .npmrc ./
+
+RUN npm install -g npm@8.15.0
+RUN npm install --location=global react-scripts
+RUN npm install --legacy-peer-deps
+RUN npm run types
+
+COPY . .
