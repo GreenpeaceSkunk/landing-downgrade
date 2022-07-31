@@ -17,7 +17,7 @@ RUN npm run client:build:test
 # nginx state for serving content
 FROM nginx:alpine
 # Set working directory to nginx asset directory
-WORKDIR /usr/share/nginx/html/landing-downgrade
+WORKDIR /usr/share/nginx/html/membership-downgrade
 
 # Copy static assets from builder stage
 COPY --from=builder /app/build .
