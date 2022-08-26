@@ -7,7 +7,7 @@ import { pixelToRem } from 'meema.utils';
 const Component: React.FunctionComponent<{
   text?: string;
 }> = ({
-  text, // ¡Seamos muchos más los que ayudamos al planeta!
+  text,
 }) => {
   return useMemo(() => (
     <Wrapper>

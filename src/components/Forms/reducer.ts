@@ -14,10 +14,6 @@ export type ContextActionType =
 | { type: 'UPDATE_FORM_STATUS' }
 | { type: 'RESET' }
 | { type: 'SET_ERROR', error: string | null }
-// | { type: 'SUBMIT_USER' }
-// | { type: 'SUBMITTED_USER' }
-// | { type: 'SUBMIT_FORM' }
-// | { type: 'SUBMITTED_FORM' }
 | SharedActions;
 
 export const initialState: ContextStateType = {

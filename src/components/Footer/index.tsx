@@ -27,7 +27,6 @@ const Component: React.FunctionComponent<{}> = memo(() => useMemo(() => (
       flex-grow: 0;
       flex-shrink: 0;
       flex-basis: auto;
-      /* min-height: ${({theme}) => pixelToRem(theme.footer.mobile.height)}; */
       min-height: ${({theme}) => pixelToRem(theme.footer.mobile.height)};
       background-color: ${({theme}) => theme.footer.mobile.backgroundColor};
       color: white;
@@ -43,9 +42,7 @@ const Component: React.FunctionComponent<{}> = memo(() => useMemo(() => (
       
       @media (min-width: ${({theme}) => pixelToRem(theme.responsive.desktop.minWidth)}) {
         min-height: ${({theme}) => pixelToRem(theme.footer.desktop.height)};
-        /* background-color: ${({theme}) => theme.footer.desktop.backgroundColor}; */
       }
-      /* background-color: orange !important; */
     `}
   >
     <Wrapper

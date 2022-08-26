@@ -1,6 +1,5 @@
 import React, { memo, useEffect, useMemo, useRef, useState, Suspense, lazy, useContext } from 'react';
 import { Switch, Route, useLocation, useRouteMatch, useHistory } from 'react-router-dom';
-// import Carousel, { IRef as ICarouselRef} from '@bit/meema.ui-components.carousel';
 import ContentSliderItem from './ContentSliderItem';
 import Elements from '@bit/meema.ui-components.elements';
 import { css } from 'styled-components';
@@ -35,26 +34,11 @@ const total = 4;
 const ContentSlider: React.FunctionComponent<{}> = memo(() => {
   const { submitted } = useContext(FormContext);
   const [ currentIndex, setCurrentIndex ] = useState(0);
-  // const [ sliderHeight, setSliderHeight ] = useState(0);
   const { pathname } = useLocation();
-  // const [ total, setTotal ] = useState<number>(4);
-  // const carouselRef = useRef<ICarouselRef>(null);
   const videoPlayerRef = useRef<IVideoPlayerRef>(null);
   const { path } = useRouteMatch();
   const history = useHistory();
   const [ allowContinue, setAllowContinue ] = useState<boolean>(false);
-
-  // const getCurrentIndex = useCallback(() => {
-  //   return carouselRef.current ? carouselRef.current.getIndex() : -1; 
-  // }, []);
-  
-  // const onResizeHandler = useCallback((evt: any) => {
-  //   setSliderHeight(
-  //     document
-  //       .querySelectorAll<HTMLElement>('.content-slider-item')
-  //       .item(currentIndex).getBoundingClientRect().height
-  //     );
-  // }, [ currentIndex ]);
 
   useEffect(() => {
     if(pathname === '/' && paths.length) {
@@ -73,15 +57,6 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
     }
   }, [ pathname ]);
 
-  // useEffect(() => {
-  //   if(carouselRef.current) {
-  //     setTotal(carouselRef.current.getTotal());
-  //   }
-  // }, [ 
-  //   carouselRef.current?.getTotal,
-  //   total,
-  // ]);
-
   useEffect(() => {
     history.push({
       pathname: `${paths[0].path}`,
@@ -92,31 +67,13 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
   ]);
 
   useEffect(() => {
-    // setSliderHeight(
-    //   document
-    //     .querySelectorAll<HTMLElement>('.content-slider-item')
-    //     .item(currentIndex).getBoundingClientRect().height
-    // );
-    
     if(currentIndex === 1 && videoPlayerRef.current) {
       setAllowContinue(false);
       videoPlayerRef.current.onPlayVideo();
     }
   }, [
     currentIndex,
-    // sliderHeight,
   ]);
-
-  // useEffect(() => {
-    // if(isMobile()) {
-    //   window.addEventListener('resize', onResizeHandler);
-
-    //   return () => {
-    //     window.removeEventListener('resize', onResizeHandler)
-    //   }
-
-    // }
-  // }, []);
 
   return useMemo(() => (
     <>
@@ -134,7 +91,6 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
           <VideoPlayer
             ref={videoPlayerRef}
             videoUrl='https://www.youtube.com/watch?v=FXr3_zGc0O4' 
-            // videoUrl='https://www.youtube.com/watch?v=QohH89Eu5iM'
             onEndedHandler={() => { setAllowContinue(true) }}  
           />
         </ContentSliderItem>
@@ -164,7 +120,6 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
               justify-content: center;
               align-self: flex-end;
               width: 100%;
-              /* min-height: ${pixelToRem(100)}; */
               margin-top: ${pixelToRem(20)};
               padding-bottom: ${pixelToRem(20)};
 
@@ -275,9 +230,6 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
     currentIndex,
     allowContinue,
     submitted,
-    // total,
-    // sliderHeight,
-    // getCurrentIndex,
   ]);
 });
 

@@ -29,7 +29,6 @@ const innerMargin = (marginRight: number, marginLeft: number) => css`
 
 const Main = styled(Elements.Form)`
   flex-direction: column;
-  /* padding: ${pixelToRem(20)} ${pixelToRem(24)} ${pixelToRem(40)}; */
   width: 100%;
   overflow: auto;
 
@@ -340,7 +339,6 @@ const Input = styled(Elements.Input)`
   width: 100%;
   font-size: ${pixelToRem(16)};
   border: ${pixelToRem(1)} solid #BDBDBD;
-  /* border: ${pixelToRem(1)} solid ${({theme}) => theme.color.secondary.normal}; */
   border-radius: ${pixelToRem(10)};
   color: #333;
   outline: none;
