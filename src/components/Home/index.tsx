@@ -47,11 +47,11 @@ const Component: React.FunctionComponent<IHome> = memo(() => {
             padding: 0;
             
             @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-              width: 80%;
+              width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)};
             }
             
             @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.desktop.minWidth)}) {
-              width: 50%;
+              width: ${({ theme }) => pixelToRem(theme.responsive.desktop.minWidth)};
             }
           `}
         >

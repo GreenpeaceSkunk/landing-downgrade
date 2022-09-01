@@ -1,20 +1,23 @@
 import React, { FormEvent, memo, useCallback, useContext, useEffect, useMemo, useRef } from 'react';
 import Elements from '@bit/meema.ui-components.elements';
+import { pixelToRem } from 'meema.utils';
 import { Loader } from '../../Shared';
-import Form from '../../Shared/Form'; // Move to bit
+import Form from '../../Shared/Form';
 import Layout from '../../Shared/Layout';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import { FormContext } from '../context';
-import UserFeedbackForm, { IRef as IUserFeedbackRef } from '../SplittedForms/UserFeedbackForm';
-import { UserDataFormContext } from '../SplittedForms/UserDataForm/context';
-import { UserFeedbackFormContext } from '../SplittedForms/UserFeedbackForm/context';
+import UserPostponeForm, { IRef as IUsePostponeFormRef } from '../SplittedForms/UserPostponeForm';
 import { save } from './service';
-import Snackbar, { IRef as ISnackbarRef } from '../../Snackbar';
+import { UserDataFormContext } from '../SplittedForms/UserDataForm/context';
+import { UserPostponeFormContext } from '../SplittedForms/UserPostponeForm/context';
 import { css } from 'styled-components';
-import { pixelToRem } from 'meema.utils';
+import Snackbar, { IRef as ISnackbarRef } from '../../Snackbar';
 
 const Component: React.FunctionComponent<{}> = () => {
   const history = useHistory();
+  const formRef = useRef<HTMLFormElement>(null);
+  const userPostponeFormRef = useRef<IUsePostponeFormRef>(null);
+  const { path } = useRouteMatch();
   const {
     totalErrors,
     submitting,
@@ -22,10 +25,7 @@ const Component: React.FunctionComponent<{}> = () => {
     dispatch,
   } = useContext(FormContext);
   const { data } = useContext(UserDataFormContext);
-  const { feedback } = useContext(UserFeedbackFormContext);
-  const formRef = useRef<HTMLFormElement>(null);
-  const userFeedbackFormRef = useRef<IUserFeedbackRef>(null);
-  const { path } = useRouteMatch();
+  const { donation } = useContext(UserPostponeFormContext);
   const snackbarRef = useRef<ISnackbarRef>(null);
 
   const onSubmit = useCallback((evt: FormEvent) => {
@@ -41,36 +41,33 @@ const Component: React.FunctionComponent<{}> = () => {
         dispatch({ type: 'SUBMIT' });
         const result = await save({
           userAgent: window.navigator.userAgent,
+          postponeUntil: donation.postponeUntil,
           firstName: data.firstName,
           lastName: data.lastName,
           citizenId: data.citizenId,
-          areaCode: data.areaCode,
           email: data.email,
-          mPhoneNumber: data.mobilePhoneNumber,
-          userFeedback: feedback.selectedOption,
-          userComment: feedback.comment,
         });
         dispatch({ type: 'SUBMITTED' });
         if(result.error) {
           console.log('Error inesperado', result.message);
         } else {
-          history.push(`/user/information?from=form-cancel`);
+          history.push(`/user/information?from=form-postpone`);
         }
       })();
     }
   }, [
-    totalErrors,
-    data,
-    feedback,
-    history,
     path,
+    data,
+    donation,
+    totalErrors,
+    history,
     dispatch,
     setShowFieldErrors,
   ]);
   
   useEffect(() => {
     const timeout = setTimeout(() => {
-      history.push({ pathname: `${path}/feedback` });
+      history.push({ pathname: `${path}/time` });
     }, 200);
 
     return () => {
@@ -84,7 +81,7 @@ const Component: React.FunctionComponent<{}> = () => {
   useEffect(() => {
     dispatch({ type: 'RESET' });
   }, [ dispatch ]);
-
+  
   return useMemo(() => (
     <Elements.View customCss={css`
       width: 100%; 
@@ -96,14 +93,17 @@ const Component: React.FunctionComponent<{}> = () => {
     `}>
       <Switch>
         <Route path={path}>
-          <Form.Main ref={formRef} onSubmit={onSubmit}>
+          <Form.Main
+            ref={formRef}
+            onSubmit={onSubmit}
+          >
             <Form.Header customCss={css`> * { text-align: left !important; }`}>
-              <Layout.Title color='primary'>Cancelar mi donación</Layout.Title>
-              <Form.Text>Lamentamos que hayas tomado esta decisión, pero entendemos que tenés motivos para hacerlo.</Form.Text>
+              <Layout.Title color='primary'>Postergar donación</Layout.Title>
+              <Form.Text>Postergá tu aporte unos meses hasta que puedas volver a ayudarnos.</Form.Text>
             </Form.Header>
-            
-            <Route exact path={`${path}/feedback`}>
-              <UserFeedbackForm ref={userFeedbackFormRef} />
+
+            <Route exact path={`${path}/time`}>
+              <UserPostponeForm ref={userPostponeFormRef} />
             </Route>
             
             <Form.Nav
@@ -124,7 +124,7 @@ const Component: React.FunctionComponent<{}> = () => {
                   type='submit'
                   format='contained'
                   disabled={submitting}
-                  >{(submitting) ? <Loader mode='light' /> : 'Finalizar'}</Layout.Button>
+                >{(submitting) ? <Loader mode='light' /> : 'Finalizar'}</Layout.Button>
             </Form.Nav>
             <Snackbar
               ref={snackbarRef}
@@ -136,7 +136,7 @@ const Component: React.FunctionComponent<{}> = () => {
     </Elements.View>
   ), [
     path,
-    userFeedbackFormRef,
+    userPostponeFormRef,
     submitting,
     formRef,
     snackbarRef,
@@ -144,5 +144,5 @@ const Component: React.FunctionComponent<{}> = () => {
   ]);
 };
 
-Component.displayName = 'CancelDonationForm';
+Component.displayName = 'PostponeDonationForm';
 export default memo(Component);

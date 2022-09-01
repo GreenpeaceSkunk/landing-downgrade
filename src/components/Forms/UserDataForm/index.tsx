@@ -11,7 +11,11 @@ import { UserDataFormContext } from '../SplittedForms/UserDataForm/context';
 import { css } from 'styled-components';
 import Snackbar, { IRef as ISnackbarRef } from '../../Snackbar';
 
-const Component: React.FunctionComponent<{}> = () => {
+interface IProps {
+  redirectTo: string;
+}
+
+const Component: React.FunctionComponent<IProps> = ({ redirectTo }) => {
   const history = useHistory();
   const formRef = useRef<HTMLFormElement>(null);
   const userDataFormRef = useRef<IUserDataFormRef>(null);
@@ -46,7 +50,9 @@ const Component: React.FunctionComponent<{}> = () => {
         if(result.error) {
           console.log('Error inesperado', result.message);
         } else {
-          history.push(`/video`);
+          if(redirectTo) {
+            history.push(redirectTo);
+          }
         }
       })();
     }
@@ -54,6 +60,7 @@ const Component: React.FunctionComponent<{}> = () => {
     data,
     totalErrors,
     history,
+    redirectTo,
     dispatch,
     setShowFieldErrors,
   ]);
@@ -88,6 +95,7 @@ const Component: React.FunctionComponent<{}> = () => {
     submitting,
     formRef,
     snackbarRef,
+    redirectTo,
     onSubmit,
   ]);
 };

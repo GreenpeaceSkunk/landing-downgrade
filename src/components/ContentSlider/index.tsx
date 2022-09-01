@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useMemo, useRef, useState, Suspense, lazy, useContext } from 'react';
-import { Switch, Route, useLocation, useRouteMatch, useHistory } from 'react-router-dom';
+import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
 import ContentSliderItem from './ContentSliderItem';
 import Elements from '@bit/meema.ui-components.elements';
 import { css } from 'styled-components';
@@ -9,225 +9,186 @@ import Card from '../Card';
 import VideoPlayer, { IRef as IVideoPlayerRef } from '../VideoPlayer';
 import { Loader } from '../Shared';
 import { FormContext } from '../Forms/context';
+import useQuery from '../../hooks/useQuery';
 
 const UserDataForm = lazy(() => import('../Forms/UserDataForm'));
 const CancelDonationForm = lazy(() => import('../Forms/CancelDonationForm'));
+const CancelDonationFormThankYou = lazy(() => import('../Forms/CancelDonationForm/ThankYou'));
 const ReduceDonationForm = lazy(() => import('../Forms/ReduceDonationForm'));
+const ReduceDonationFormThankYou = lazy(() => import('../Forms/ReduceDonationForm/ThankYou'));
+const PostponeDonationForm = lazy(() => import('../Forms/PostponeDonationForm'));
+const PostponeDonationFormThankYou = lazy(() => import('../Forms/PostponeDonationForm/ThankYou'));
 
 type PathType = {
   path: string;
-  index: number;
-  showContinueButton: boolean;
+  index?: number;
+  showContinueButton?: boolean;
   goTo?: string;
+  redirectTo: string;
 };
 
-const paths: Array<PathType> = [
-  { path: '/user/information', index: 0, showContinueButton: false },
-  { path: '/video', goTo: '/about-us', index: 1, showContinueButton: true },
-  { path: '/about-us', index: 2, showContinueButton: false },
-  { path: '/form/reduce', index: 3, showContinueButton: false },
-  { path: '/form/cancel', index: 3, showContinueButton: false },
-];
-
-const total = 4;
+type RouteType = {
+  [a: string]: PathType;
+}
+const routing: RouteType = {
+  'video': { path: '/video', redirectTo: 'about-us', showContinueButton: true },
+  'about-us': { path: '/about-us', redirectTo: 'video', showContinueButton: false },
+}
 
 const ContentSlider: React.FunctionComponent<{}> = memo(() => {
   const { submitted } = useContext(FormContext);
-  const [ currentIndex, setCurrentIndex ] = useState(0);
+  const [ currentIndex, setCurrentIndex ] = useState();
+  const [ currentPath, setCurrentPath ] = useState<PathType | null>(null);
   const { pathname } = useLocation();
   const videoPlayerRef = useRef<IVideoPlayerRef>(null);
-  const { path } = useRouteMatch();
   const history = useHistory();
   const [ allowContinue, setAllowContinue ] = useState<boolean>(false);
+  const params = useQuery();
 
   useEffect(() => {
-    if(pathname === '/' && paths.length) {
-      setCurrentIndex(paths[0].index)
+    if(pathname !== '/') {
+      setCurrentPath(routing[pathname.slice(1, pathname.length).replace(/\//g, '-')]);
     } else {
-      const path = paths.filter((_: PathType) => _.path === pathname);
-      if(path.length) {
-        const timeout = setTimeout(() => {
-          setCurrentIndex(path[0].index);
-        }, 100) 
+      setCurrentPath(routing['video']);
+    }
+  }, [
+    pathname,
+  ]);
         
-        return () => {
-          clearTimeout(timeout);
-        }
-      }
+  useEffect(() => {
+    if(currentPath) {
+      history.push({
+        pathname: `${currentPath.path}`,
+      });
     }
-  }, [ pathname ]);
+  }, [ currentPath ]);
 
   useEffect(() => {
-    history.push({
-      pathname: `${paths[0].path}`,
-    });
-  }, [
-    path,
-    history,
-  ]);
-
-  useEffect(() => {
-    if(currentIndex === 1 && videoPlayerRef.current) {
-      setAllowContinue(false);
-      videoPlayerRef.current.onPlayVideo();
-    }
-  }, [
-    currentIndex,
-  ]);
+    setCurrentPath(routing['video']);
+  }, []);
 
   return useMemo(() => (
     <>
-      {(currentIndex === 0) ? (
-        <ContentSliderItem
-          title='Subsistimos con aportes como el tuyo'
-          text='Siempre podrás reducir el monto de tu donación o cancelarla directamente, sin vueltas.<br> Si aún no estás seguro, podés hacerlo en otro momento.'
-        >
-          <React.Suspense fallback={'User data form error'}>
-            <UserDataForm />
-          </React.Suspense>
-        </ContentSliderItem>
-      ) : (currentIndex === 1) ? (
-        <ContentSliderItem title='Tu solicitud aún no termina.<br>Por favor, <em>mirá el video</em> antes de continuar'>
-          <VideoPlayer
-            ref={videoPlayerRef}
-            videoUrl='https://www.youtube.com/watch?v=FXr3_zGc0O4' 
-            onEndedHandler={() => { setAllowContinue(true) }}  
-          />
-        </ContentSliderItem>
-      ) : (currentIndex === 2) ? (
-        <ContentSliderItem title='Antes de seguir, recordá que en Greenpeace:'>
-          <Layout.Cards>
-            <Card
-              title='No recibimos aportes de empresas privadas.'
-              icon='factory'
-            />
-            <Card
-              title='No recibimos aportes de partidos políticos ni estamos vinculados con ellos.'
-              icon='government'
-            />
-          </Layout.Cards>
-          <Layout.Text
-            color='light'
-            customCss={css`
-              width: 80%;
-              margin: ${pixelToRem(20)};
-            `}
-          >También podemos asegurarte que siempre podrás reducir el monto de tu donación o cancelarla, sin vueltas.</Layout.Text>
-          <Elements.Nav
-            customCss={css`
-              display: flex;
-              flex-direction: column;
-              justify-content: center;
-              align-self: flex-end;
-              width: 100%;
-              margin-top: ${pixelToRem(20)};
-              padding-bottom: ${pixelToRem(20)};
+      <Switch>
 
-              a {
+        <Route path='/video'>
+          <ContentSliderItem title='Tu solicitud aún no termina.<br>Por favor, <em>mirá el video</em> antes de continuar'>
+            <React.Suspense fallback={'User data form error'}>
+              <VideoPlayer
+                ref={videoPlayerRef}
+                videoUrl='https://www.youtube.com/watch?v=FXr3_zGc0O4' 
+                onEndedHandler={() => { setAllowContinue(true) }}  
+              />
+            </React.Suspense>
+          </ContentSliderItem>
+        </Route>
+        
+        <Route path='/user/information'>
+          <ContentSliderItem
+            title='Subsistimos con aportes como el tuyo'
+            text='Siempre podrás reducir el monto de tu donación o cancelarla directamente, sin vueltas.<br> Si aún no estás seguro, podés hacerlo en otro momento.'
+          >
+            <React.Suspense fallback={'User data form error'}>
+              <UserDataForm redirectTo={`/${(params.get('from') || '').replace(/\-/g, '/')}/thankyou`} />
+            </React.Suspense>
+          </ContentSliderItem>
+        </Route>
+
+        <Route path='/about-us'>
+          <ContentSliderItem title='Antes de seguir, recordá que en Greenpeace:'>
+            <Layout.Cards>
+              <Card
+                title='No recibimos aportes de empresas privadas.'
+                icon='factory'
+              />
+              <Card
+                title='No recibimos aportes de partidos políticos ni estamos vinculados con ellos.'
+                icon='government'
+              />
+            </Layout.Cards>
+            <Layout.Text
+              color='light'
+              customCss={css`
+                width: 80%;
+                margin: ${pixelToRem(20)};
+              `}
+            >También podemos asegurarte que siempre podrás reducir el monto de tu donación o cancelarla, sin vueltas.</Layout.Text>
+            <Elements.Nav
+              customCss={css`
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-self: flex-end;
                 width: 100%;
-                margin-bottom: ${pixelToRem(30)};
-              }
-
-              @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-                flex-direction: row;
+                margin-top: ${pixelToRem(20)};
+                padding-bottom: ${pixelToRem(20)};
 
                 a {
-                  width: fit-content;
-                  margin-bottom: 0;
+                  width: 100%;
+                  margin-bottom: ${pixelToRem(30)};
+                }
 
-                  &:not(:last-child) {
-                    margin-right: ${pixelToRem(30)};
+                @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+                  flex-direction: row;
+
+                  a {
+                    width: fit-content;
+                    margin-bottom: 0;
+
+                    &:not(:last-child) {
+                      margin-right: ${pixelToRem(30)};
+                    }
                   }
                 }
-              }
-            `}>
-            <Layout.ButtonLink to='/form/cancel'>Cancelar mi donación</Layout.ButtonLink>
-            <Layout.ButtonLink to='/form/reduce'>Reducir el monto</Layout.ButtonLink>
-          </Elements.Nav>
-        </ContentSliderItem>
-      ) : (currentIndex === 3) ? (
-        <ContentSliderItem>
-          <Switch>
-            <Route path={`/form/reduce`}>
-              <Suspense fallback={<Loader mode='default' />}>
-                <ReduceDonationForm />
-              </Suspense>
-            </Route>
-            <Route path={`/form/cancel`}>
-              <Suspense fallback={<Loader mode='default' />}>
-                <CancelDonationForm />
-              </Suspense>
-            </Route>
-          </Switch>
-        </ContentSliderItem>
-      ) : null}
+              `}>
+              <Layout.ButtonLink to='/form/cancel'>Cancelar mi donación</Layout.ButtonLink>
+              <Layout.ButtonLink to='/form/reduce'>Reducir el monto</Layout.ButtonLink>
+              <Layout.ButtonLink to='/form/postpone'>Postergar mi donación</Layout.ButtonLink>
+            </Elements.Nav>
+          </ContentSliderItem>
+        </Route>
 
-      {!submitted && (
-        <Elements.Wrapper
-          customCss={css`
-            display: flex;
-            position: relative;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            align-items: center;
-            margin-top: ${pixelToRem(40)};
-            
-            @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-              flex-direction: row-reverse;
-              justify-content: flex-start;
-            }
-          `}
-        >
-          {(paths[currentIndex] && paths[currentIndex].showContinueButton) && <Elements.Nav customCss={css`
-            display: flex;
-            align-self: flex-end;
-            margin-bottom: ${pixelToRem(40)};
-          `}><Layout.ButtonLink to={paths[currentIndex].goTo || ''} disabled={!allowContinue}>Continuar</Layout.ButtonLink>
-          </Elements.Nav>}
-
-          <Elements.Wrapper
-            customCss={css`
-              display: flex;
-              align-items: center;
-              width: auto;
-              pointer-events: none;
-
-              @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-                position: absolute;
-                width: 100%;
-                justify-content: center;
-                margin-top: 0;
-              }
-            `}
-          >
-            {Array.from({ length: total }, (_, i) => i).map((idx: number) => (
-              <Elements.Wrapper
-                key={idx}
-                customCss={css`
-                  display: inline-flex;
-                  width: ${pixelToRem(12)};
-                  height: ${pixelToRem(12)};
-                  border-radius: 50%;
-                  border: ${pixelToRem(2)} solid ${({theme}) => theme.color.primary.normal};
-
-                  &:not(:last-child) {
-                    margin-right: ${pixelToRem(9)};
-                  }
-
-                  ${idx <= currentIndex && css`
-                    background-color: ${({theme}) => theme.color.primary.normal};
-                  `};
-                `}
-              />
-            ))}
-          </Elements.Wrapper>  
-        </Elements.Wrapper>
-      )}
+        <Route exact path='/form/reduce/thankyou'>
+          <Suspense fallback={<Loader mode='default' />}>
+            <ReduceDonationFormThankYou />
+          </Suspense>
+        </Route>
+        
+        <Route path='/form/reduce'>
+          <Suspense fallback={<Loader mode='default' />}>
+            <ReduceDonationForm />
+          </Suspense>
+        </Route>
+        
+        <Route exact path='/form/cancel/thankyou'>
+          <Suspense fallback={<Loader mode='default' />}>
+            <CancelDonationFormThankYou />
+          </Suspense>
+        </Route>
+        
+        <Route path='/form/cancel'>
+          <Suspense fallback={<Loader mode='default' />}>
+            <CancelDonationForm />
+          </Suspense>
+        </Route>
+        
+        <Route exact path='/form/postpone/thankyou'>
+          <Suspense fallback={<Loader mode='default' />}>
+            <PostponeDonationFormThankYou />
+          </Suspense>
+        </Route>
+        
+        <Route path='/form/postpone'>
+          <Suspense fallback={<Loader mode='default' />}>
+            <PostponeDonationForm />
+          </Suspense>
+        </Route>
+      </Switch>
     </>
   ), [
+    params,
     currentIndex,
+    currentPath,
     allowContinue,
     submitted,
   ]);

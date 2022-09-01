@@ -7,8 +7,8 @@ import { NavLink, Route, Switch, useLocation } from 'react-router-dom';
 import { Loader } from '../Shared';
 import Layout from '../Shared/Layout';
 
-const ReduceDonationForm = lazy(() => import('./ReduceDonationForm'));
-const CancelDonationForm = lazy(() => import('./CancelDonationForm'));
+// const ReduceDonationForm = lazy(() => import('./ReduceDonationForm'));
+// const CancelDonationForm = lazy(() => import('./CancelDonationForm'));
 
 const FormWrapper = styled(Wrapper)`
   position: fixed;
@@ -45,31 +45,31 @@ const TabButton = styled(NavLink)`
 const Component: FunctionComponent<{}> = () => {
   const { pathname } = useLocation();
   const [ posArrowLeftX, setPosArrowLeftX ] = useState<number>(0);
-  const triangleRef = useRef<HTMLDivElement>(null);
+  // const triangleRef = useRef<HTMLDivElement>(null);
   const reduceButtonRef = useRef<any>(null);
   const cancelButtonRef = useRef<any>(null);
 
-  const onMoveTriangle = useCallback((parentButton: any) => {
-    if(triangleRef.current && parentButton) {
-      const trianglePosX = triangleRef.current.getBoundingClientRect();
-      setPosArrowLeftX(parentButton.getBoundingClientRect().x - trianglePosX.x + (parentButton.getBoundingClientRect().width / 2) - 60);
-    }
-  }, [
-    triangleRef,
-  ]);
+  // const onMoveTriangle = useCallback((parentButton: any) => {
+  //   if(triangleRef.current && parentButton) {
+  //     const trianglePosX = triangleRef.current.getBoundingClientRect();
+  //     setPosArrowLeftX(parentButton.getBoundingClientRect().x - trianglePosX.x + (parentButton.getBoundingClientRect().width / 2) - 60);
+  //   }
+  // }, [
+  //   triangleRef,
+  // ]);
 
-  useEffect(() => {
-    if(/reduce/.test(pathname) && reduceButtonRef && reduceButtonRef.current) {
-      onMoveTriangle(reduceButtonRef.current);
-    }
+  // useEffect(() => {
+  //   if(/reduce/.test(pathname) && reduceButtonRef && reduceButtonRef.current) {
+  //     onMoveTriangle(reduceButtonRef.current);
+  //   }
     
-    if(/cancel/.test(pathname) && reduceButtonRef && reduceButtonRef.current) {
-      onMoveTriangle(cancelButtonRef.current);
-    }
-  }, [
-    pathname,
-    onMoveTriangle,
-  ]);
+  //   if(/cancel/.test(pathname) && reduceButtonRef && reduceButtonRef.current) {
+  //     onMoveTriangle(cancelButtonRef.current);
+  //   }
+  // }, [
+  //   pathname,
+  //   onMoveTriangle,
+  // ]);
 
   return useMemo(() => (
     <Elements.View
@@ -111,6 +111,7 @@ const Component: FunctionComponent<{}> = () => {
           activeClassName='active'
           ref={reduceButtonRef}
         >Quiero disminuir el monto</TabButton>
+
         <TabButton
           activeClassName='active'
           to={`/donation/cancel`}
@@ -118,7 +119,7 @@ const Component: FunctionComponent<{}> = () => {
         >Quiero cancelar mi donación</TabButton>
       </Elements.Nav>
       
-      {(/donation/.test(pathname)) && (
+      {/* {(/donation/.test(pathname)) && (
         <>
           <Wrapper
             ref={triangleRef}
@@ -173,7 +174,7 @@ const Component: FunctionComponent<{}> = () => {
             </Layout.PanelWrapper>
           </Layout.Panel>
         </>
-      )}
+      )} */}
     </Elements.View>
   ), [
     pathname,
