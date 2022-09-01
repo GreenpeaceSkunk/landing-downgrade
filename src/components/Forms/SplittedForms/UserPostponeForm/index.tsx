@@ -5,18 +5,19 @@ import { OnClickEvent } from 'greenpeace';
 import { css } from 'styled-components';
 import Form from '../../../Shared/Form'; // Move to bit
 import { FormContext } from '../../context';
-import { UserDonationFormContext } from './context';
+import { UserPostponeFormContext } from './context';
 
-interface IProps {}
 export interface IRef {
   errors: any;
 }
+
+interface IProps {}
 
 const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
   props: IProps,
   innerRef: React.ForwardedRef<IRef>
 ) => {
-  const { donation, dispatch } = useContext(UserDonationFormContext);
+  const { donation, dispatch } = useContext(UserPostponeFormContext);
   const { errors } = useContext(FormContext);
 
   const onClick = useCallback((evt: OnClickEvent) => {
@@ -37,33 +38,25 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
       errors,
     }
   });
-  
+  console.log(donation)
   return useMemo(() => (
     <Form.Content>
-      <Form.Title>¿Cuánto vas a reducir?</Form.Title>
+      <Form.Title>¿En cuántos meses te gustaría volver a colaborar?</Form.Title>
       <Form.Row>
-        <Form.Group
-          fieldName='percentDecrease'
-        >
+        <Form.Group fieldName='postponeUntil'>
           <Wrapper
             customCss={css`
               display: flex;
-              /* flex-direction: column; */
-              /* align-items: center; */
               flex-wrap: wrap;
               width: 100%;
               margin-bottom: ${pixelToRem(15)};
-
-              @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.desktop.minWidth)}) {
-                flex-direction: row;
-              }
             `}
           >
-            {[10, 20, 30, 40, 50].map((value: number) => (
+            {[ 1, 2, 3, 4 ].map((value: number) => (
               <Button
                 format='outlined'
                 key={value}
-                name='percentDecrease'
+                name='postponeUntil'
                 data-value={value}
                 customCss={css`
                   padding: ${pixelToRem(10)} ${pixelToRem(34)};
@@ -80,7 +73,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
                     margin-right: 3%;
                   }
 
-                  ${(donation.percentDecrease === value) && css`
+                  ${(donation?.postponeUntil === value) && css`
                     background-color: ${({theme}) => theme.color.primary.normal} !important;
                     border-color: ${({theme}) => theme.color.primary.normal} !important;
                     color: white !important;
@@ -92,15 +85,15 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
                     }
 
                     @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-                      width: 30%;
+                      width: calc(25% - ${pixelToRem(10)});
 
                       &:not(:last-child) {
-                        margin-right: 3%;
+                        margin-right: ${pixelToRem(10)};
                       }
-                    }                  
-                    
+                    }
+
                     @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.desktop.minWidth)}) {
-                      width: fit-content;
+                      width: ${pixelToRem(100)};
 
                       &:not(:last-child) {
                         margin-right: ${pixelToRem(16)};
@@ -108,7 +101,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
                     }                  
                 `}
                 onClick={onClick}
-              >{value}%</Button>
+              >{value}</Button>
             ))}
           </Wrapper>
         </Form.Group>
@@ -120,5 +113,5 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
   ]);
 });
 
-Component.displayName = 'UserDonationForm';
+Component.displayName = 'UserPostponeForm';
 export default React.forwardRef<IRef, IProps>(Component);

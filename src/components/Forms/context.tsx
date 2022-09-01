@@ -3,6 +3,7 @@ import { reducer, initialState, ContextActionType as FormContextActionType, Erro
 import { UserDonationFormProvider } from './SplittedForms/UserDonationForm/context';
 import { UserDataFormProvider } from './SplittedForms/UserDataForm/context';
 import { UserFeedbackFormProvider } from './SplittedForms/UserFeedbackForm/context';
+import { UserPostponeFormProvider } from './SplittedForms/UserPostponeForm/context';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 interface IContext {
@@ -100,7 +101,9 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
       <UserDataFormProvider>
         <UserDonationFormProvider>
           <UserFeedbackFormProvider>
-            { children }
+            <UserPostponeFormProvider>
+              { children }
+            </UserPostponeFormProvider>
           </UserFeedbackFormProvider>
         </UserDonationFormProvider>
       </UserDataFormProvider>

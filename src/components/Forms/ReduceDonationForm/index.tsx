@@ -1,4 +1,4 @@
-import React, { FormEvent, lazy, memo, Suspense, useCallback, useContext, useEffect, useMemo, useRef } from 'react';
+import React, { FormEvent, memo, useCallback, useContext, useEffect, useMemo, useRef } from 'react';
 import Elements from '@bit/meema.ui-components.elements';
 import { pixelToRem } from 'meema.utils';
 import { Loader } from '../../Shared';
@@ -12,8 +12,6 @@ import { UserDataFormContext } from '../SplittedForms/UserDataForm/context';
 import { UserDonationFormContext } from '../SplittedForms/UserDonationForm/context';
 import { css } from 'styled-components';
 import Snackbar, { IRef as ISnackbarRef } from '../../Snackbar';
-
-const ReduceDonationFormThankYou = lazy(() => import('./ThankYou'));
 
 const Component: React.FunctionComponent<{}> = () => {
   const history = useHistory();
@@ -55,7 +53,7 @@ const Component: React.FunctionComponent<{}> = () => {
         if(result.error) {
           console.log('Error inesperado', result.message);
         } else {
-          history.push(`${path}/thankyou`);
+          history.push(`/user/information?from=form-reduce`);
         }
       })();
     }
@@ -96,11 +94,6 @@ const Component: React.FunctionComponent<{}> = () => {
       }
     `}>
       <Switch>
-        <Route exact path={`${path}/thankyou`}>
-          <Suspense fallback={<Loader mode='default' />}>
-            <ReduceDonationFormThankYou />
-          </Suspense>
-        </Route>
         <Route path={path}>
           <Form.Main
             ref={formRef}
@@ -120,7 +113,7 @@ const Component: React.FunctionComponent<{}> = () => {
                 display: flex;
                 flex-direction: row !important;
                 align-items: center !important;
-                justify-content: flex-end;
+                justify-content: space-between;
                 width: 100%;
 
                 > * {
@@ -128,6 +121,7 @@ const Component: React.FunctionComponent<{}> = () => {
                   height: 100%;
                 }
               `}>
+                <Layout.ButtonLink format='text' to='/about-us'>Volver</Layout.ButtonLink>
                 <Layout.Button
                   type='submit'
                   format='contained'

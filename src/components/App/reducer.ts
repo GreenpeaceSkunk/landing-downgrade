@@ -27,6 +27,7 @@ export const initialState: ContextStateType = {
     },
     donation: {
       percentDecrease: 10,
+      postponeUntil: 1,
     },
     feedback: {
       selectedOption: '',

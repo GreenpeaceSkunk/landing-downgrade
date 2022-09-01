@@ -1,9 +1,10 @@
-import React, { useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { Wrapper } from '@bit/meema.ui-components.elements';
+import React, { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import Elements, { Wrapper } from '@bit/meema.ui-components.elements';
 import { pixelToRem } from 'meema.utils';
 import ReactPlayer from 'react-player/lazy';
 import { css } from 'styled-components';
 import { Loader } from '../Shared';
+import Layout from '../Shared/Layout';
 
 interface IProps {
   videoUrl: string;
@@ -22,12 +23,17 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
 ) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [ playingVideo, setPlayingVideo ] = useState<boolean>(false);
+  const [ allowNext, setAllowNext ] = useState<boolean>(false);
 
   const onEnded = useCallback(() => {
+    setAllowNext(true);
     if(onEndedHandler) {
       onEndedHandler();
     }
-  }, [ onEndedHandler ]);
+  }, [
+    allowNext,
+    onEndedHandler,
+  ]);
 
   const onPlayVideo = useCallback(() => {
     setPlayingVideo(true);
@@ -38,6 +44,10 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
       onPlayVideo,
     }
   });
+
+  useEffect(() => {
+    setPlayingVideo(true);
+  }, []);
 
   return useMemo(() => (
     <Wrapper
@@ -86,8 +96,21 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
           }
         />
       </Wrapper>
+      <Elements.Nav
+        customCss={css`
+          display: flex;
+          align-self: flex-end;
+          justify-content: flex-end;
+          margin-top: ${pixelToRem(60)};
+        `}
+      >
+        <Layout.ButtonLink to='/about-us' disabled={!allowNext}>
+          Continuar
+        </Layout.ButtonLink>
+      </Elements.Nav>
     </Wrapper>
   ), [
+    allowNext,
     videoUrl,
     playingVideo,
     onEnded,
