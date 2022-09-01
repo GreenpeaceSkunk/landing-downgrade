@@ -40,8 +40,8 @@ const Component: React.FunctionComponent<{}> = () => {
             filter: drop-shadow(0 ${pixelToRem(4)} ${pixelToRem(20)} rgba(0, 0, 0, .15));
           `}
         />
-        <Layout.Title color='light'>Listo, reduciremos tu donación</Layout.Title>
-        <Layout.Text color='light'>En las próximas 72 horas haremos el cambio y se aplicará<br/> en tu próxima donación.</Layout.Text>
+        <Layout.Title color='light'>Listo, registramos tu solicitud</Layout.Title>
+        <Layout.Text color='light'>En breve estaremos aplicando la reducción en el monto de tu donación.</Layout.Text>
       </Elements.Wrapper>
       <Elements.Nav customCss={css`
         display: flex;
