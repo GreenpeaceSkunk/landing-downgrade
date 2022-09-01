@@ -72,7 +72,7 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
       <Switch>
 
         <Route path='/video'>
-          <ContentSliderItem title='Tu solicitud aún no termina.<br>Por favor, <em>mirá el video</em> antes de continuar'>
+          <ContentSliderItem title='Por favor, <em>mirá el video</em> antes de continuar'>
             <React.Suspense fallback={'User data form error'}>
               <VideoPlayer
                 ref={videoPlayerRef}
