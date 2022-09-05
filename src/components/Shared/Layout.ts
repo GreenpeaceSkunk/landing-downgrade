@@ -53,7 +53,7 @@ const buttonStyles = css<IButtonProps>`
       background-color: transparent;
       box-shadow: none !important;
     }
-  `}
+  `} 
 `;
 
 const Panel = styled(Elements.Wrapper)`
@@ -202,6 +202,18 @@ const ButtonLink = styled(NavLink)<IButtonProps & IButtonDisabledProps>`
 const Link = styled(Elements.A)<IButtonProps & IButtonDisabledProps>`
   ${buttonStyles};
   ${buttonDisabledStyles};
+
+  ${({format}) => (format === 'contained') && css`
+    background-color: ${({theme}) => theme.color.primary.normal} !important;
+    padding: ${pixelToRem(13)} ${pixelToRem(60)} !important;
+    color: white !important;
+    text-decoration: none !important;
+
+    &:hover {
+      background-color: transparent;
+      box-shadow: none !important;
+    }
+  `}
 `;
 
 const _ = {

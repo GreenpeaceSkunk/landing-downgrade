@@ -48,8 +48,6 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
           <Wrapper
             customCss={css`
               display: flex;
-              /* flex-direction: column; */
-              /* align-items: center; */
               flex-wrap: wrap;
               width: 100%;
               margin-bottom: ${pixelToRem(15)};
@@ -59,7 +57,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
               }
             `}
           >
-            {[10, 20, 30, 40, 50].map((value: number) => (
+            {[5, 10, 15, 20, 25].map((value: number) => (
               <Button
                 format='outlined'
                 key={value}

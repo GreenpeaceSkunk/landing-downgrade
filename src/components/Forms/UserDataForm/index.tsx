@@ -10,6 +10,7 @@ import { save } from './service';
 import { UserDataFormContext } from '../SplittedForms/UserDataForm/context';
 import { css } from 'styled-components';
 import Snackbar, { IRef as ISnackbarRef } from '../../Snackbar';
+import { pixelToRem } from 'meema.utils';
 
 interface IProps {
   redirectTo: string;
@@ -74,11 +75,47 @@ const Component: React.FunctionComponent<IProps> = ({ redirectTo }) => {
             onSubmit={onSubmit}
           >
             <UserDataForm ref={userDataFormRef} />
-            <Form.Nav>
+            <Form.Nav
+              customCss={css`
+                display: flex;
+                flex-direction: column;
+                align-items: center !important;
+                justify-content: space-between;
+                width: 100%;
+
+                /* > *:not(&:last-child) {
+                  margin-bottom: 0 !important;
+                  height: 100%;
+                } */
+
+                a {
+                  padding: 0;
+                  background: transparent;
+                  color: ${({theme}) => theme.color.primary.dark};
+                  text-decoration: underline;
+                  margin-bottom: ${pixelToRem(40)} !important;
+                  
+                  &:not(:last-child) {
+                    margin-bottom: 0;
+                  }
+
+                  &:hover {
+                    background: transparent;
+                  }
+                }
+
+                @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+                  flex-direction: row !important;
+                  align-items: center !important;
+                  /* justify-content: center !important; */
+                }
+              `}
+            >
+              <Layout.Link type='text' format='contained' href='https://www.greenpeace.org/argentina' target='_self'>Continuar como socio</Layout.Link>
               <Layout.Button
                 type='submit'
-                format='contained'
-                >{(submitting) ? <Loader mode='light' /> : 'Confimar'}
+                format='text'
+                >{(submitting) ? <Loader mode='light' /> : 'Confimar la baja'}
               </Layout.Button>
             </Form.Nav>
             <Snackbar

@@ -86,7 +86,7 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
         <Route path='/user/information'>
           <ContentSliderItem
             title='Subsistimos con aportes como el tuyo'
-            text='Siempre podrás reducir el monto de tu donación o cancelarla directamente, sin vueltas.<br> Si aún no estás seguro, podés hacerlo en otro momento.'
+            text='Siempre podrás reducir el monto de tu donación, postergar tu aporte o cancelarlo, sin vueltas. Si aún no estás seguro, podés hacerlo en otro momento.'
           >
             <React.Suspense fallback={'User data form error'}>
               <UserDataForm redirectTo={`/${(params.get('from') || '').replace(/\-/g, '/')}/thankyou`} />
@@ -96,55 +96,62 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
 
         <Route path='/about-us'>
           <ContentSliderItem title='Antes de seguir, recordá que en Greenpeace:'>
-            <Layout.Cards>
-              <Card
-                title='No recibimos aportes de empresas privadas.'
-                icon='factory'
-              />
-              <Card
-                title='No recibimos aportes de partidos políticos ni estamos vinculados con ellos.'
-                icon='government'
-              />
-            </Layout.Cards>
-            <Layout.Text
-              color='light'
-              customCss={css`
-                width: 80%;
-                margin: ${pixelToRem(20)};
-              `}
-            >También podemos asegurarte que siempre podrás reducir el monto de tu donación o cancelarla, sin vueltas.</Layout.Text>
-            <Elements.Nav
-              customCss={css`
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-self: flex-end;
-                width: 100%;
-                margin-top: ${pixelToRem(20)};
-                padding-bottom: ${pixelToRem(20)};
-
-                a {
+            <Elements.Wrapper
+              
+            >
+              <Layout.Cards>
+                <Card
+                  title='No recibimos aportes de empresas privadas.'
+                  icon='factory'
+                />
+                <Card
+                  title='No recibimos aportes de partidos políticos ni estamos vinculados con ellos.'
+                  icon='government'
+                />
+              </Layout.Cards>
+              <Layout.Text
+                color='light'
+                customCss={css`
+                  width: fit-content;
+                  margin: ${pixelToRem(20)};
+                  text-align: center;
+                `}
+              >También podemos asegurarte que siempre podrás reducir el monto de tu donación, postergar tu aporte o cancelarlo, sin vueltas.</Layout.Text>
+              <Elements.Nav
+                customCss={css`
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                  align-self: flex-end;
                   width: 100%;
-                  margin-bottom: ${pixelToRem(30)};
-                }
-
-                @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
-                  flex-direction: row;
+                  margin-top: ${pixelToRem(60)};
+                  padding-bottom: ;
+                  padding: ${pixelToRem(20)} ${pixelToRem(80)};
 
                   a {
-                    width: fit-content;
-                    margin-bottom: 0;
+                    width: 100%;
+                    margin-bottom: ${pixelToRem(30)};
+                  }
 
-                    &:not(:last-child) {
-                      margin-right: ${pixelToRem(30)};
+                  @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+                    flex-direction: row;
+                    padding: 0;
+
+                    a {
+                      width: fit-content;
+                      margin-bottom: 0;
+
+                      &:not(:last-child) {
+                        margin-right: ${pixelToRem(30)};
+                      }
                     }
                   }
-                }
-              `}>
-              <Layout.ButtonLink to='/form/cancel'>Cancelar mi donación</Layout.ButtonLink>
-              <Layout.ButtonLink to='/form/reduce'>Reducir el monto</Layout.ButtonLink>
-              <Layout.ButtonLink to='/form/postpone'>Postergar mi donación</Layout.ButtonLink>
-            </Elements.Nav>
+                `}>
+                <Layout.ButtonLink to='/form/cancel'>Cancelar mi donación</Layout.ButtonLink>
+                <Layout.ButtonLink to='/form/reduce'>Reducir el monto</Layout.ButtonLink>
+                <Layout.ButtonLink to='/form/postpone'>Postergar mi donación</Layout.ButtonLink>
+              </Elements.Nav>
+            </Elements.Wrapper>
           </ContentSliderItem>
         </Route>
 

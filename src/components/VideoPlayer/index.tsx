@@ -54,13 +54,14 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
       ref={wrapperRef}
       customCss={css`
         width: 100vw;
-        height: ${pixelToRem(240)};
-        background-color: black;
+        padding: 0 ${pixelToRem(30)};
         
         @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+          display: flex;
+          flex-direction: column;
           width: 100%;
-          height: ${pixelToRem(450)};
-          z-index: 999;
+          padding-left: 0;
+          padding-right: 0;
         }
       `}
     >
@@ -68,6 +69,11 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
         customCss={css`
           width: 100%;
           height: 100%;
+          height: ${pixelToRem(400)};
+
+          @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
+            height: ${pixelToRem(450)};
+          }
         `}
       >
         <ReactPlayer

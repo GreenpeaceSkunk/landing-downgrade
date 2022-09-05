@@ -11,12 +11,14 @@ const MainHeader: FunctionComponent<{}> = memo(() => {
         display: flex;
         flex-direction: column;
         justify-content: center;
+        align-items: center;
         padding: ${pixelToRem(20)};
         width: 100%;
         background-color: ${({theme}) => theme.header.mobile.backgroundColor};
   
         @media (min-width: ${({theme}) => pixelToRem(theme.responsive.tablet.minWidth)}) {
           background-color: ${({theme}) => theme.header.tablet.backgroundColor};
+          align-items: flex-start;
         }
         
         @media (min-width: ${({theme}) => pixelToRem(theme.responsive.desktop.minWidth)}) {
