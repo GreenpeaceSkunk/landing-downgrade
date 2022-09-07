@@ -1,12 +1,21 @@
-import React, { memo, useMemo, useRef } from 'react';
+import React, { memo, useContext, useEffect, useMemo, useRef } from 'react';
 import { pixelToRem } from 'meema.utils';
 import { css } from 'styled-components';
 import Elements, { Img } from '@bit/meema.ui-components.elements';
 import Images from '../../../../images';
 import Layout from '../../../Shared/Layout';
+import { UserDataFormContext } from '../../SplittedForms/UserDataForm/context';
+import { updateContact } from '../../../../services/greenlab';
 
 const Component: React.FunctionComponent<{}> = () => {
+  const { data: { user: { data } } } = useContext(UserDataFormContext);
   const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    (async () => {
+      await updateContact(data.email, { estado_landing_de_bajas: 'reduced' });
+    })();
+  }, []);
   
   return useMemo(() => (
     <Elements.Wrapper

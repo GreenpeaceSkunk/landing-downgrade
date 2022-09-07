@@ -5,10 +5,17 @@ import Elements, { Img } from '@bit/meema.ui-components.elements';
 import Images from '../../../../images';
 import Layout from '../../../Shared/Layout';
 import { UserDataFormContext } from '../../SplittedForms/UserDataForm/context';
+import { updateContact } from '../../../../services/greenlab';
 
 const Component: React.FunctionComponent<{}> = () => {
-  const { data } = useContext(UserDataFormContext);
+  const { data: { user: { data } } } = useContext(UserDataFormContext);
   const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    (async () => {
+      await updateContact(data.email, { estado_landing_de_bajas: 'postponed' });
+    })();
+  }, []);
   
   return useMemo(() => (
     <Elements.Wrapper
