@@ -7,7 +7,6 @@ import Layout from '../../Shared/Layout';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import { FormContext } from '../context';
 import UserDonationForm, { IRef as IUserDonationFormRef } from '../SplittedForms/UserDonationForm';
-import { save } from './service';
 import { UserDataFormContext } from '../SplittedForms/UserDataForm/context';
 import { UserDonationFormContext } from '../SplittedForms/UserDonationForm/context';
 import { css } from 'styled-components';
@@ -23,8 +22,12 @@ const Component: React.FunctionComponent<{}> = () => {
     submitting,
     setShowFieldErrors,
     dispatch,
+    payload,
+    serviceForm,
+    setPayload,
+    setServiceForm,
   } = useContext(FormContext);
-  const { data } = useContext(UserDataFormContext);
+  const { data: { user: { data } } } = useContext(UserDataFormContext);
   const { donation } = useContext(UserDonationFormContext);
   const snackbarRef = useRef<ISnackbarRef>(null);
 
@@ -37,25 +40,12 @@ const Component: React.FunctionComponent<{}> = () => {
         snackbarRef.current.showSnackbar();
       }
     } else {
-      (async () => {
-        dispatch({ type: 'SUBMIT' });
-        const result = await save({
-          userAgent: window.navigator.userAgent,
-          percentDecrease: donation.percentDecrease,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          citizenId: data.citizenId,
-          areaCode: data.areaCode,
-          email: data.email,
-          mPhoneNumber: data.mobilePhoneNumber,
-        });
-        dispatch({ type: 'SUBMITTED' });
-        if(result.error) {
-          console.log('Error inesperado', result.message);
-        } else {
-          history.push(`/user/information?from=form-reduce`);
-        }
-      })();
+      setServiceForm('ReduceDonationForm');
+      setPayload({
+        percentDecrease: donation.percentDecrease,
+        mPhoneNumber: '',
+        areaCode: '', 
+      });
     }
   }, [
     path,
@@ -66,7 +56,16 @@ const Component: React.FunctionComponent<{}> = () => {
     dispatch,
     setShowFieldErrors,
   ]);
-  
+
+  useEffect(() => {
+    if(payload && serviceForm) {
+      history.push(`/user/information?from=form-reduce`);
+    }
+  }, [
+    payload,
+    serviceForm,
+  ]);
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       history.push({ pathname: `${path}/amounts` });
@@ -143,6 +142,10 @@ const Component: React.FunctionComponent<{}> = () => {
     formRef,
     snackbarRef,
     onSubmit,
+    payload,
+    serviceForm,
+    setPayload,
+    setServiceForm,
   ]);
 };
 

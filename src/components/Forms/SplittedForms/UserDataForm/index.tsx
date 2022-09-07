@@ -12,8 +12,13 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
   props: IProps,
   innerRef: React.ForwardedRef<IRef>
 ) => {
-  const { showFieldErrors, onUpdateFieldHandler, onFocusHandler } = useContext(FormContext);
-  const { data, dispatch } = useContext(UserDataFormContext);
+  const { 
+    showFieldErrors,
+    onUpdateFieldHandler,
+    onFocusHandler,
+  } = useContext(FormContext);
+      
+  const { data: { user: { data } }, dispatch } = useContext(UserDataFormContext);
 
   const onChangeHandler = useCallback((evt: OnChangeEvent) => {
     evt.preventDefault();
@@ -115,6 +120,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
               value={data.email}
               onChange={onChangeHandler}
               onFocus={onFocusHandler}
+              disabled={true}
             />
           </Form.Group>
         </Form.Column>

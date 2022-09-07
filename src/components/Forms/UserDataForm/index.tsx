@@ -6,7 +6,6 @@ import Layout from '../../Shared/Layout';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import { FormContext } from '../context';
 import UserDataForm, { IRef as IUserDataFormRef } from '../SplittedForms/UserDataForm';
-import { save } from './service';
 import { UserDataFormContext } from '../SplittedForms/UserDataForm/context';
 import { css } from 'styled-components';
 import Snackbar, { IRef as ISnackbarRef } from '../../Snackbar';
@@ -24,10 +23,12 @@ const Component: React.FunctionComponent<IProps> = ({ redirectTo }) => {
   const {
     totalErrors,
     submitting,
-    setShowFieldErrors,
+    payload,
+    serviceForm,
     dispatch,
+    setShowFieldErrors,
   } = useContext(FormContext);
-  const { data } = useContext(UserDataFormContext);
+  const { data: { user: { data }} } = useContext(UserDataFormContext);
   const snackbarRef = useRef<ISnackbarRef>(null);
 
   const onSubmit = useCallback((evt: FormEvent) => {
@@ -41,18 +42,28 @@ const Component: React.FunctionComponent<IProps> = ({ redirectTo }) => {
     } else {
       (async () => {
         dispatch({ type: 'SUBMIT' });
-        const result = await save({
-          firstName: data.firstName,
-          lastName: data.lastName,
-          citizenId: data.citizenId,
-          email: data.email,
-          campaignName: '',
-        });
-        if(result.error) {
-          console.log('Error inesperado', result.message);
-        } else {
-          if(redirectTo) {
-            history.push(redirectTo);
+
+        if(payload && serviceForm) {
+          const Service = await (import (`../${serviceForm}/service`));
+          if(Service) {
+            const { save } = Service;
+
+            const result = await save({
+              citizenId: data.citizenId,
+              email: data.email,
+              firstName: data.firstName,
+              lastName: data.lastName,
+              userAgent: window.navigator.userAgent,
+              ...payload,
+            });
+
+            if(result.error) {
+              console.log('Error inesperado', result.message);
+            } else {
+              if(redirectTo) {
+                history.push(redirectTo);
+              }
+            }
           }
         }
       })();
@@ -61,6 +72,8 @@ const Component: React.FunctionComponent<IProps> = ({ redirectTo }) => {
     data,
     totalErrors,
     history,
+    payload,
+    serviceForm,
     redirectTo,
     dispatch,
     setShowFieldErrors,
@@ -83,11 +96,6 @@ const Component: React.FunctionComponent<IProps> = ({ redirectTo }) => {
                 justify-content: space-between;
                 width: 100%;
 
-                /* > *:not(&:last-child) {
-                  margin-bottom: 0 !important;
-                  height: 100%;
-                } */
-
                 a {
                   padding: 0;
                   background: transparent;
@@ -107,7 +115,6 @@ const Component: React.FunctionComponent<IProps> = ({ redirectTo }) => {
                 @media (min-width: ${({ theme }) => pixelToRem(theme.responsive.tablet.minWidth)}) {
                   flex-direction: row !important;
                   align-items: center !important;
-                  /* justify-content: center !important; */
                 }
               `}
             >
@@ -134,8 +141,11 @@ const Component: React.FunctionComponent<IProps> = ({ redirectTo }) => {
     snackbarRef,
     redirectTo,
     onSubmit,
+    payload,
+    serviceForm,
   ]);
 };
 
 Component.displayName = 'UserDataForm';
 export default memo(Component);
+

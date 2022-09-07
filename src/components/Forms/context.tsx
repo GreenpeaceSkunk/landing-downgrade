@@ -6,6 +6,8 @@ import { UserFeedbackFormProvider } from './SplittedForms/UserFeedbackForm/conte
 import { UserPostponeFormProvider } from './SplittedForms/UserPostponeForm/context';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
+type ServiceFnType = 'CancelDonationForm' | 'ReduceDonationForm' | 'PostponeDonationForm';
+
 interface IContext {
   errors: ErrorsType;
   pathnames: string[];
@@ -23,6 +25,10 @@ interface IContext {
   onUpdateFieldHandler: (fieldName: string, isValid: boolean, value?: string|number) => void;
   onFocusHandler: (evt: FocusEvent) => void
   dispatch: (action: FormContextActionType) => void;
+  payload: any;
+  serviceForm: ServiceFnType | null;
+  setPayload: React.Dispatch<any>;
+  setServiceForm: React.Dispatch<ServiceFnType | null>;
 }
 
 interface IProps {
@@ -45,6 +51,9 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
   const [ currentIndex, setCurrentIndex ] = useState<number>(0);
   const [ totalErrors, setTotalErrors ] = useState<number>(0);
   const [ pathnames, setPathnames ] = useState<string[]>([]);
+
+  const [ payload, setPayload ] = useState<any>(null);
+  const [ serviceForm, setServiceForm ] = useState<ServiceFnType | null>(null);
 
   const onFocusHandler = useCallback((evt: FocusEvent) => {
     evt.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -79,6 +88,11 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
     isEdited,
   ]);
 
+  useEffect(() => {
+    setServiceForm(null);
+    setPayload(null);
+  }, []);
+
   return useMemo(() => (
     <Provider value={{
       errors,
@@ -97,6 +111,10 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
       onUpdateFieldHandler,
       onFocusHandler,
       dispatch,
+      serviceForm,
+      setServiceForm,
+      payload,
+      setPayload,
     }}>
       <UserDataFormProvider>
         <UserDonationFormProvider>
@@ -126,6 +144,10 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
     onUpdateFieldHandler,
     onFocusHandler,
     dispatch,
+    serviceForm,
+    setServiceForm,
+    payload,
+    setPayload,
   ]);
 };
 

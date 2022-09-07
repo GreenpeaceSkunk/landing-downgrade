@@ -1,10 +1,9 @@
-import React, { createContext, useMemo, useReducer } from 'react';
-import { UserContextActionType as ContextActionType, IUserData } from 'greenpeace';
-import { reducer, initialState } from '../../../App/reducer';
+import React, { createContext, useContext, useMemo } from 'react';
+import { AppContext } from '../../../App/context';
 
 interface IContext {
-  data: IUserData;
-  dispatch: (action: ContextActionType) => void;
+  data: any;
+  dispatch: React.Dispatch<any>;
 }
 
 interface IProps {
@@ -16,8 +15,8 @@ Context.displayName = 'UserDataFormContext';
 const { Provider, Consumer } = Context;
 
 const ContextProvider: React.FunctionComponent<IProps> = ({ children }) => {
-  const [ { user: { data } }, dispatch ] = useReducer(reducer, initialState);
-
+  const { data, dispatch } = useContext(AppContext);
+ 
   return useMemo(() => (
     <Provider value={{
       data,

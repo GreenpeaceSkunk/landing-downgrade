@@ -8,7 +8,6 @@ import { FormContext } from '../context';
 import UserFeedbackForm, { IRef as IUserFeedbackRef } from '../SplittedForms/UserFeedbackForm';
 import { UserDataFormContext } from '../SplittedForms/UserDataForm/context';
 import { UserFeedbackFormContext } from '../SplittedForms/UserFeedbackForm/context';
-import { save } from './service';
 import Snackbar, { IRef as ISnackbarRef } from '../../Snackbar';
 import { css } from 'styled-components';
 import { pixelToRem } from 'meema.utils';
@@ -20,8 +19,12 @@ const Component: React.FunctionComponent<{}> = () => {
     submitting,
     setShowFieldErrors,
     dispatch,
+    payload,
+    serviceForm,
+    setPayload,
+    setServiceForm,
   } = useContext(FormContext);
-  const { data } = useContext(UserDataFormContext);
+  const { data: { user: { data } } } = useContext(UserDataFormContext);
   const { feedback } = useContext(UserFeedbackFormContext);
   const formRef = useRef<HTMLFormElement>(null);
   const userFeedbackFormRef = useRef<IUserFeedbackRef>(null);
@@ -36,28 +39,15 @@ const Component: React.FunctionComponent<{}> = () => {
       if(snackbarRef && snackbarRef.current) {
         snackbarRef.current.showSnackbar();
       }
-    } else {
-      (async () => {
-        dispatch({ type: 'SUBMIT' });
-        const result = await save({
-          userAgent: window.navigator.userAgent,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          citizenId: data.citizenId,
-          areaCode: data.areaCode,
-          email: data.email,
-          mPhoneNumber: data.mobilePhoneNumber,
-          userFeedback: feedback.selectedOption,
-          userComment: feedback.comment,
-        });
-        dispatch({ type: 'SUBMITTED' });
-        if(result.error) {
-          console.log('Error inesperado', result.message);
-        } else {
-          history.push(`/user/information?from=form-cancel`);
-        }
-      })();
-    }
+  } else {
+    setServiceForm('CancelDonationForm');
+    setPayload({
+      areaCode: '',
+      mPhoneNumber: '',
+      userFeedback: feedback.selectedOption,
+      userComment: feedback.comment,
+    });
+  }
   }, [
     totalErrors,
     data,
@@ -66,6 +56,15 @@ const Component: React.FunctionComponent<{}> = () => {
     path,
     dispatch,
     setShowFieldErrors,
+  ]);
+
+  useEffect(() => {
+    if(payload && serviceForm) {
+      history.push(`/user/information?from=form-cancel`);
+    }
+  }, [
+    payload,
+    serviceForm,
   ]);
   
   useEffect(() => {
@@ -141,6 +140,10 @@ const Component: React.FunctionComponent<{}> = () => {
     formRef,
     snackbarRef,
     onSubmit,
+    payload,
+    serviceForm,
+    setPayload,
+    setServiceForm,
   ]);
 };
 

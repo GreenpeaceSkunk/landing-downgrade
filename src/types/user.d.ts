@@ -28,7 +28,7 @@ export type ContextStateType = {
 } & SharedState;
 
 export type ContextActionType = 
-| { type: 'UPDATE_USER_INFORMATION', payload: PayloadObjectType }
+| { type: 'UPDATE_HUBSPOT_USER_INFORMATION', payload: PayloadObjectType }
 | { type: 'UPDATE_USER_DONATION', payload: PayloadObjectType }
 | { type: 'UPDATE_USER_FEEDBACK', payload: PayloadObjectType }
 | SharedActions;

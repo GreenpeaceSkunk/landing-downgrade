@@ -37,7 +37,6 @@ const routing: RouteType = {
 
 const ContentSlider: React.FunctionComponent<{}> = memo(() => {
   const { submitted } = useContext(FormContext);
-  const [ currentIndex, setCurrentIndex ] = useState();
   const [ currentPath, setCurrentPath ] = useState<PathType | null>(null);
   const { pathname } = useLocation();
   const videoPlayerRef = useRef<IVideoPlayerRef>(null);
@@ -96,9 +95,7 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
 
         <Route path='/about-us'>
           <ContentSliderItem title='Antes de seguir, recordá que en Greenpeace:'>
-            <Elements.Wrapper
-              
-            >
+            <Elements.Wrapper>
               <Layout.Cards>
                 <Card
                   title='No recibimos aportes de empresas privadas.'
@@ -194,7 +191,6 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
     </>
   ), [
     params,
-    currentIndex,
     currentPath,
     allowContinue,
     submitted,

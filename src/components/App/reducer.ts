@@ -39,10 +39,24 @@ export const initialState: ContextStateType = {
     },
   } as IUser,
   error: null,
-}
+};
 
 export const reducer: GenericReducerFn<ContextStateType, ContextActionType> = (state: ContextStateType, action: ContextActionType) => {
   switch (action.type) {
+    case 'UPDATE_HUBSPOT_USER_INFORMATION': 
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          data: {
+            ...state.user.data,
+            firstName: action.payload.firstname,
+            lastName: action.payload.lastname,
+            email: action.payload.email,
+          }
+        },
+      }
+    break;
     case 'UPDATE_USER_DATA':
       return {
         ...state,

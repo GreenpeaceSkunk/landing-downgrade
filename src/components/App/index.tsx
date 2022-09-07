@@ -1,7 +1,7 @@
-import React, { Suspense, lazy, memo, useMemo, useEffect } from 'react';
+import React, { Suspense, lazy, memo, useMemo, useEffect, useContext, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import ErrorBoundary from '../ErrorBoundary';
-import { AppProvider } from './context';
+import { AppContext, AppProvider } from './context';
 import { initialize as initializeTagManager, pushToDataLayer } from '../../utils/googleTagManager';
 import { initialize as inititalizeAnalytics, trackPage } from '../../utils/googleAnalytics';
 import { initialize as initializeFacebookPixel, trackEvent } from '../../utils/facebookPixel';
@@ -13,6 +13,8 @@ import { css } from 'styled-components';
 import { pixelToRem } from 'meema.utils';
 import { FormProvider } from '../Forms/context';
 import { scrollToTop } from '../../utils';
+import useQuery from '../../hooks/useQuery';
+import { getUserById } from '../../services/greenlab';
 
 const AppRouter = lazy(() => import('./router'));
 
@@ -26,6 +28,10 @@ if(process.env.NODE_ENV === 'production') {
 
 const Component: React.FunctionComponent<{}> = memo(() => {
   const { pathname } = useLocation();
+  const queryParams = useQuery();
+  const { data, dispatch } = useContext(AppContext);
+  const [ allowedUser, setAllowedUser ] = useState<boolean>(false);
+  const [ fetchingUser, setFetchingUser ] = useState<boolean>(true);
 
   useEffect(() => {
     scrollToTop();
@@ -35,6 +41,23 @@ const Component: React.FunctionComponent<{}> = memo(() => {
       trackPage("", pathname, "");
     }
   }, [ pathname ]);
+
+  useEffect(() => {
+    (async () => {
+      if(queryParams.get('memberId')) {
+        const user = await getUserById(`${queryParams.get('memberId')}`);
+
+        setAllowedUser(true);
+        setFetchingUser(false);
+        if(user) {
+          dispatch({
+            type: 'UPDATE_HUBSPOT_USER_INFORMATION',
+            payload: user,
+          });
+        }
+      }
+    })();
+  }, []);
 
   return useMemo(() => (
     <Wrapper
@@ -47,13 +70,34 @@ const Component: React.FunctionComponent<{}> = memo(() => {
         }
       `}
     >
-      <ErrorBoundary fallback='App Error.'>
-        <Suspense fallback={<Loader mode='default' />}>
-          <AppRouter />
-        </Suspense>
-      </ErrorBoundary>
+      <>
+        {(fetchingUser && !allowedUser) ? (
+          <Wrapper
+            customCss={css`
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              height: 100%;
+            `}
+          >
+            <Loader mode='default' />
+          </Wrapper>
+        ) : (
+          <ErrorBoundary fallback='App Error.'>
+            <Suspense fallback={<Loader mode='default' />}>
+              <AppRouter />
+            </Suspense>
+          </ErrorBoundary>
+        )}
+        
+      </>
     </Wrapper>
-  ), []);
+  ), [
+    data,
+    allowedUser,
+    fetchingUser,
+    dispatch,
+  ]);
 })
 
 Component.displayName = 'App';

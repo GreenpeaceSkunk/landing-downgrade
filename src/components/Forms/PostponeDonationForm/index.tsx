@@ -23,8 +23,12 @@ const Component: React.FunctionComponent<{}> = () => {
     submitting,
     setShowFieldErrors,
     dispatch,
+    payload,
+    serviceForm,
+    setPayload,
+    setServiceForm,
   } = useContext(FormContext);
-  const { data } = useContext(UserDataFormContext);
+  const { data: { user: { data } } } = useContext(UserDataFormContext);
   const { donation } = useContext(UserPostponeFormContext);
   const snackbarRef = useRef<ISnackbarRef>(null);
 
@@ -36,25 +40,12 @@ const Component: React.FunctionComponent<{}> = () => {
       if(snackbarRef && snackbarRef.current) {
         snackbarRef.current.showSnackbar();
       }
-    } else {
-      (async () => {
-        dispatch({ type: 'SUBMIT' });
-        const result = await save({
-          userAgent: window.navigator.userAgent,
-          postponeUntil: donation.postponeUntil,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          citizenId: data.citizenId,
-          email: data.email,
-        });
-        dispatch({ type: 'SUBMITTED' });
-        if(result.error) {
-          console.log('Error inesperado', result.message);
-        } else {
-          history.push(`/user/information?from=form-postpone`);
-        }
-      })();
-    }
+  } else {
+    setServiceForm('PostponeDonationForm');
+    setPayload({
+      postponeUntil: donation.postponeUntil,
+    });
+  }
   }, [
     path,
     data,
@@ -63,6 +54,15 @@ const Component: React.FunctionComponent<{}> = () => {
     history,
     dispatch,
     setShowFieldErrors,
+  ]);
+
+  useEffect(() => {
+    if(payload && serviceForm) {
+      history.push(`/user/information?from=form-postpone`);
+    }
+  }, [
+    payload,
+    serviceForm,
   ]);
   
   useEffect(() => {
@@ -141,6 +141,10 @@ const Component: React.FunctionComponent<{}> = () => {
     formRef,
     snackbarRef,
     onSubmit,
+    payload,
+    serviceForm,
+    setPayload,
+    setServiceForm,
   ]);
 };
 

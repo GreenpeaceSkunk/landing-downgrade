@@ -1,13 +1,16 @@
-import React, { createContext, useMemo } from "react";
+import React, { createContext, useMemo, useReducer } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import useQuery from "../../hooks/useQuery";
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from '../../theme/globalStyle';
 import {LightTheme as Theme} from '../../theme/Theme';
 import ErrorBoundary from '../ErrorBoundary';
+import { reducer, initialState } from './reducer';
 
 interface IContext {
+  data: any;
   queryParams: URLSearchParams;
+  dispatch: React.Dispatch<any>;
 }
 
 interface IProps {
@@ -20,10 +23,13 @@ const { Provider, Consumer } = Context;
 
 const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = ({ children }) => {
   const queryParams = useQuery();
+  const [ data, dispatch ] = useReducer(reducer, initialState);
 
   return useMemo(() => (
     <Provider value={{
+      data,
       queryParams,
+      dispatch,
     }}>
       <ThemeProvider theme={Theme}>
         <GlobalStyle />
@@ -33,8 +39,10 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
       </ThemeProvider>
     </Provider>
   ), [
-    queryParams,
     children,
+    data,
+    queryParams,
+    dispatch,
   ]);
 };
 
