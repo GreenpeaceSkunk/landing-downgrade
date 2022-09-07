@@ -7,7 +7,7 @@ const ApiCall = async <A>(config: AxiosRequestConfig) => {
       method: config.method,
       baseURL: config.baseURL ? config.baseURL : `${process.env.REACT_APP_API_URL}`,
       url: config.url,
-      headers: {},
+      headers: { "X-Greenlab-App": "greenlab-membership-downgrade-app" },
       data: config.data,
       params: config.params,
     });
