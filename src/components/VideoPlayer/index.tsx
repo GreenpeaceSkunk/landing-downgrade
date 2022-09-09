@@ -26,14 +26,16 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
 ) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [ playingVideo, setPlayingVideo ] = useState<boolean>(false);
+  const [ buttonDisabled, setButtonDisabled ] = useState<boolean>(true);
   const { queryParams } = useContext(AppContext);
 
   const onEnded = useCallback(() => {
+    setButtonDisabled(false);
     if(onEndedHandler) {
       onEndedHandler();
     }
   }, [
-    allowNext,
+    buttonDisabled,
     onEndedHandler,
   ]);
 
@@ -104,23 +106,26 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
           }
         />
       </Wrapper>
-      <Elements.Nav
-        customCss={css`
-          display: flex;
-          align-self: flex-end;
-          justify-content: flex-end;
-          margin-top: ${pixelToRem(60)};
-        `}
-      >
-        <Layout.ButtonLink to={`/about-us?${queryParams}`} disabled={!allowNext}>
-          Continuar
-        </Layout.ButtonLink>
-      </Elements.Nav>
+      {allowNext && (
+        <Elements.Nav
+          customCss={css`
+            display: flex;
+            align-self: flex-end;
+            justify-content: flex-end;
+            margin-top: ${pixelToRem(60)};
+          `}
+        >
+          <Layout.ButtonLink to={`/about-us?${queryParams}`} disabled={buttonDisabled}>
+            Continuar
+          </Layout.ButtonLink>
+        </Elements.Nav>
+      )}
     </Wrapper>
   ), [
     allowNext,
     videoUrl,
     playingVideo,
+    buttonDisabled,
     queryParams,
     onEnded,
   ]);

@@ -125,7 +125,7 @@ const Component: React.FunctionComponent<{}> = () => {
                   height: 100%;
                 }
               `}>
-                <Layout.ButtonLink format='text' to='/about-us'>Volver</Layout.ButtonLink>
+                <Layout.ButtonLink format='text' to={`/about-us?${queryParams}`}>Volver</Layout.ButtonLink>
                 <Layout.Button
                   type='submit'
                   format='contained'
