@@ -22,7 +22,7 @@ Context.displayName = 'AppContext';
 const { Provider, Consumer } = Context;
 
 const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = ({ children }) => {
-  const [ data, dispatch ] = useReducer(reducer, initialState);
+  const [ data,  dispatch ] = useReducer(reducer, initialState);
   const queryParams = useQuery();
   const { pathname } = useLocation();
 

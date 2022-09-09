@@ -62,6 +62,8 @@ const Component: React.FunctionComponent<IProps> = ({ redirectTo }) => {
             if(result.error) {
               console.log('Error inesperado', result.message);
             } else {
+              dispatch({ type: 'SUBMITTED' });
+              
               if(redirectTo) {
                 history.push({
                   pathname: `${redirectTo}`,

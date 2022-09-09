@@ -73,14 +73,14 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
   return useMemo(() => (
     <>
       <Switch>
-
         <Route path='/video'>
           <ContentSliderItem title='Por favor, <em>mirá el video</em> antes de continuar'>
             <React.Suspense fallback={'User data form error'}>
               <VideoPlayer
                 ref={videoPlayerRef}
-                videoUrl='https://www.youtube.com/watch?v=FXr3_zGc0O4' 
-                onEndedHandler={() => { setAllowContinue(true) }}  
+                videoUrl='https://www.youtube.com/watch?v=FXr3_zGc0O4'
+                allowNext={submitted}
+                onEndedHandler={() => {}}
               />
             </React.Suspense>
           </ContentSliderItem>

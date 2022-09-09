@@ -9,7 +9,8 @@ import { AppContext } from '../App/context';
 
 interface IProps {
   videoUrl: string;
-  onEndedHandler: () => void;
+  allowNext: boolean;
+  onEndedHandler?: () => void;
 }
 export interface IRef {
   onPlayVideo: () => void;
@@ -18,17 +19,16 @@ export interface IRef {
 const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
   {
     videoUrl,
+    allowNext = true,
     onEndedHandler,
   }: IProps,
   innerRef: React.ForwardedRef<IRef>
 ) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [ playingVideo, setPlayingVideo ] = useState<boolean>(false);
-  const [ allowNext, setAllowNext ] = useState<boolean>(false);
   const { queryParams } = useContext(AppContext);
 
   const onEnded = useCallback(() => {
-    setAllowNext(true);
     if(onEndedHandler) {
       onEndedHandler();
     }
@@ -112,7 +112,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
           margin-top: ${pixelToRem(60)};
         `}
       >
-        <Layout.ButtonLink to={`/about-us?${queryParams}`} disabled={!allowNext}>
+        <Layout.ButtonLink to={`/about-us?${queryParams}`} disabled={allowNext}>
           Continuar
         </Layout.ButtonLink>
       </Elements.Nav>
