@@ -6,10 +6,12 @@ import Images from '../../../../images';
 import Layout from '../../../Shared/Layout';
 import { updateContact } from '../../../../services/greenlab';
 import { UserDataFormContext } from '../../SplittedForms/UserDataForm/context';
+import { AppContext } from '../../../App/context';
 
 const Component: React.FunctionComponent<{}> = () => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const { data: { user: { data } } } = useContext(UserDataFormContext);
+  const { queryParams } = useContext(AppContext);
 
   useEffect(() => {
     (async () => {
@@ -64,12 +66,13 @@ const Component: React.FunctionComponent<{}> = () => {
         }
       `}>
         <Layout.Link href='https://www.greenpeace.org/argentina/campanas/' target='_blank'>Conocé más sobre Greenpeace</Layout.Link>
-        <Layout.ButtonLink to='/' format='text' >Volver al inicio</Layout.ButtonLink>
+        <Layout.ButtonLink to={`/?${queryParams}`} format='text' >Volver al inicio</Layout.ButtonLink>
       </Elements.Nav>
     </Elements.Wrapper>
   ), [
     wrapperRef,
     data,
+    queryParams,
   ]);
 };
 

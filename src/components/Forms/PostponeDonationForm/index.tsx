@@ -12,6 +12,7 @@ import { UserDataFormContext } from '../SplittedForms/UserDataForm/context';
 import { UserPostponeFormContext } from '../SplittedForms/UserPostponeForm/context';
 import { css } from 'styled-components';
 import Snackbar, { IRef as ISnackbarRef } from '../../Snackbar';
+import { AppContext } from '../../App/context';
 
 const Component: React.FunctionComponent<{}> = () => {
   const history = useHistory();
@@ -31,6 +32,7 @@ const Component: React.FunctionComponent<{}> = () => {
   const { data: { user: { data } } } = useContext(UserDataFormContext);
   const { donation } = useContext(UserPostponeFormContext);
   const snackbarRef = useRef<ISnackbarRef>(null);
+  const { queryParams } = useContext(AppContext);
 
   const onSubmit = useCallback((evt: FormEvent) => {
     evt.preventDefault();
@@ -58,7 +60,10 @@ const Component: React.FunctionComponent<{}> = () => {
 
   useEffect(() => {
     if(payload && serviceForm) {
-      history.push(`/user/information?from=form-postpone`);
+      history.push({
+        pathname: `/user/information`,
+        search: `?${queryParams}&from=form-postpone`,
+      });
     }
   }, [
     payload,
@@ -67,7 +72,10 @@ const Component: React.FunctionComponent<{}> = () => {
   
   useEffect(() => {
     const timeout = setTimeout(() => {
-      history.push({ pathname: `${path}/time` });
+      history.push({
+        pathname: `${path}/time`,
+        search: `${queryParams}`,
+      });
     }, 200);
 
     return () => {
@@ -119,7 +127,7 @@ const Component: React.FunctionComponent<{}> = () => {
                   height: 100%;
                 }
               `}>
-                <Layout.ButtonLink format='text' to='/about-us'>Volver</Layout.ButtonLink>
+                <Layout.ButtonLink format='text' to={`/about-us${queryParams}`}>Volver</Layout.ButtonLink>
                 <Layout.Button
                   type='submit'
                   format='contained'
@@ -140,11 +148,12 @@ const Component: React.FunctionComponent<{}> = () => {
     submitting,
     formRef,
     snackbarRef,
-    onSubmit,
     payload,
     serviceForm,
+    queryParams,
     setPayload,
     setServiceForm,
+    onSubmit,
   ]);
 };
 

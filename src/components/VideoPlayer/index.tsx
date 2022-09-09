@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import Elements, { Wrapper } from '@bit/meema.ui-components.elements';
 import { pixelToRem } from 'meema.utils';
 import ReactPlayer from 'react-player/lazy';
 import { css } from 'styled-components';
 import { Loader } from '../Shared';
 import Layout from '../Shared/Layout';
+import { AppContext } from '../App/context';
 
 interface IProps {
   videoUrl: string;
@@ -24,6 +25,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [ playingVideo, setPlayingVideo ] = useState<boolean>(false);
   const [ allowNext, setAllowNext ] = useState<boolean>(false);
+  const { queryParams } = useContext(AppContext);
 
   const onEnded = useCallback(() => {
     setAllowNext(true);
@@ -110,7 +112,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
           margin-top: ${pixelToRem(60)};
         `}
       >
-        <Layout.ButtonLink to='/about-us' disabled={!allowNext}>
+        <Layout.ButtonLink to={`/about-us?${queryParams}`} disabled={!allowNext}>
           Continuar
         </Layout.ButtonLink>
       </Elements.Nav>
@@ -119,6 +121,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
     allowNext,
     videoUrl,
     playingVideo,
+    queryParams,
     onEnded,
   ]);
 });

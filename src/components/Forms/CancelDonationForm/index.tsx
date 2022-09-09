@@ -11,6 +11,7 @@ import { UserFeedbackFormContext } from '../SplittedForms/UserFeedbackForm/conte
 import Snackbar, { IRef as ISnackbarRef } from '../../Snackbar';
 import { css } from 'styled-components';
 import { pixelToRem } from 'meema.utils';
+import { AppContext } from '../../App/context';
 
 const Component: React.FunctionComponent<{}> = () => {
   const history = useHistory();
@@ -24,6 +25,7 @@ const Component: React.FunctionComponent<{}> = () => {
     setPayload,
     setServiceForm,
   } = useContext(FormContext);
+  const { queryParams } = useContext(AppContext);
   const { data: { user: { data } } } = useContext(UserDataFormContext);
   const { feedback } = useContext(UserFeedbackFormContext);
   const formRef = useRef<HTMLFormElement>(null);
@@ -60,7 +62,10 @@ const Component: React.FunctionComponent<{}> = () => {
 
   useEffect(() => {
     if(payload && serviceForm) {
-      history.push(`/user/information?from=form-cancel`);
+      history.push({
+        pathname: `/user/information`,
+        search: `?${queryParams}&from=form-cancel`,
+      });
     }
   }, [
     payload,
@@ -69,7 +74,10 @@ const Component: React.FunctionComponent<{}> = () => {
   
   useEffect(() => {
     const timeout = setTimeout(() => {
-      history.push({ pathname: `${path}/feedback` });
+      history.push({
+        pathname: `${path}/feedback`,
+        search: `${queryParams}`,
+      });
     }, 200);
 
     return () => {
@@ -118,7 +126,7 @@ const Component: React.FunctionComponent<{}> = () => {
                   height: 100%;
                 }
               `}>
-                <Layout.ButtonLink format='text' to='/about-us'>Volver</Layout.ButtonLink>
+                <Layout.ButtonLink format='text' to={`/about-us${queryParams}`}>Volver</Layout.ButtonLink>
                 <Layout.Button
                   type='submit'
                   format='contained'
@@ -139,9 +147,10 @@ const Component: React.FunctionComponent<{}> = () => {
     submitting,
     formRef,
     snackbarRef,
-    onSubmit,
     payload,
     serviceForm,
+    queryParams,
+    onSubmit,
     setPayload,
     setServiceForm,
   ]);

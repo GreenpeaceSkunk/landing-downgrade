@@ -27,11 +27,11 @@ if(process.env.NODE_ENV === 'production') {
 }
 
 const Component: React.FunctionComponent<{}> = memo(() => {
-  const { pathname } = useLocation();
-  const queryParams = useQuery();
-  const { data, dispatch } = useContext(AppContext);
   const [ allowedUser, setAllowedUser ] = useState<boolean>(false);
   const [ fetchingUser, setFetchingUser ] = useState<boolean>(true);
+  const { data, dispatch } = useContext(AppContext);
+  const { pathname } = useLocation();
+  const queryParams = useQuery();
 
   useEffect(() => {
     scrollToTop();
@@ -49,6 +49,7 @@ const Component: React.FunctionComponent<{}> = memo(() => {
 
         setAllowedUser(true);
         setFetchingUser(false);
+
         if(user) {
           dispatch({
             type: 'UPDATE_HUBSPOT_USER_INFORMATION',

@@ -1,5 +1,5 @@
-import React, { createContext, useMemo, useReducer } from "react";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import React, { createContext, useEffect, useMemo, useReducer } from "react";
+import { RouteComponentProps, useLocation, withRouter } from "react-router-dom";
 import useQuery from "../../hooks/useQuery";
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from '../../theme/globalStyle';
@@ -22,8 +22,18 @@ Context.displayName = 'AppContext';
 const { Provider, Consumer } = Context;
 
 const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = ({ children }) => {
-  const queryParams = useQuery();
   const [ data, dispatch ] = useReducer(reducer, initialState);
+  const queryParams = useQuery();
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    if(pathname === '/' && queryParams.get('from')) {
+      queryParams.delete('from');
+    }
+  }, [
+    pathname,
+    queryParams,
+  ]);
 
   return useMemo(() => (
     <Provider value={{

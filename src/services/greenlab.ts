@@ -1,5 +1,7 @@
 import { ApiCall } from '../utils/apiCall';
 
+const greenlab_app_name = 'membership-downgrade-app'; // hardcoded through the apiCall
+
 export const getApiUrl = (): string => {
   return (`${process.env.REACT_APP_ENVIRONMENT}` === 'development')
     ? `${process.env.REACT_APP_GREENLAB_API_URL}`
@@ -10,7 +12,7 @@ export const updateContact = async (email: string, data: any) => {
   try {
     const response = await ApiCall({
       headers: {
-        'X-Greenlab-App': `${window.sessionStorage.getItem('greenlab_app_name')}`,
+        'X-Greenlab-App': greenlab_app_name,
       },
       baseURL: `${getApiUrl()}/hubspot/contact/email/${email}`,
       method: 'POST',
@@ -26,7 +28,7 @@ export const getUserByEmail = async (email: string) => {
   try {
     const response = await ApiCall({
       headers: {
-        'X-Greenlab-App': `${window.sessionStorage.getItem('greenlab_app_name')}`,
+        'X-Greenlab-App': greenlab_app_name,
       },
       baseURL: `${getApiUrl()}/hubspot/contact/email/${email}`,
       method: 'GET',
@@ -42,7 +44,7 @@ export const getUserById = async (id: string) => {
   try {
     const response = await ApiCall({
       headers: {
-        'X-Greenlab-App': `${window.sessionStorage.getItem('greenlab_app_name')}`,
+        'X-Greenlab-App': greenlab_app_name,
       },
       baseURL: `${getApiUrl()}/hubspot/contact/id/${id}`,
       method: 'GET',

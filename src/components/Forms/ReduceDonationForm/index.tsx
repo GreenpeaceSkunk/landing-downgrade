@@ -11,6 +11,7 @@ import { UserDataFormContext } from '../SplittedForms/UserDataForm/context';
 import { UserDonationFormContext } from '../SplittedForms/UserDonationForm/context';
 import { css } from 'styled-components';
 import Snackbar, { IRef as ISnackbarRef } from '../../Snackbar';
+import { AppContext } from '../../App/context';
 
 const Component: React.FunctionComponent<{}> = () => {
   const history = useHistory();
@@ -29,6 +30,7 @@ const Component: React.FunctionComponent<{}> = () => {
   } = useContext(FormContext);
   const { data: { user: { data } } } = useContext(UserDataFormContext);
   const { donation } = useContext(UserDonationFormContext);
+  const { queryParams } = useContext(AppContext);
   const snackbarRef = useRef<ISnackbarRef>(null);
 
   const onSubmit = useCallback((evt: FormEvent) => {
@@ -59,7 +61,10 @@ const Component: React.FunctionComponent<{}> = () => {
 
   useEffect(() => {
     if(payload && serviceForm) {
-      history.push(`/user/information?from=form-reduce`);
+      history.push({
+        pathname: `/user/information`,
+        search: `?${queryParams}&from=form-reduce`,
+      });
     }
   }, [
     payload,
@@ -141,11 +146,12 @@ const Component: React.FunctionComponent<{}> = () => {
     submitting,
     formRef,
     snackbarRef,
-    onSubmit,
     payload,
     serviceForm,
+    queryParams,
     setPayload,
     setServiceForm,
+    onSubmit,
   ]);
 };
 

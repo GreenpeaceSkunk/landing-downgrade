@@ -9,7 +9,7 @@ import Card from '../Card';
 import VideoPlayer, { IRef as IVideoPlayerRef } from '../VideoPlayer';
 import { Loader } from '../Shared';
 import { FormContext } from '../Forms/context';
-import useQuery from '../../hooks/useQuery';
+import { AppContext } from '../App/context';
 
 const UserDataForm = lazy(() => import('../Forms/UserDataForm'));
 const CancelDonationForm = lazy(() => import('../Forms/CancelDonationForm'));
@@ -37,12 +37,12 @@ const routing: RouteType = {
 
 const ContentSlider: React.FunctionComponent<{}> = memo(() => {
   const { submitted } = useContext(FormContext);
+  const { queryParams} = useContext(AppContext);
   const [ currentPath, setCurrentPath ] = useState<PathType | null>(null);
   const { pathname } = useLocation();
   const videoPlayerRef = useRef<IVideoPlayerRef>(null);
   const history = useHistory();
   const [ allowContinue, setAllowContinue ] = useState<boolean>(false);
-  const params = useQuery();
 
   useEffect(() => {
     if(pathname !== '/') {
@@ -52,15 +52,19 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
     }
   }, [
     pathname,
+    queryParams,
   ]);
         
   useEffect(() => {
     if(currentPath) {
       history.push({
         pathname: `${currentPath.path}`,
+        search: `${queryParams}`,
       });
     }
-  }, [ currentPath ]);
+  }, [
+    currentPath,
+  ]);
 
   useEffect(() => {
     setCurrentPath(routing['video']);
@@ -88,7 +92,7 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
             text='Siempre podrás reducir el monto de tu donación, postergar tu aporte o cancelarlo, sin vueltas. Si aún no estás seguro, podés hacerlo en otro momento.'
           >
             <React.Suspense fallback={'User data form error'}>
-              <UserDataForm redirectTo={`/${(params.get('from') || '').replace(/\-/g, '/')}/thankyou`} />
+              <UserDataForm redirectTo={`/${(queryParams.get('from') || '').replace(/\-/g, '/')}/thankyou`} />
             </React.Suspense>
           </ContentSliderItem>
         </Route>
@@ -144,9 +148,9 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
                     }
                   }
                 `}>
-                <Layout.ButtonLink to='/form/cancel'>Cancelar mi donación</Layout.ButtonLink>
-                <Layout.ButtonLink to='/form/reduce'>Reducir el monto</Layout.ButtonLink>
-                <Layout.ButtonLink to='/form/postpone'>Postergar mi donación</Layout.ButtonLink>
+                <Layout.ButtonLink to={`/form/cancel?${queryParams}`}>Cancelar mi donación</Layout.ButtonLink>
+                <Layout.ButtonLink to={`/form/reduce?${queryParams}`}>Reducir el monto</Layout.ButtonLink>
+                <Layout.ButtonLink to={`/form/postpone?${queryParams}`}>Postergar mi donación</Layout.ButtonLink>
               </Elements.Nav>
             </Elements.Wrapper>
           </ContentSliderItem>
@@ -190,7 +194,7 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
       </Switch>
     </>
   ), [
-    params,
+    queryParams,
     currentPath,
     allowContinue,
     submitted,

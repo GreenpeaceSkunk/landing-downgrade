@@ -10,6 +10,7 @@ import { UserDataFormContext } from '../SplittedForms/UserDataForm/context';
 import { css } from 'styled-components';
 import Snackbar, { IRef as ISnackbarRef } from '../../Snackbar';
 import { pixelToRem } from 'meema.utils';
+import { AppContext } from '../../App/context';
 
 interface IProps {
   redirectTo: string;
@@ -28,6 +29,7 @@ const Component: React.FunctionComponent<IProps> = ({ redirectTo }) => {
     dispatch,
     setShowFieldErrors,
   } = useContext(FormContext);
+  const { queryParams } = useContext(AppContext);
   const { data: { user: { data }} } = useContext(UserDataFormContext);
   const snackbarRef = useRef<ISnackbarRef>(null);
 
@@ -61,7 +63,10 @@ const Component: React.FunctionComponent<IProps> = ({ redirectTo }) => {
               console.log('Error inesperado', result.message);
             } else {
               if(redirectTo) {
-                history.push(redirectTo);
+                history.push({
+                  pathname: `${redirectTo}`,
+                  search: `${queryParams}`,
+                });
               }
             }
           }
@@ -75,6 +80,7 @@ const Component: React.FunctionComponent<IProps> = ({ redirectTo }) => {
     payload,
     serviceForm,
     redirectTo,
+    queryParams,
     dispatch,
     setShowFieldErrors,
   ]);
@@ -140,9 +146,10 @@ const Component: React.FunctionComponent<IProps> = ({ redirectTo }) => {
     formRef,
     snackbarRef,
     redirectTo,
-    onSubmit,
+    queryParams,
     payload,
     serviceForm,
+    onSubmit,
   ]);
 };
 
