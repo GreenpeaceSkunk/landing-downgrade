@@ -40,7 +40,6 @@ export const getUserByEmail = async (email: string) => {
 }
 
 export const getUserById = async (id: string) => {
-  console.log(getApiUrl());
   try {
     const response = await ApiCall({
       headers: {
