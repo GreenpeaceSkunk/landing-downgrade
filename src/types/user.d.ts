@@ -4,6 +4,7 @@ export interface IUserData {
   citizenId: string;
   email: string;
   mobilePhoneNumber: string;
+  estado_landing_de_bajas: '' | 'cancelled' | 'reduced' | 'postponed';
   areaCode: string;
 }
 

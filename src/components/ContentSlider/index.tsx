@@ -37,7 +37,7 @@ const routing: RouteType = {
 
 const ContentSlider: React.FunctionComponent<{}> = memo(() => {
   const { submitted } = useContext(FormContext);
-  const { queryParams} = useContext(AppContext);
+  const { queryParams, data: { user: { data } } } = useContext(AppContext);
   const [ currentPath, setCurrentPath ] = useState<PathType | null>(null);
   const { pathname } = useLocation();
   const videoPlayerRef = useRef<IVideoPlayerRef>(null);
@@ -79,7 +79,7 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
               <VideoPlayer
                 ref={videoPlayerRef}
                 videoUrl='https://www.youtube.com/watch?v=FXr3_zGc0O4'
-                allowNext={submitted}
+                allowNext={(!submitted && data.estado_landing_de_bajas === '')}
                 onEndedHandler={() => {}}
               />
             </React.Suspense>
@@ -198,6 +198,7 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
     currentPath,
     allowContinue,
     submitted,
+    data,
   ]);
 });
 

@@ -112,7 +112,7 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
           margin-top: ${pixelToRem(60)};
         `}
       >
-        <Layout.ButtonLink to={`/about-us?${queryParams}`} disabled={allowNext}>
+        <Layout.ButtonLink to={`/about-us?${queryParams}`} disabled={!allowNext}>
           Continuar
         </Layout.ButtonLink>
       </Elements.Nav>

@@ -16,6 +16,7 @@ export const initialState: ContextStateType = {
       email: '',
       areaCode: '',
       mobilePhoneNumber: '',
+      estado_landing_de_bajas: '',
       ...(autofill ? {
         firstName: 'Doe',
         lastName: 'Deer',
@@ -53,6 +54,7 @@ export const reducer: GenericReducerFn<ContextStateType, ContextActionType> = (s
             firstName: action.payload.firstname,
             lastName: action.payload.lastname,
             email: action.payload.email,
+            estado_landing_de_bajas: action.payload.estado_landing_de_bajas,
           }
         },
       }
