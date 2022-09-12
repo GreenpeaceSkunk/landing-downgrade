@@ -79,7 +79,7 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
               <VideoPlayer
                 ref={videoPlayerRef}
                 videoUrl='https://www.youtube.com/watch?v=FXr3_zGc0O4'
-                allowNext={(!submitted && data.estado_landing_de_bajas === '')}
+                allowNext={(!submitted)}
                 onEndedHandler={() => {}}
               />
             </React.Suspense>
