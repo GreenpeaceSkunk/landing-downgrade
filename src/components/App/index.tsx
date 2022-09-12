@@ -5,8 +5,6 @@ import { AppContext, AppProvider } from './context';
 import { initialize as initializeTagManager, pushToDataLayer } from '../../utils/googleTagManager';
 import { initialize as inititalizeAnalytics, trackPage } from '../../utils/googleAnalytics';
 import { initialize as initializeFacebookPixel, trackEvent } from '../../utils/facebookPixel';
-import { initialize as initializeMercadopago } from '../../utils/mercadopago';
-import { initialize as initializeHotjar } from '../../utils/hotjar';
 import { Loader } from '../Shared'; // TODO Import directly from bit
 import { Wrapper } from '@bit/meema.ui-components.elements';
 import { css } from 'styled-components';
@@ -22,8 +20,6 @@ if(process.env.NODE_ENV === 'production') {
   initializeTagManager();
   inititalizeAnalytics();
   initializeFacebookPixel();
-  initializeMercadopago();
-  initializeHotjar();
 }
 
 const Component: React.FunctionComponent<{}> = memo(() => {
