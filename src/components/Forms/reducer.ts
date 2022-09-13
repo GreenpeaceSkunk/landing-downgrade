@@ -2,21 +2,25 @@ import { SharedActions, GenericReducerFn, SharedState } from 'greenpeace';
 
 export type FieldErrorType = { [fieldName: string]:boolean } | null;
 export type ErrorsType = { [index: string]: FieldErrorType } | null;
+export type FormType = '' | 'cancel' | 'reduce' | 'postpone';
 
 export type ContextStateType = {
   errors: ErrorsType;
   isEdited: boolean;
+  currentForm: FormType; 
 } & SharedState;
 
 export type ContextActionType = 
 | { type: 'UPDATE_FIELD_ERRORS', payload: { fieldName: string; isValid: boolean; indexForm: number; } }
 | { type: 'RESET_FIELD_ERRORS' }
 | { type: 'UPDATE_FORM_STATUS' }
+| { type: 'SET_CURRENT_FORM', payload: { formType: FormType } }
 | { type: 'RESET' }
 | { type: 'SET_ERROR', error: string | null }
 | SharedActions;
 
 export const initialState: ContextStateType = {
+  currentForm: '',
   error: null,
   errors: null,
   submitted: false,
@@ -52,6 +56,12 @@ export const reducer: GenericReducerFn<ContextStateType, ContextActionType> = (s
         errors: null,
         isEdited: false,
       }
+    }
+    case 'SET_CURRENT_FORM': {
+      return {
+        ...state,
+        currentForm: action.payload.formType,
+      };
     }
     case 'UPDATE_FORM_STATUS': {
       return {

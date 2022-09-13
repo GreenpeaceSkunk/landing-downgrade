@@ -6,7 +6,6 @@ import Layout from '../../Shared/Layout';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import { FormContext } from '../context';
 import UserFeedbackForm, { IRef as IUserFeedbackRef } from '../SplittedForms/UserFeedbackForm';
-import { UserDataFormContext } from '../SplittedForms/UserDataForm/context';
 import { UserFeedbackFormContext } from '../SplittedForms/UserFeedbackForm/context';
 import Snackbar, { IRef as ISnackbarRef } from '../../Snackbar';
 import { css } from 'styled-components';
@@ -26,7 +25,6 @@ const Component: React.FunctionComponent<{}> = () => {
     setServiceForm,
   } = useContext(FormContext);
   const { queryParams } = useContext(AppContext);
-  const { data: { user: { data } } } = useContext(UserDataFormContext);
   const { feedback } = useContext(UserFeedbackFormContext);
   const formRef = useRef<HTMLFormElement>(null);
   const userFeedbackFormRef = useRef<IUserFeedbackRef>(null);
@@ -52,24 +50,30 @@ const Component: React.FunctionComponent<{}> = () => {
   }
   }, [
     totalErrors,
-    data,
     feedback,
-    history,
-    path,
-    dispatch,
+    setPayload,
+    setServiceForm,
     setShowFieldErrors,
   ]);
 
   useEffect(() => {
     if(payload && serviceForm) {
+      dispatch({
+        type: 'SET_CURRENT_FORM',
+        payload: { formType: 'cancel' },
+      });
+
       history.push({
         pathname: `/user/information`,
-        search: `?${queryParams}&from=form-cancel`,
+        search: `?${queryParams}`,
       });
     }
   }, [
     payload,
     serviceForm,
+    dispatch,
+    history,
+    queryParams,
   ]);
   
   useEffect(() => {
@@ -86,6 +90,7 @@ const Component: React.FunctionComponent<{}> = () => {
   }, [
     path,
     history,
+    queryParams,
   ]);
 
   useEffect(() => {
@@ -147,12 +152,8 @@ const Component: React.FunctionComponent<{}> = () => {
     submitting,
     formRef,
     snackbarRef,
-    payload,
-    serviceForm,
     queryParams,
     onSubmit,
-    setPayload,
-    setServiceForm,
   ]);
 };
 

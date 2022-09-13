@@ -12,12 +12,14 @@ const Component: React.FunctionComponent<{}> = () => {
   const { queryParams } = useContext(AppContext);
   const { data: { user: { data } } } = useContext(UserDataFormContext);
   const wrapperRef = useRef<HTMLDivElement>(null);
-
+  
   useEffect(() => {
     (async () => {
-      await updateContact(data.email, { estado_landing_de_bajas: 'reduced' });
+      if(data.email) {
+        await updateContact(data.email, { estado_landing_de_bajas: 'reduced' });
+      }
     })();
-  }, []);
+  }, [ data.email ]);
   
   return useMemo(() => (
     <Elements.Wrapper
@@ -69,7 +71,6 @@ const Component: React.FunctionComponent<{}> = () => {
       </Elements.Nav>
     </Elements.Wrapper>
   ), [
-    data,
     queryParams,
     wrapperRef,
   ]);

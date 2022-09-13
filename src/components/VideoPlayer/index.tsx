@@ -35,7 +35,6 @@ const Component: React.ForwardRefRenderFunction<IRef, IProps> = ((
       onEndedHandler();
     }
   }, [
-    buttonDisabled,
     onEndedHandler,
   ]);
 

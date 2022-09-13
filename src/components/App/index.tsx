@@ -25,7 +25,7 @@ if(process.env.NODE_ENV === 'production') {
 const Component: React.FunctionComponent<{}> = memo(() => {
   const [ allowedUser, setAllowedUser ] = useState<boolean>(false);
   const [ fetchingUser, setFetchingUser ] = useState<boolean>(true);
-  const { data, dispatch } = useContext(AppContext);
+  const { dispatch } = useContext(AppContext);
   const { pathname } = useLocation();
   const queryParams = useQuery();
 
@@ -54,7 +54,10 @@ const Component: React.FunctionComponent<{}> = memo(() => {
         }
       }
     })();
-  }, []);
+  }, [
+    dispatch,
+    queryParams,
+  ]);
 
   return useMemo(() => (
     <Wrapper
@@ -90,10 +93,8 @@ const Component: React.FunctionComponent<{}> = memo(() => {
       </>
     </Wrapper>
   ), [
-    data,
     allowedUser,
     fetchingUser,
-    dispatch,
   ]);
 })
 

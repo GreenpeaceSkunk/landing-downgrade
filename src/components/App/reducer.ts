@@ -58,7 +58,6 @@ export const reducer: GenericReducerFn<ContextStateType, ContextActionType> = (s
           }
         },
       }
-    break;
     case 'UPDATE_USER_DATA':
       return {
         ...state,

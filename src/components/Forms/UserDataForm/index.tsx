@@ -12,12 +12,8 @@ import Snackbar, { IRef as ISnackbarRef } from '../../Snackbar';
 import { pixelToRem } from 'meema.utils';
 import { AppContext } from '../../App/context';
 
-interface IProps {
-  redirectTo: string;
-}
-
-const Component: React.FunctionComponent<IProps> = ({ redirectTo }) => {
-  const history = useHistory();
+const Component: React.FunctionComponent<{}> = () => {
+const history = useHistory();
   const formRef = useRef<HTMLFormElement>(null);
   const userDataFormRef = useRef<IUserDataFormRef>(null);
   const { path } = useRouteMatch();
@@ -26,6 +22,7 @@ const Component: React.FunctionComponent<IProps> = ({ redirectTo }) => {
     submitting,
     payload,
     serviceForm,
+    currentForm,
     dispatch,
     setShowFieldErrors,
   } = useContext(FormContext);
@@ -64,9 +61,9 @@ const Component: React.FunctionComponent<IProps> = ({ redirectTo }) => {
             } else {
               dispatch({ type: 'SUBMITTED' });
               
-              if(redirectTo) {
+              if(currentForm !== '') {
                 history.push({
-                  pathname: `${redirectTo}`,
+                  pathname: `/form/${currentForm}/thankyou`,
                   search: `${queryParams}`,
                 });
               }
@@ -81,8 +78,8 @@ const Component: React.FunctionComponent<IProps> = ({ redirectTo }) => {
     history,
     payload,
     serviceForm,
-    redirectTo,
     queryParams,
+    currentForm,
     dispatch,
     setShowFieldErrors,
   ]);
@@ -126,10 +123,10 @@ const Component: React.FunctionComponent<IProps> = ({ redirectTo }) => {
                 }
               `}
             >
-              <Layout.Link type='text' format='contained' href='https://www.greenpeace.org/argentina' target='_self'>Continuar como socio</Layout.Link>
+              <Layout.ButtonLink to={`/about-us?${queryParams}`} format='text' >Cambiar método</Layout.ButtonLink>
               <Layout.Button
                 type='submit'
-                format='text'
+                format='contained'
                 >{(submitting) ? <Loader mode='light' /> : 'Confimar la baja'}
               </Layout.Button>
             </Form.Nav>
@@ -147,10 +144,7 @@ const Component: React.FunctionComponent<IProps> = ({ redirectTo }) => {
     submitting,
     formRef,
     snackbarRef,
-    redirectTo,
     queryParams,
-    payload,
-    serviceForm,
     onSubmit,
   ]);
 };

@@ -15,9 +15,11 @@ const Component: React.FunctionComponent<{}> = () => {
 
   useEffect(() => {
     (async () => {
-      await updateContact(data.email, { estado_landing_de_bajas: 'cancelled' });
+      if(data.email) {
+        await updateContact(data.email, { estado_landing_de_bajas: 'cancelled' });
+      }
     })();
-  }, []);
+  }, [ data.email ]);
 
   return useMemo(() => (
     <Elements.Wrapper
@@ -71,7 +73,6 @@ const Component: React.FunctionComponent<{}> = () => {
     </Elements.Wrapper>
   ), [
     wrapperRef,
-    data,
     queryParams,
   ]);
 };

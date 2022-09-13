@@ -7,8 +7,6 @@ import Layout from '../../Shared/Layout';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import { FormContext } from '../context';
 import UserPostponeForm, { IRef as IUsePostponeFormRef } from '../SplittedForms/UserPostponeForm';
-import { save } from './service';
-import { UserDataFormContext } from '../SplittedForms/UserDataForm/context';
 import { UserPostponeFormContext } from '../SplittedForms/UserPostponeForm/context';
 import { css } from 'styled-components';
 import Snackbar, { IRef as ISnackbarRef } from '../../Snackbar';
@@ -29,7 +27,6 @@ const Component: React.FunctionComponent<{}> = () => {
     setPayload,
     setServiceForm,
   } = useContext(FormContext);
-  const { data: { user: { data } } } = useContext(UserDataFormContext);
   const { donation } = useContext(UserPostponeFormContext);
   const snackbarRef = useRef<ISnackbarRef>(null);
   const { queryParams } = useContext(AppContext);
@@ -49,25 +46,31 @@ const Component: React.FunctionComponent<{}> = () => {
     });
   }
   }, [
-    path,
-    data,
     donation,
     totalErrors,
-    history,
-    dispatch,
+    setPayload,
+    setServiceForm,
     setShowFieldErrors,
   ]);
 
   useEffect(() => {
     if(payload && serviceForm) {
+      dispatch({
+        type: 'SET_CURRENT_FORM',
+        payload: { formType: 'postpone' },
+      });
+
       history.push({
         pathname: `/user/information`,
-        search: `?${queryParams}&from=form-postpone`,
+        search: `?${queryParams}`,
       });
     }
   }, [
     payload,
     serviceForm,
+    dispatch,
+    history,
+    queryParams,
   ]);
   
   useEffect(() => {
@@ -84,6 +87,7 @@ const Component: React.FunctionComponent<{}> = () => {
   }, [
     path,
     history,
+    queryParams,
   ]);
 
   useEffect(() => {
@@ -148,11 +152,7 @@ const Component: React.FunctionComponent<{}> = () => {
     submitting,
     formRef,
     snackbarRef,
-    payload,
-    serviceForm,
     queryParams,
-    setPayload,
-    setServiceForm,
     onSubmit,
   ]);
 };

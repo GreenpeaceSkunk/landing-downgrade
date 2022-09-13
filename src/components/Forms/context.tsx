@@ -1,5 +1,5 @@
 import React, { createContext, FocusEvent, useCallback, useEffect, useMemo, useReducer, useState } from 'react';
-import { reducer, initialState, ContextActionType as FormContextActionType, ErrorsType } from './reducer';
+import { reducer, initialState, ContextActionType as FormContextActionType, ErrorsType, FormType } from './reducer';
 import { UserDonationFormProvider } from './SplittedForms/UserDonationForm/context';
 import { UserDataFormProvider } from './SplittedForms/UserDataForm/context';
 import { UserFeedbackFormProvider } from './SplittedForms/UserFeedbackForm/context';
@@ -18,6 +18,7 @@ interface IContext {
   isEdited: boolean;
   submitted: boolean;
   submitting: boolean;
+  currentForm: FormType;
   setPathnames: React.Dispatch<React.SetStateAction<string[]>>;
   setShowGeneralError: React.Dispatch<React.SetStateAction<boolean>>;
   setShowFieldErrors: React.Dispatch<React.SetStateAction<boolean>>;
@@ -45,6 +46,7 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
     isEdited,
     submitted,
     submitting,
+    currentForm,
   }, dispatch ] = useReducer(reducer, initialState);
   const [ showFieldErrors, setShowFieldErrors ] = useState<boolean>(false);
   const [ showGeneralError, setShowGeneralError ] = useState<boolean>(false);
@@ -99,6 +101,7 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
       pathnames,
       currentIndex,
       totalErrors,
+      currentForm,
       showFieldErrors,
       showGeneralError,
       isEdited,
@@ -137,6 +140,7 @@ const ContextProvider: React.FunctionComponent<IProps & RouteComponentProps> = (
     isEdited,
     submitted,
     submitting,
+    currentForm,
     setPathnames,
     setCurrentIndex,
     setShowGeneralError,

@@ -7,7 +7,6 @@ import Layout from '../../Shared/Layout';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import { FormContext } from '../context';
 import UserDonationForm, { IRef as IUserDonationFormRef } from '../SplittedForms/UserDonationForm';
-import { UserDataFormContext } from '../SplittedForms/UserDataForm/context';
 import { UserDonationFormContext } from '../SplittedForms/UserDonationForm/context';
 import { css } from 'styled-components';
 import Snackbar, { IRef as ISnackbarRef } from '../../Snackbar';
@@ -28,7 +27,6 @@ const Component: React.FunctionComponent<{}> = () => {
     setPayload,
     setServiceForm,
   } = useContext(FormContext);
-  const { data: { user: { data } } } = useContext(UserDataFormContext);
   const { donation } = useContext(UserDonationFormContext);
   const { queryParams } = useContext(AppContext);
   const snackbarRef = useRef<ISnackbarRef>(null);
@@ -50,30 +48,39 @@ const Component: React.FunctionComponent<{}> = () => {
       });
     }
   }, [
-    path,
-    data,
     donation,
     totalErrors,
-    history,
-    dispatch,
+    setPayload,
+    setServiceForm,
     setShowFieldErrors,
   ]);
 
   useEffect(() => {
     if(payload && serviceForm) {
+      dispatch({
+        type: 'SET_CURRENT_FORM',
+        payload: { formType: 'reduce' },
+      });
+
       history.push({
         pathname: `/user/information`,
-        search: `?${queryParams}&from=form-reduce`,
+        search: `?${queryParams}`,
       });
     }
   }, [
     payload,
     serviceForm,
+    dispatch,
+    history,
+    queryParams,
   ]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      history.push({ pathname: `${path}/amounts` });
+      history.push({
+        pathname: `${path}/amounts`,
+        search: `?${queryParams}`,
+      });
     }, 200);
 
     return () => {
@@ -82,6 +89,7 @@ const Component: React.FunctionComponent<{}> = () => {
   }, [
     path,
     history,
+    queryParams,
   ]);
 
   useEffect(() => {
@@ -146,11 +154,7 @@ const Component: React.FunctionComponent<{}> = () => {
     submitting,
     formRef,
     snackbarRef,
-    payload,
-    serviceForm,
     queryParams,
-    setPayload,
-    setServiceForm,
     onSubmit,
   ]);
 };
