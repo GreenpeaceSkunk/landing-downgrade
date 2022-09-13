@@ -56,7 +56,6 @@ const Component: React.FunctionComponent<{}> = memo(() => {
     })();
   }, [
     dispatch,
-    queryParams,
   ]);
 
   return useMemo(() => (

@@ -59,7 +59,6 @@ const ContentSlider: React.FunctionComponent<{}> = memo(() => {
     }
   }, [
     history,
-    queryParams,
     currentPath,
   ]);
 

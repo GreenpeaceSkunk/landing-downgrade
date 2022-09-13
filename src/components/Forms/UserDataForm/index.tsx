@@ -76,7 +76,6 @@ const history = useHistory();
     data,
     totalErrors,
     history,
-    payload,
     serviceForm,
     queryParams,
     currentForm,
