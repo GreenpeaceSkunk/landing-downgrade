@@ -126,7 +126,7 @@ const history = useHistory();
               <Layout.Button
                 type='submit'
                 format='contained'
-                >{(submitting) ? <Loader mode='light' /> : 'Confimar la baja'}
+                >{(submitting) ? <Loader mode='light' /> : 'Confimar'}
               </Layout.Button>
             </Form.Nav>
             <Snackbar
